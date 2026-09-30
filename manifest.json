@@ -1,0 +1,16 @@
+{
+  "name": "RAMAI Codex Kickoff Pack",
+  "version": "1.0",
+  "purpose": "Sprint 0 / Foundation",
+  "created": "2026-09-30",
+  "reference_docs": [
+    "02_Product_Specification_v1.0.pdf",
+    "04_Technical_Architecture_v1.0.pdf",
+    "05_Business_Memory_Design_v1.0.pdf",
+    "06_AI_Engine_Design_v1.0.pdf",
+    "07_Connectors_Architecture_v1.0.pdf",
+    "08_Security_GDPR_AI_Act_v1.0.pdf",
+    "11_Codex_Development_Specification_v1.0.pdf",
+    "12_MVP_Test_Plan_v1.0.pdf"
+  ]
+}
