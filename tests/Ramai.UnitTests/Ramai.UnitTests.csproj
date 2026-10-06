@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../../src/backend/Ramai.Api/Ramai.Api.csproj" />
+  </ItemGroup>
+</Project>

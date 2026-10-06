@@ -1,5 +1,7 @@
 bin/
 obj/
+[Bb]in/
+[Oo]bj/
 node_modules/
 .next/
 out/
@@ -18,3 +20,7 @@ logs/
 TestResults/
 coverage/
 dist/
+artifacts/
+*.user
+*.suo
+*.tsbuildinfo

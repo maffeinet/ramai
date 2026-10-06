@@ -1,21 +1,28 @@
+name: ramai
+
 services:
   postgres:
-    image: pgvector/pgvector:pg17
+    image: pgvector/pgvector:0.8.6-pg17
     environment:
       POSTGRES_DB: ${RAMAI_DB_NAME:-ramai_dev}
       POSTGRES_USER: ${RAMAI_DB_USER:-ramai}
-      POSTGRES_PASSWORD: ${RAMAI_DB_PASSWORD:-change-me-local-only}
+      POSTGRES_PASSWORD: ${RAMAI_DB_PASSWORD:?Set RAMAI_DB_PASSWORD in the local .env file}
     ports:
       - "${RAMAI_DB_PORT:-5432}:5432"
     volumes:
       - ramai_postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init/001-enable-vector.sql:/docker-entrypoint-initdb.d/001-enable-vector.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${RAMAI_DB_USER:-ramai} -d ${RAMAI_DB_NAME:-ramai_dev}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 10s
+    networks:
+      - ramai
   redis:
-    image: redis:7-alpine
+    image: redis:7.2.16-alpine3.21
+    command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "${RAMAI_REDIS_PORT:-6379}:6379"
     volumes:
@@ -25,6 +32,13 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+      start_period: 5s
+    networks:
+      - ramai
 volumes:
   ramai_postgres_data:
   ramai_redis_data:
+
+networks:
+  ramai:
+    driver: bridge

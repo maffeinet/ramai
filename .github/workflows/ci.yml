@@ -1,0 +1,83 @@
+name: RAMAI CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+  DOTNET_NOLOGO: '1'
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      RAMAI_DB_HOST: 127.0.0.1
+      RAMAI_DB_PORT: '5432'
+      RAMAI_DB_NAME: ramai_dev
+      RAMAI_DB_USER: ramai
+      RAMAI_REDIS_HOST: 127.0.0.1
+      RAMAI_REDIS_PORT: '6379'
+      RAMAI_RUN_INFRASTRUCTURE_TESTS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
+        with:
+          dotnet-version: '10.0.401'
+      - name: Generate ephemeral database password
+        id: credentials
+        shell: bash
+        run: |
+          password="$(openssl rand -hex 32)"
+          echo "::add-mask::$password"
+          printf 'RAMAI_DB_PASSWORD=%s\n' "$password" >> "$GITHUB_ENV"
+      - name: Validate Compose configuration
+        run: docker compose --project-name ramai-ci config --quiet
+      - name: Start PostgreSQL/pgvector and Redis
+        run: docker compose --project-name ramai-ci up -d --wait --wait-timeout 120
+      - name: Restore
+        run: dotnet restore src/backend/Ramai.sln
+      - name: Build
+        run: dotnet build src/backend/Ramai.sln --configuration Release --no-restore
+      - name: Check formatting
+        run: dotnet format src/backend/Ramai.sln --verify-no-changes --no-restore
+      - name: Test including real infrastructure
+        run: dotnet test src/backend/Ramai.sln --configuration Release --no-build
+      - name: Clean up ephemeral CI services and volumes
+        if: ${{ always() && steps.credentials.outcome == 'success' }}
+        run: docker compose --project-name ramai-ci down --volumes --remove-orphans
+
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: src/frontend/ramai-web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: src/frontend/ramai-web/.nvmrc
+          cache: npm
+          cache-dependency-path: src/frontend/ramai-web/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Type-check
+        run: npm run type-check
+      - name: Production build
+        run: npm run build

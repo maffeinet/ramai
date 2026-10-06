@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Ramai.Domain\Ramai.Domain.csproj" />
+  </ItemGroup>
+</Project>

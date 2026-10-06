@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\Ramai.Application\Ramai.Application.csproj" />
+    <ProjectReference Include="..\Ramai.Infrastructure\Ramai.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
