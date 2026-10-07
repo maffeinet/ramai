@@ -14,9 +14,9 @@ Questa modifica realizza esclusivamente:
 - S0-008: health check applicativo e correlation ID;
 - S0-009: logging strutturato baseline.
 
-S0-010 aggiunge la baseline di test. S0-011 aggiunge la CI descritta nella sezione
-finale: implementata e verificata localmente, in attesa della prima esecuzione GitHub.
-S0-012 non è incluso.
+S0-010 aggiunge la baseline di test. S0-011 aggiunge la CI, ora verificata anche su
+GitHub. S0-012 completa il developer bootstrap. I risultati cronologici sono riportati
+nelle sezioni finali; Sprint 1 non è incluso.
 
 ## Housekeeping
 
@@ -374,3 +374,74 @@ Warning/limiti/technical debt:
 - limiti dei test e debt precedenti restano invariati. Nessun secret aggiunto ai file.
 - Git segnala conversioni LF/CRLF su alcuni file della working copy preesistente;
   nessun errore whitespace rilevato, nessuna normalizzazione estesa in questo task.
+
+### Conferma GitHub S0-011 — 2026-10-06
+
+Il precedente stato "in attesa" è superato: commit/push autorizzati e completati su
+`main`, commit `d7cb53548cf10185f7f17766ce23755a1916832d`.
+[RAMAI CI, run 37431050731](https://github.com/maffeinet/ramai/actions/runs/37431050731)
+è completed/success, verificato tramite GitHub CLI, non soltanto dal riscontro utente.
+Entrambi i job backend e frontend e tutti i rispettivi gate sono success.
+La run è iniziata il 6 ottobre 2026 alle 09:39:40 Europe/Rome.
+Questo risultato riguarda S0-011 e il commit indicato, non le successive modifiche locali.
+
+## S0-012 — Developer bootstrap (2026-10-06)
+
+Implementato esclusivamente il bootstrap Foundation. Nessuna modifica applicativa,
+nessuna nuova dipendenza, nessun avvio di Sprint 1. Nuovi commit/push non eseguiti.
+
+File modificati/creati:
+
+- `README.md`: prerequisiti/versioni, nuovo clone, configurazione password, tre shell
+  per API/frontend/verifica, quality gate, arresto conservativo e troubleshooting;
+- `scripts/Import-DevEnvironment.ps1`: importa solo chiavi documentate nell'ambiente
+  del processo; nessuna valutazione del contenuto o stampa di credenziali;
+- `scripts/Test-DevEnvironment.ps1`: 7 casi ripetibili senza dipendenze di test extra;
+- `docs/sprint0-progress.md`: conferma GitHub e questa registrazione.
+
+Ambiguità risolta: `.env` viene letto da Compose ma non automaticamente da ASP.NET Core.
+Il README precedente avviava l'API senza importarlo: ora il passaggio è esplicito.
+Gli script dev-up/dev-down sono opzionali nel backlog e non sono stati aggiunti:
+avvio/arresto dei processi restano espliciti, senza supervisori o processi nascosti.
+
+Verifica locale effettuata in un clone temporaneo del commit pubblicato, con i soli
+file bootstrap aggiornati copiati sopra: nessun bin/obj/node_modules preesistente.
+PostgreSQL e Redis usavano volumi nuovi e un progetto Compose isolato; porte di prova
+15432/16379/18080/13000 per non interferire con i servizi locali. Password casuale
+generata soltanto nel `.env` ignorato del clone temporaneo, mai stampata.
+
+Quality gate e risultati:
+
+- loader: 7 casi PASS (valido/apici/commenti, placeholder, vuoto, duplicato,
+  chiave non consentita, riga invalida, file assente); nessun output sensibile,
+  file invalidi respinti prima di modificare l'ambiente;
+- parser PowerShell: PASS per entrambi gli script;
+- Compose config silenzioso, inizializzazione da volumi vuoti e health Docker: PASS;
+- restore/build backend: PASS, 0 warning e 0 errori;
+- 16 test backend con infrastruttura reale: PASS, 0 falliti e 0 skipped;
+  PostgreSQL/Redis raggiungibili ed estensione vector verificata;
+- format backend: PASS;
+- API avviata tramite configurazione importata: `/health` HTTP 200, Healthy per
+  application/postgresql/redis, correlation ID `ramai-bootstrap-check` nella response
+  e nello scope del log JSON;
+- `npm ci`, lint, type-check e production build: PASS;
+- frontend development avviato: HTTP 200, pagina RAMAI presente;
+- arresto API/frontend e `docker compose down` del solo progetto di prova: PASS,
+  volumi persistenti conservati, infrastruttura originale non modificata;
+- whitespace diff: PASS; nessun secret aggiunto ai file versionabili.
+
+Toolchain invariata: SDK 10.0.401, Node 24.19.0, npm 11.17.0, Next.js 16.3.8;
+immagini pgvector 0.8.6-pg17 e Redis 7.2.16-alpine3.21.
+
+Limiti/technical debt:
+
+- persistono i 5 high di sviluppo ESLint, deprecazione ESLint 9 e warning postinstall
+  unrs-resolver: nessun aggiornamento forzato o approvazione automatica;
+- test eseguiti su Windows con toolchain e cache pacchetti già installate: non si
+  dichiara una prova su un sistema operativo appena installato o senza cache;
+- loader PowerShell: formato locale limitato, non parser dotenv universale;
+  usare password esadecimale senza interpolazioni per coerenza con Compose;
+- i 7 test PowerShell sono locali/documentati, non ancora inclusi nella CI Linux;
+- la run GitHub verde è quella S0-011: S0-012 non ancora pubblicato/eseguito su GitHub;
+- clone temporaneo e volumi di prova conservati per non eliminare dati autonomamente;
+- limiti Foundation e debito precedenti restano validi. Nessuna feature fuori Sprint 0.

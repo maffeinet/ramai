@@ -19,9 +19,69 @@ Non implementare ancora connector reali, AI Engine, Business Memory funzionale, 
 
 ## Prerequisiti attuali
 
-- .NET 10 SDK
-- Node.js 24 LTS con npm 11
-- Docker con Docker Compose
+- Git e PowerShell (Windows PowerShell 5.1 o PowerShell 7).
+- .NET 10 SDK: CI verificata con 10.0.401; vedere `global.json`.
+- Node.js 24.19.0 (vedi `.nvmrc`) con npm 11.
+- Docker Desktop avviato, engine Linux e Compose v2 con supporto `--wait`.
+- Porte libere: PostgreSQL 5432, Redis 6379, API 8080, frontend 3000.
+
+## Bootstrap da un nuovo clone (PowerShell)
+
+```powershell
+git clone https://github.com/maffeinet/ramai.git
+cd ramai
+Copy-Item .env.example .env
+notepad .env
+```
+
+Sostituire il placeholder della password, salvare e chiudere l'editor. Non sovrascrivere
+un `.env` esistente. Usare una password locale casuale, ad esempio esadecimale, senza
+`$`, interpolazioni o commenti inline. Il loader supporta `KEY=value`, commenti su righe
+separate e valori racchiusi in apici; non espande variabili né esegue il contenuto.
+
+Nella stessa shell, dalla root:
+
+```powershell
+. .\scripts\Import-DevEnvironment.ps1
+docker compose config --quiet
+docker compose up -d --wait --wait-timeout 120
+docker compose ps
+dotnet restore .\src\backend\Ramai.sln
+dotnet build .\src\backend\Ramai.sln --no-restore
+dotnet run --no-build --project .\src\backend\Ramai.Api\Ramai.Api.csproj
+```
+
+Lasciare questa shell aperta: l'API ascolta su `http://localhost:8080`.
+In una seconda shell dalla root avviare il frontend:
+
+```powershell
+Set-Location .\src\frontend\ramai-web
+npm ci
+npm run dev
+```
+
+Aprire `http://localhost:3000`. In una terza shell verificare l'API:
+
+```powershell
+$response = Invoke-WebRequest http://localhost:8080/health -UseBasicParsing `
+  -Headers @{ 'X-Correlation-ID' = 'ramai-bootstrap-check' }
+$response.StatusCode
+$response.Headers['X-Correlation-ID']
+$response.Content
+```
+
+Attesi: HTTP 200, stesso correlation ID e stato Healthy per applicazione, PostgreSQL e
+Redis. Il frontend è un placeholder: non chiama ancora l'API. Le variabili URL
+frontend/API sono predisposizioni, non integrazioni già implementate.
+
+Per fermare API e frontend usare Ctrl+C nelle rispettive shell, poi dalla root:
+
+```powershell
+docker compose down
+```
+
+Questo conserva i volumi. Non usare `down --volumes` nel normale flusso di sviluppo.
+Gli script opzionali dev-up/dev-down non sono necessari: i comandi restano espliciti.
 
 ## Configurazione locale
 
@@ -38,6 +98,7 @@ Infrastructure. Il file `.env` viene letto da Compose, non automaticamente da `d
 ```powershell
 dotnet restore .\src\backend\Ramai.sln
 dotnet build .\src\backend\Ramai.sln --no-restore
+. .\scripts\Import-DevEnvironment.ps1
 dotnet run --project .\src\backend\Ramai.Api\Ramai.Api.csproj
 ```
 
@@ -75,8 +136,8 @@ Copy-Item .env.example .env
 Quindi avviare l'infrastruttura:
 
 ```powershell
-docker compose config
-docker compose up -d
+docker compose config --quiet
+docker compose up -d --wait --wait-timeout 120
 docker compose ps
 ```
 
@@ -99,7 +160,7 @@ inizializzato manualmente o ricreato consapevolmente.
 
 ```powershell
 cd .\src\frontend\ramai-web
-npm install
+npm ci
 npm run dev
 ```
 
@@ -124,8 +185,9 @@ autenticazione, Business Memory, AI, connector o billing.
 
 ## Stato Sprint 0
 
-La baseline corrente copre S0-001 fino a S0-010. S0-011 è implementato e verificato
-localmente; la prima esecuzione su GitHub resta da verificare. S0-012 non avviato.
+La baseline copre S0-001 fino a S0-012. S0-011 è verde anche sui runner GitHub:
+[run verificata del commit d7cb535](https://github.com/maffeinet/ramai/actions/runs/37431050731).
+S0-012 documenta il bootstrap locale; Sprint 1 non avviato.
 
 ## Test backend
 
@@ -135,6 +197,7 @@ Eseguire dalla root; i test ordinari non richiedono Docker:
 dotnet build .\src\backend\Ramai.sln
 dotnet test .\src\backend\Ramai.sln --no-build
 dotnet format .\src\backend\Ramai.sln --verify-no-changes --no-restore
+.\scripts\Test-DevEnvironment.ps1
 ```
 
 La suite comprende unit test del correlation ID, test HTTP in-memory di `/health` e
@@ -147,6 +210,7 @@ container, inclusa la password locale, quindi:
 
 ```powershell
 $env:RAMAI_RUN_INFRASTRUCTURE_TESTS = '1'
+. .\scripts\Import-DevEnvironment.ps1
 dotnet test .\src\backend\Ramai.sln --no-build
 Remove-Item Env:\RAMAI_RUN_INFRASTRUCTURE_TESTS
 ```
@@ -169,5 +233,25 @@ e mascherata; non sono necessari secret repository. I volumi del progetto Compos
 Permessi limitati alla lettura dei contenuti, azioni fissate a SHA immutabili.
 La CI non configura branch protection, non pubblica e non esegue deploy.
 
-Risultati locali e limiti sono nel report Sprint 0; non è ancora stata eseguita una
-run su GitHub e non sono stati effettuati commit o push per questo task.
+La prima run GitHub è completata con successo per il commit `d7cb535`:
+[RAMAI CI](https://github.com/maffeinet/ramai/actions/runs/37431050731).
+Questa run verifica S0-011, non le modifiche S0-012 ancora locali.
+
+## Troubleshooting e limiti Foundation
+
+- Docker non raggiungibile: avviare Docker Desktop e attendere che l'engine Linux sia pronto.
+- Script PowerShell bloccato: verificare la policy aziendale; non modificarla globalmente.
+  Il loader modifica solo l'ambiente del processo: ripeterlo in ogni shell backend/test.
+- Porta occupata: chiudere il processo concorrente oppure modificare `.env`; importare
+  nuovamente il file e riavviare i servizi. Per Next usare `npm run dev -- --port 3001`
+  se necessario; aggiornare gli URL di verifica in modo coerente.
+- `/health` HTTP 503: controllare Docker health, password e variabili importate.
+  Cambiare `POSTGRES_PASSWORD` non cambia la password dentro un volume già inizializzato:
+  non eliminare volumi per tentativi; riallineare le credenziali consapevolmente.
+- `vector` assente su un volume precedente: eseguire consapevolmente
+  `CREATE EXTENSION IF NOT EXISTS vector;` nel database di sviluppo; non crea tabelle.
+- Non pubblicare configurazioni complete, `.env` o log contenenti secret.
+- Restano i warning/vulnerabilità ESLint documentati nel report. Non eseguire
+  `npm audit fix --force` senza valutare le modifiche incompatibili.
+- Nessuna autenticazione, tenancy operativa, AI, Business Memory, connector o billing;
+  i moduli sono placeholder, non funzionalità già disponibili.
