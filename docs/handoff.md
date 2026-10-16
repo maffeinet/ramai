@@ -65,9 +65,9 @@ Backend e servizi non riavviati/riverificati in questo blocco.
 
 ## Debito e questioni aperte
 
-1. **Documentazione riallineata localmente.** README e progress report riportano ora
-   commit S0-012 e run verde, preservando lo storico. Le modifiche documentali non
-   erano locali e sono ora pubblicate in 258e603; chiusura M0 e accettazione del debt
+1. **Documentazione riallineata e pubblicata.** README e progress report riportano ora
+   commit S0-012 e run verde, preservando lo storico. Le modifiche documentali prima
+   locali sono ora pubblicate in 258e603; chiusura M0 e accettazione del debt
    ancora da confermare.
 2. **npm, ultimo audit 16 ottobre 2026.** Cinque segnalazioni high nella catena dev
    eslint-config-next → plugin Next → fast-glob → micromatch → braces; zero nelle
