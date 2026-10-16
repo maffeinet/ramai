@@ -2,6 +2,9 @@
   "name": "ramai-web",
   "version": "0.1.0",
   "private": true,
+  "allowScripts": {
+    "unrs-resolver": false
+  },
   "engines": {
     "node": ">=20.9.0",
     "npm": ">=10.0.0"

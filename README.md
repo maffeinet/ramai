@@ -21,7 +21,7 @@ Non implementare ancora connector reali, AI Engine, Business Memory funzionale, 
 
 - Git e PowerShell (Windows PowerShell 5.1 o PowerShell 7).
 - .NET 10 SDK: CI verificata con 10.0.401; vedere `global.json`.
-- Node.js 24.19.0 (vedi `.nvmrc`) con npm 11.
+- Node.js 24.19.0 (vedi `.nvmrc`) con npm 11.17.0, versione verificata per la policy script.
 - Docker Desktop avviato, engine Linux e Compose v2 con supporto `--wait`.
 - Porte libere: PostgreSQL 5432, Redis 6379, API 8080, frontend 3000.
 
@@ -187,7 +187,13 @@ autenticazione, Business Memory, AI, connector o billing.
 
 La baseline copre S0-001 fino a S0-012. S0-011 è verde anche sui runner GitHub:
 [run verificata del commit d7cb535](https://github.com/maffeinet/ramai/actions/runs/37431050731).
-S0-012 documenta il bootstrap locale; Sprint 1 non avviato.
+S0-012 è pubblicato nel commit `6d5f697`, con
+[pipeline verde](https://github.com/maffeinet/ramai/actions/runs/37586023391).
+Il 16 ottobre 2026 la documentazione è stata riallineata; resta da confermare con
+l'utente l'accettazione del debito noto e la chiusura formale M0. Sprint 1 non avviato.
+
+Per riprendere il progetto leggere [memory](docs/memory.md), [handoff](docs/handoff.md)
+e il [report Sprint 0](docs/sprint0-progress.md). Questi documenti non sostituiscono AGENTS.md e ADR.
 
 ## Test backend
 
@@ -233,9 +239,12 @@ e mascherata; non sono necessari secret repository. I volumi del progetto Compos
 Permessi limitati alla lettura dei contenuti, azioni fissate a SHA immutabili.
 La CI non configura branch protection, non pubblica e non esegue deploy.
 
-La prima run GitHub è completata con successo per il commit `d7cb535`:
-[RAMAI CI](https://github.com/maffeinet/ramai/actions/runs/37431050731).
-Questa run verifica S0-011, non le modifiche S0-012 ancora locali.
+La run S0-011 del commit `d7cb535` è
+[verde](https://github.com/maffeinet/ramai/actions/runs/37431050731).
+Anche la successiva run S0-012 del commit `6d5f697` è
+[verde](https://github.com/maffeinet/ramai/actions/runs/37586023391): backend e frontend
+success, risultato riconfermato il 16 ottobre 2026. Si tratta di run storiche,
+non di nuove esecuzioni sulle modifiche documentali locali.
 
 ## Troubleshooting e limiti Foundation
 
@@ -253,5 +262,10 @@ Questa run verifica S0-011, non le modifiche S0-012 ancora locali.
 - Non pubblicare configurazioni complete, `.env` o log contenenti secret.
 - Restano i warning/vulnerabilità ESLint documentati nel report. Non eseguire
   `npm audit fix --force` senza valutare le modifiche incompatibili.
+- `package.json` nega esplicitamente il postinstall di `unrs-resolver` tramite
+  `allowScripts`: non è un'approvazione dello script e non corregge le vulnerabilità
+  ESLint. `npm ci` con npm 11.17.0 e dipendenze optional abilitate, lint, tipi e build
+  sono stati verificati su Windows senza eseguirlo. Non usare approvazioni globali
+  o omettere i binding optional per aggirare errori; altri ambienti vanno verificati.
 - Nessuna autenticazione, tenancy operativa, AI, Business Memory, connector o billing;
   i moduli sono placeholder, non funzionalità già disponibili.

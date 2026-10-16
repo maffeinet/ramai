@@ -445,3 +445,115 @@ Limiti/technical debt:
 - la run GitHub verde è quella S0-011: S0-012 non ancora pubblicato/eseguito su GitHub;
 - clone temporaneo e volumi di prova conservati per non eliminare dati autonomamente;
 - limiti Foundation e debito precedenti restano validi. Nessuna feature fuori Sprint 0.
+
+## Riallineamento finale e audit — 2026-10-16
+
+Questa sezione aggiorna gli stati storici precedenti senza cancellarli: S0-012 non
+è più soltanto locale. Commit/push autorizzati erano stati completati su `main` con
+`6d5f697b75eba409198f6cdfb402d152d7e55997`.
+[Run GitHub 37586023391](https://github.com/maffeinet/ramai/actions/runs/37586023391):
+completed/success, job backend e frontend success, riconfermato tramite GitHub CLI
+il 16 ottobre. Nessuna nuova run è stata avviata in questa sessione.
+
+### Stato rispetto a backlog e Definition of Done
+
+S0-001–012 risultano implementati e pubblicati. Le evidenze precedenti coprono
+struttura e stack, configurazione environment, Docker health/connettività reale,
+pgvector, API /health, correlation ID/logging, frontend, test e bootstrap pulito.
+La run del commit S0-012 verifica build/format e 16 test backend senza skipped,
+installazione/lint/type-check/build frontend. I 7 test loader restano verifiche
+locali, non comprese nel workflow attuale.
+
+Il disallineamento documentale sull'avvenuta pubblicazione è corretto nel README e
+in questo aggiornamento. Stato di chiusura: Foundation tecnicamente verificata,
+in attesa di conferma umana della chiusura M0 e dell'accettazione del debito noto.
+Non viene dichiarato implicitamente accettato il rischio né autorizzato Sprint 1.
+
+### Audit npm attuale, senza aggiornamenti
+
+Comandi eseguiti sul lockfile con `--ignore-scripts` e cache temporanea esterna al
+repository: `npm audit --package-lock-only --json` e variante `--omit=dev`.
+
+- totale: 5 high, 0 critical; produzione: 0 vulnerabilità segnalate;
+- catena dev: eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch
+  → braces; cinque pacchetti segnalati non equivalgono a cinque falle indipendenti;
+- [advisory braces](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm): esaurimento
+  dello stack con pattern profondamente annidati, versioni <=3.0.3; nessuna patch
+  indicata. Il registry restituisce ancora braces 3.0.3 come versione latest;
+- npm propone eslint-config-next 14.2.35 come modifica major/downgrade incompatibile:
+  non applicato. Zero risultati production non sono garanzia assoluta di sicurezza;
+- ESLint 9.39.5 confermato deprecato dal registry e fuori supporto dalla
+  [policy ufficiale ESLint](https://eslint.org/version-support/);
+- eslint-config-next 16.4.2 disponibile: metadati letti, non installata; il plugin
+  corrispondente dipende ancora da fast-glob 3.3.1. Non è una correzione dimostrata;
+- il peer della configurazione è eslint >=9.0.0: da solo non dimostra compatibilità
+  dell'intero albero con ESLint 10. Serve una prova isolata prima della migrazione;
+- unrs-resolver 1.12.2 dichiara postinstall `node postinstall.js`: warning già noto,
+  script non approvato né eseguito da questo audit. Analisi del codice ancora da fare;
+- npm segnala disponibilità della major 12.2.0 rispetto alla locale 11.17.0: è un
+  avviso di aggiornamento, non un gate fallito; nessun upgrade globale effettuato.
+
+### File e verifiche di questa sessione
+
+README e questo report riallineati; `docs/memory.md` e `docs/handoff.md` aggiornati
+come contesto di ripresa (creati nella sessione documentale precedente, ancora locali).
+Nessun manifest, lockfile, workflow, script o sorgente applicativo modificato.
+Controlli documentali: whitespace e link locali verificati. Build/test/runtime non
+rieseguiti per una modifica solo documentale; evidenze storiche distinte dall'audit
+registry odierno. Nessun nuovo commit/push; Sprint 1 non avviato.
+
+Prossima decisione: accettare esplicitamente il debt per chiudere M0 oppure richiedere
+una verifica/correzione isolata delle dipendenze prima della chiusura. Non usare
+`npm audit fix --force` o approvazioni automatiche degli script.
+
+## Tentativo di riduzione del debt frontend — 2026-10-16
+
+Richiesta utente: verificare e risolvere il debt ove possibile, senza nuove feature.
+Risultato: **riduzione parziale**, non risoluzione delle cinque segnalazioni high.
+
+### Prove isolate e decisioni
+
+- Creata una copia temporanea del solo frontend, senza node_modules iniziale e senza
+  modificare le versioni del repository. Lockfile della copia identico all'originale
+  dopo la prova (SHA256 confrontati).
+- Provato `npm install --save-dev --save-exact eslint@10.12.0 --strict-peer-deps
+  --ignore-scripts --package-lock-only` nella sola copia: FAIL atteso, ERESOLVE.
+  eslint-plugin-import 2.32.0 ammette ESLint fino a v9. Anche i metadati latest di
+  eslint-plugin-react 7.37.5 e eslint-plugin-jsx-a11y 6.10.2 non dichiarano v10.
+  eslint-plugin-react-hooks e typescript-eslint dichiarano v10, ma non bastano a
+  rendere compatibile l'intero albero. Nessun force/legacy-peer-deps usato.
+- braces latest resta 3.0.3, affetto dall'advisory già citato e senza patch indicata.
+  Nessun downgrade, fork, override di versioni non corrette o rimozione di regole lint.
+  Non è stata trovata una soluzione compatibile verificata per eliminare i 5 high.
+- Letti postinstall.js di unrs-resolver e il relativo helper napi-postinstall:
+  preparano il binding nativo e prevedono fallback con installazione npm/download.
+  Scelta conservativa: negare questo script, non approvarlo automaticamente.
+
+### Correzione applicata e verifica effettiva
+
+`src/frontend/ramai-web/package.json`: aggiunto soltanto
+`"allowScripts": { "unrs-resolver": false }`. Policy interpretata e verificata con
+npm 11.17.0, coerente con il codice della CLI installata. Non equivale a dichiarare
+sicuro lo script o a correggere braces. Nessuna dipendenza o lockfile aggiornata.
+
+Prima nella copia pulita, poi nel repository locale:
+
+- `npm ci --strict-peer-deps`: PASS, nessun peer override e nessun warning su script
+  unrs-resolver non ancora revisionato; resta la deprecazione ESLint;
+- `npm approve-scripts --allow-scripts-pending --json`: `{"allowScripts":[]}`;
+  questa modalità elenca soltanto, non approva né esegue script;
+- lint, type-check e production build: PASS;
+- `npm ls eslint --all`: PASS con ESLint 9.39.5, nessun peer invalid;
+- audit lockfile: ancora 5 high dev, 0 critical; audit production: 0 segnalazioni.
+  Il gate audit completo resta fallito (exit 1); non viene mascherato come risolto.
+
+File toccati in questo blocco: package.json, README, questo report, memory e handoff.
+Le modifiche documentali precedenti sono preservate. Nessuna modifica a package-lock,
+sorgenti, backend, regole lint o workflow. Gate backend non rieseguiti perché invariati.
+Controlli finali whitespace/link e coerenza JSON eseguiti.
+
+Limiti: prova su Windows con binding optional installati da npm ci. Linux/GitHub per
+questa nuova policy non ancora verificati; la run verde pubblicata riguarda ancora
+il commit 6d5f697, non queste modifiche locali. Copia temporanea conservata; nessun
+commit/push o avvio Sprint 1. Il debt ESLint/braces e la chiusura formale M0 restano
+aperti, con decisione umana necessaria sulle alternative o accettazione temporanea.
