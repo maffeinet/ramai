@@ -557,3 +557,18 @@ questa nuova policy non ancora verificati; la run verde pubblicata riguarda anco
 il commit 6d5f697, non queste modifiche locali. Copia temporanea conservata; nessun
 commit/push o avvio Sprint 1. Il debt ESLint/braces e la chiusura formale M0 restano
 aperti, con decisione umana necessaria sulle alternative o accettazione temporanea.
+
+### Pubblicazione e conferma Linux — 2026-10-16
+
+Il precedente limite "policy non ancora verificata su GitHub" è superato.
+Commit `258e6035f7cf996e9f5d750e284925feddc229f7` pubblicato su main con i cinque
+file concordati, inclusi memory/handoff; Gitleaks sul contenuto staged: nessun leak.
+[RAMAI CI 38887367228](https://github.com/maffeinet/ramai/actions/runs/38887367228)
+completed/success, entrambi i job verdi. Log controllati: nessun warning allow-scripts,
+installazione/lint/type-check/build frontend superati su Ubuntu; backend 0 warning,
+0 errori e 16 test superati, 0 falliti, 0 skipped.
+
+Restano nei log la deprecazione ESLint 9 e le 5 high dev: la correzione è parziale,
+non accettazione automatica del rischio né chiusura formale M0. Sprint 1 non avviato.
+Questo aggiornamento documenta la run del commit di correzione, non una nuova
+esecuzione locale; eventuali commit solo documentali successivi non cambiano il codice.

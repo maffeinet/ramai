@@ -4,27 +4,36 @@ Snapshot: 2026-10-16, Europe/Rome. Contesto stabile in [memory.md](memory.md).
 
 ## Stato in una frase
 
-Sprint 0 implementato e pubblicato, CI verde; documentazione riallineata localmente,
+Sprint 0 implementato e pubblicato, CI verde; correzione parziale npm pubblicata e verificata,
 chiusura formale e accettazione/gestione del debt ancora da confermare. Sprint 1 non avviato.
 
 ## Repository e pubblicazioni
 
 - Checkout: `C:\Sviluppo\ramai`; repository https://github.com/maffeinet/ramai.
 - Branch locale verificato: `main`.
-- HEAD verificato: `6d5f697b75eba409198f6cdfb402d152d7e55997`.
+- Commit di correzione verificato: `258e6035f7cf996e9f5d750e284925feddc229f7`.
+  Verificare git status/log alla ripresa: aggiornamenti solo documentali possono seguire.
 - `d7cb535`: baseline fino a S0-011, già pubblicata.
 - `6d5f697`: S0-012, quattro file pubblicati (README, progress report, due script).
-- Working tree ora comprende README, progress report e package.json modificati,
-  memory e handoff nuovi/aggiornati: cinque file locali, non ancora committati.
+- I cinque file (README, progress report, package.json, memory, handoff) sono stati
+  pubblicati nel commit 258e603; questo aggiornamento registra l'esito della sua run.
 - Richiesta successiva: tentare la riduzione del debt frontend. Applicata solo policy
-  di negazione postinstall; versioni e lockfile invariati. Nessuna nuova feature o commit/push.
+  di negazione postinstall; versioni e lockfile invariati. Commit/push successivamente
+  autorizzati e completati; nessuna nuova feature.
 
 ## Evidenze e distinzione temporale
 
 ### GitHub riconfermato il 16 ottobre
 
+Nuova run effettiva della correzione:
+[38887367228](https://github.com/maffeinet/ramai/actions/runs/38887367228), commit 258e603,
+completed/success. Backend: 0 warning/errori, 16 test superati senza skipped.
+Frontend: installazione/lint/tipi/build success e nessun warning allow-scripts.
+Restano warning deprecazione ESLint 9 e 5 high dev. La policy è verificata anche Linux.
+Le evidenze precedenti sotto rimangono storico del commit S0-012.
+
 [RAMAI CI — run 37586023391](https://github.com/maffeinet/ramai/actions/runs/37586023391)
-per HEAD `6d5f697`: completed/success; job backend e frontend entrambi success.
+per il commit `6d5f697`: completed/success; job backend e frontend entrambi success.
 La riconferma è una lettura della run storica, non una nuova esecuzione della pipeline.
 
 I log verificati nell'audit del 7 ottobre attestano:
@@ -58,7 +67,8 @@ Backend e servizi non riavviati/riverificati in questo blocco.
 
 1. **Documentazione riallineata localmente.** README e progress report riportano ora
    commit S0-012 e run verde, preservando lo storico. Le modifiche documentali non
-   sono pubblicate; chiusura formale M0 e accettazione del debt ancora da confermare.
+   erano locali e sono ora pubblicate in 258e603; chiusura M0 e accettazione del debt
+   ancora da confermare.
 2. **npm, ultimo audit 16 ottobre 2026.** Cinque segnalazioni high nella catena dev
    eslint-config-next → plugin Next → fast-glob → micromatch → braces; zero nelle
    dipendenze di produzione in quell'audit. Cinque pacchetti segnalati non equivalgono
@@ -74,7 +84,7 @@ Backend e servizi non riavviati/riverificati in questo blocco.
    Applicata policy `allowScripts` con unrs-resolver false: script negato, non approvato.
    npm ci rigoroso, lint, tipi, build e npm ls verdi su Windows; pending scripts vuoto.
    Warning script eliminato senza correggere i 5 high o la deprecazione ESLint.
-   Verifica policy su Linux/GitHub ancora da fare; non omettere dipendenze optional.
+   Policy verificata anche su GitHub/Linux nella run 38887367228; non omettere optional.
    Avviso npm 12.2.0 disponibile: nessun upgrade rispetto alla locale 11.17.0.
 4. **Copertura futura.** Formatter JSON console non coperto completamente end-to-end;
    test architetturali coprono riferimenti, non accesso a tabelle inesistenti.
@@ -93,8 +103,8 @@ Backend e servizi non riavviati/riverificati in questo blocco.
 1. Riallineamento README/report e audit npm del 16 ottobre completati localmente.
 2. Prova isolata eseguita: correzione parziale script applicata localmente, vulnerabilità
    ed ESLint EOL restano. Non migrare forzatamente né rimuovere regole per azzerare audit.
-   Prossima scelta: pubblicare/verificare la sola correzione con autorizzazione,
-   accettare temporaneamente il debt residuo oppure approvare un intervento più ampio.
+   Correzione pubblicata/verificata con autorizzazione. Prossima scelta: accettare
+   temporaneamente il debt residuo oppure approvare un intervento più ampio.
 3. Confermare con l'utente accettazione del debt residuo e chiusura formale M0 secondo
    [Definition of Done](definition-of-done.md) e [backlog Sprint 0](../tasks/SPRINT0_BACKLOG.md).
 4. Solo con istruzione esplicita, definire obiettivi/backlog Sprint 1. Non inventare

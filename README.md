@@ -267,5 +267,7 @@ non di nuove esecuzioni sulle modifiche documentali locali.
   ESLint. `npm ci` con npm 11.17.0 e dipendenze optional abilitate, lint, tipi e build
   sono stati verificati su Windows senza eseguirlo. Non usare approvazioni globali
   o omettere i binding optional per aggirare errori; altri ambienti vanno verificati.
+  La stessa policy è stata verificata anche sul runner GitHub Ubuntu per il commit
+  `258e603`: [run verde 38887367228](https://github.com/maffeinet/ramai/actions/runs/38887367228).
 - Nessuna autenticazione, tenancy operativa, AI, Business Memory, connector o billing;
   i moduli sono placeholder, non funzionalità già disponibili.

@@ -71,10 +71,13 @@ Il 16 ottobre README e progress report sono stati riallineati localmente; rimane
 la decisione umana di accettazione del debt e chiusura formale M0. L'audit npm
 del 16 ottobre segnala 5 high nel tooling dev e zero nelle dipendenze production;
 dettagli e limiti nel report e nell'handoff, nessuna dipendenza aggiornata.
-Nella successiva prova di riduzione del debt è stata aggiunta solo una policy locale
+Nella successiva prova di riduzione del debt è stata aggiunta solo una policy
 che nega il postinstall unrs-resolver, verificata con npm 11.17.0 e gate frontend verdi.
 Il tentativo rigoroso ESLint 10 fallisce per peer incompatibili: rimangono ESLint 9
 fuori supporto e i 5 high dev, senza indebolire i controlli o forzare aggiornamenti.
+La policy e i documenti sono pubblicati nel commit `258e603`; anche la
+[run GitHub/Linux 38887367228](https://github.com/maffeinet/ramai/actions/runs/38887367228)
+è verde, verificata il 16 ottobre. Il debt residuo non è implicitamente accettato.
 
 L'health applicativo verifica applicazione, PostgreSQL e Redis e resta distinto
 dall'health Docker. L'API riusa un X-Correlation-ID valido o ne genera uno, lo
