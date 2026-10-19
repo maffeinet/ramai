@@ -189,8 +189,14 @@ La baseline copre S0-001 fino a S0-012. S0-011 è verde anche sui runner GitHub:
 [run verificata del commit d7cb535](https://github.com/maffeinet/ramai/actions/runs/37431050731).
 S0-012 è pubblicato nel commit `6d5f697`, con
 [pipeline verde](https://github.com/maffeinet/ramai/actions/runs/37586023391).
-Il 16 ottobre 2026 la documentazione è stata riallineata; resta da confermare con
-l'utente l'accettazione del debito noto e la chiusura formale M0. Sprint 1 non avviato.
+Il 16 ottobre 2026 l'utente ha approvato la chiusura M0 con
+[SEC-EX-001 accettata temporaneamente](docs/security-exception.md) per il solo sviluppo
+interno: riesame entro il 30 ottobre o prima secondo le condizioni registrate.
+Ultima [CI pubblicata verde](https://github.com/maffeinet/ramai/actions/runs/38887663889),
+commit `4c441b3`. Chiusura Foundation non significa prodotto pronto alla vendita.
+Sprint 1: S1-001 approvato; S1-002 modelli/contratti e S1-003 persistenza/migrazioni
+completati. Stato, verifiche locali e conferma CI della pubblicazione sono nel
+[report Sprint 1](docs/sprint1-progress.md). Login e task S1-004+ non iniziati.
 
 Per riprendere il progetto leggere [memory](docs/memory.md), [handoff](docs/handoff.md)
 e il [report Sprint 0](docs/sprint0-progress.md). Questi documenti non sostituiscono AGENTS.md e ADR.

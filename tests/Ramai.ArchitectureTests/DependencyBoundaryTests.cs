@@ -58,4 +58,84 @@ public sealed class DependencyBoundaryTests
             .Order().ToArray();
         Assert.Equal(expected.Order().ToArray(), references);
     }
+
+    [Fact]
+    public void Identity_and_tenant_models_have_no_persistence_or_identity_framework_dependencies()
+    {
+        var models = new[] { "Ramai.Modules.Identity", "Ramai.Modules.Tenants" };
+        var forbiddenPrefixes = new[] { "Microsoft.EntityFrameworkCore", "Microsoft.AspNetCore.Identity", "Npgsql", "StackExchange.Redis" };
+        foreach (var model in models)
+        {
+            Assert.DoesNotContain(Assembly.Load(model).GetReferencedAssemblies(),
+                reference => forbiddenPrefixes.Any(prefix => reference.Name?.StartsWith(prefix, StringComparison.Ordinal) == true));
+        }
+
+        var user = Assembly.Load(models[0]).GetType("Ramai.Modules.Identity.Domain.UserAccount")!;
+        var membership = Assembly.Load(models[1]).GetType("Ramai.Modules.Tenants.Domain.Membership")!;
+        Assert.Null(user.GetProperty("TenantId"));
+        Assert.Equal(typeof(Guid), membership.GetProperty("TenantId")!.PropertyType);
+        Assert.Null(membership.GetProperty("TenantId")!.SetMethod);
+        Assert.Null(membership.GetProperty("UserId")!.SetMethod);
+    }
+
+    [Fact]
+    public void Application_contracts_do_not_expose_module_or_infrastructure_types()
+    {
+        var application = Assembly.Load("Ramai.Application");
+        var contracts = application.GetExportedTypes()
+            .Where(type => type.Namespace?.StartsWith("Ramai.Application.Contracts.", StringComparison.Ordinal) == true)
+            .ToArray();
+        Assert.NotEmpty(contracts);
+        foreach (var contract in contracts)
+        {
+            foreach (var property in contract.GetProperties())
+            {
+                AssertContractType(property.PropertyType, application);
+            }
+
+            if (!contract.IsInterface)
+            {
+                continue;
+            }
+
+            foreach (var method in contract.GetMethods())
+            {
+                AssertContractType(method.ReturnType, application);
+                foreach (var parameter in method.GetParameters())
+                {
+                    AssertContractType(parameter.ParameterType, application);
+                }
+            }
+        }
+    }
+
+    private static void AssertContractType(Type type, Assembly application)
+    {
+        Assert.True(type.Assembly == application ||
+            type.Assembly.GetName().Name?.StartsWith("System.", StringComparison.Ordinal) == true,
+            $"Unexpected contract type: {type.FullName}");
+        foreach (var argument in type.GetGenericArguments())
+        {
+            AssertContractType(argument, application);
+        }
+    }
+
+    [Fact]
+    public void Persistence_adapters_reference_only_their_own_model_and_shared_contracts()
+    {
+        var root = Path.Combine(RepositoryRoot, "src", "backend", "Persistence");
+        var projects = Directory.GetFiles(root, "*.csproj", SearchOption.AllDirectories);
+        Assert.Equal(2, projects.Length);
+        foreach (var project in projects)
+        {
+            var identity = Path.GetFileNameWithoutExtension(project) == "Ramai.Modules.Identity.Persistence";
+            var allowed = identity ? new[] { "Ramai.Application" } : new[] { "Ramai.Application", "Ramai.Modules.Tenants" };
+            var actual = XDocument.Load(project).Descendants("ProjectReference")
+                .Select(element => Path.GetFileNameWithoutExtension(element.Attribute("Include")!.Value.Replace('\\', '/')));
+            Assert.Equal(allowed.Order(), actual.Order());
+            var assembly = Assembly.Load(Path.GetFileNameWithoutExtension(project));
+            Assert.DoesNotContain(assembly.GetReferencedAssemblies(), reference =>
+                reference.Name?.StartsWith("Ramai.", StringComparison.Ordinal) == true && !allowed.Contains(reference.Name));
+        }
+    }
 }

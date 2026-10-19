@@ -572,3 +572,60 @@ Restano nei log la deprecazione ESLint 9 e le 5 high dev: la correzione è parzi
 non accettazione automatica del rischio né chiusura formale M0. Sprint 1 non avviato.
 Questo aggiornamento documenta la run del commit di correzione, non una nuova
 esecuzione locale; eventuali commit solo documentali successivi non cambiano il codice.
+
+## Pianificazione controllata successiva — 2026-10-16
+
+Predisposti [SEC-EX-001](security-exception.md) e il
+[backlog Sprint 1](../tasks/SPRINT1_BACKLOG.md), entrambi **proposte non approvate**.
+Non vengono registrate una firma umana del rischio o una chiusura M0 non espresse.
+Nessuna implementazione Sprint 1 avviata.
+
+La lettura PDF (skill PDF, estrazione testuale) delle specifiche 04/08/11/12 ha guidato
+il piano: Identity + Tenant + DB baseline, sessioni sicure, membership, ruoli,
+test cross-tenant e gate di sicurezza/release. Non è stata verificata graficamente
+la fedeltà dei layout PDF; la pianificazione usa contenuti testuali e sezioni indicate.
+I PDF sono stati letti senza modificarli; il parser ha recuperato gli indici xref
+segnalati come non corretti. Nessuna dipendenza installata per questa lettura.
+
+Ambiguità documentate nel backlog: varianti layout/numerazione Foundation nei PDF,
+auth locale versus OIDC/OAuth/IdP da decidere con ADR, moduli futuri non da aggiungere
+ora e target backup differenti da risolvere prima del rilascio. Il progetto mantiene
+AGENTS.md, ADR e confini attuali; nessuna scelta infrastrutturale implicita.
+Rettificato il contesto memory/handoff: SaaS europeo e cloud EU sono già target delle
+specifiche, mentre provider e deployment concreto non sono ancora definiti.
+
+Eccezione proposta: solo tooling noto per sviluppo interno, approvatore da assegnare,
+riesame/scadenza 30 ottobre 2026 o prima se fine Sprint 1/clienti reali; nessuna
+estensione automatica a beta o commercializzazione. Nuovi rischi non sono coperti.
+
+File del blocco: nuovi docs/security-exception.md e tasks/SPRINT1_BACKLOG.md;
+aggiornati questo report, memory e handoff. Verifiche proporzionate: whitespace,
+link locali e coerenza stati proposta/non implementato. Nessuna build/test/audit
+registry rieseguita per queste sole modifiche documentali; nessun commit o push.
+
+## Chiusura M0 con eccezione accettata — 2026-10-16
+
+L'utente ha risposto esplicitamente "si procediamo accettando il debito fino al
+riesame" alla richiesta di chiudere Sprint 0 con la deroga per il solo sviluppo
+interno. [SEC-EX-001](security-exception.md) è ora accettata temporaneamente fino al
+30 ottobre 2026, o prima se fine Sprint 1 o prima di clienti/dati reali. Le condizioni
+di revoca/riesame anticipato restano valide. Nessuna approvazione alla commercializzazione.
+
+**Sprint 0 / M0: chiuso con eccezione documentata sul tooling frontend.**
+S0-001–012 restano verificati dalle evidenze precedenti: baseline repository/stack,
+PostgreSQL/Redis/pgvector, config/secrets, health/logging, test, CI e bootstrap.
+Ultima run pubblicata riconfermata oggi tramite GitHub CLI:
+[38887663889](https://github.com/maffeinet/ramai/actions/runs/38887663889), commit
+`4c441b32eac4aaeb4e34761a21cce7518d8ca1b0`, completed/success, job backend/frontend success.
+Non è una nuova run né un test delle modifiche documentali ancora locali.
+
+Le 5 high dev e la deprecazione ESLint restano aperte, non corrette. L'accettazione
+non copre nuove vulnerabilità, auth/tenancy o runtime. Nessun gate è stato disabilitato
+e nessun criterio della Definition of Done riscritto per nascondere un fallimento.
+Le sezioni storiche "in attesa di accettazione" sono superate da questo aggiornamento.
+
+Aggiornati eccezione, README, questo report, memory/handoff, prerequisito M0 del
+backlog Sprint 1 e riferimento nell'ADR-009. Controlli documentali link/whitespace;
+nessun nuovo audit npm, build/test/runtime, codice, migration, commit o push.
+S1-001 resta da completare sui dettagli security; chiusura M0 non approva integralmente
+l'ADR-009 né autorizza in blocco l'implementazione dei task Sprint 1.

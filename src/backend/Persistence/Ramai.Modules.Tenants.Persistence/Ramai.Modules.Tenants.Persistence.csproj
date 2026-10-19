@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12" PrivateAssets="all" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <ProjectReference Include="../../Ramai.Application/Ramai.Application.csproj" />
+    <ProjectReference Include="../../Modules/Ramai.Modules.Tenants/Ramai.Modules.Tenants.csproj" />
+  </ItemGroup>
+</Project>

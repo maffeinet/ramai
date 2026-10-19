@@ -2,5 +2,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
     <ProjectReference Include="../../src/backend/Ramai.Api/Ramai.Api.csproj" />
+    <ProjectReference Include="../../src/backend/Persistence/Ramai.Modules.Identity.Persistence/Ramai.Modules.Identity.Persistence.csproj" />
+    <ProjectReference Include="../../src/backend/Persistence/Ramai.Modules.Tenants.Persistence/Ramai.Modules.Tenants.Persistence.csproj" />
   </ItemGroup>
 </Project>

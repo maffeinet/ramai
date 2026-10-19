@@ -2,5 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="../../src/backend/Ramai.Api/Ramai.Api.csproj" />
     <ProjectReference Include="../../src/backend/Modules/*/*.csproj" />
+    <ProjectReference Include="../../src/backend/Persistence/*/*.csproj" />
   </ItemGroup>
 </Project>

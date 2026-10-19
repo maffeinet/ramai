@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="../../src/backend/Ramai.Api/Ramai.Api.csproj" />
+    <ProjectReference Include="../../src/backend/Modules/Ramai.Modules.Identity/Ramai.Modules.Identity.csproj" />
+    <ProjectReference Include="../../src/backend/Modules/Ramai.Modules.Tenants/Ramai.Modules.Tenants.csproj" />
   </ItemGroup>
 </Project>

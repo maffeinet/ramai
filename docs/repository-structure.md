@@ -13,6 +13,9 @@ ramai/
 │  │  ├─ Ramai.Domain/
 │  │  ├─ Ramai.Application/
 │  │  ├─ Ramai.Infrastructure/
+│  │  ├─ Persistence/
+│  │  │  ├─ Ramai.Modules.Identity.Persistence/
+│  │  │  └─ Ramai.Modules.Tenants.Persistence/
 │  │  └─ Modules/
 │  │     ├─ Ramai.Modules.Identity/
 │  │     ├─ Ramai.Modules.Tenants/
@@ -30,3 +33,8 @@ ramai/
 ├─ scripts/
 └─ docs/adr/
 ```
+
+S1-003 aggiunge due adapter di persistenza degli stessi moduli nel monolite, non
+nuovi servizi. Modelli in Modules restano puri; ownership, schemi e procedure sono in
+[database-migrations.md](database-migrations.md). I layer condivisi e l'API non
+dipendono dagli adapter in questo blocco. EF CLI è fissata in `.config/dotnet-tools.json`.
