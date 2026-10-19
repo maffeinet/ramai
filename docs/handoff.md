@@ -8,16 +8,46 @@ Sprint 0/M0 chiuso con SEC-EX-001 accettata temporaneamente per sviluppo interno
 baseline pubblicata e CI verde. Debito non risolto, riesame entro 30 ottobre o prima.
 S1-001 documentale completato; S1-002 modelli/contratti completato localmente il 17 ottobre;
 S1-003 persistence/migrazioni completato localmente il 18 ottobre dopo richiesta di
-prosecuzione e avvio Docker. S1-004/login e task successivi non iniziati.
+prosecuzione e avvio Docker. S1-004A/B componenti account/password e conferma/reset
+completati il 19 ottobre; pubblicazione finale A+B autorizzata e in verifica.
+S1-004 complessivo aperto, C/D e S1-005+ non iniziati.
 Il 19 ottobre l'utente ha autorizzato verifica, commit/push e controllo GitHub del
 lavoro già svolto. Pubblicato nel commit `7da7758ea89f319c2e8c056f97f5c2e823b55476`;
 [run 39210403963](https://github.com/maffeinet/ramai/actions/runs/39210403963) conclusa
 success, entrambi i job verdi: 58 test backend senza skipped e tutti i gate frontend.
 Questo aggiornamento solo documentale registra l'evidenza della run del codice;
 il suo eventuale commit successivo non è il commit testato da quella run.
-Nessuna autorizzazione a iniziare S1-004 in questo blocco.
+Quella pubblicazione non autorizzava S1-004. Successivamente l'utente ha autorizzato
+solo S1-004A, senza commit/push: nuove modifiche ancora locali, non coperte dalle run sopra.
 
-## Ultimo blocco — S1-003
+## Ultimo blocco — S1-004B
+
+Conferma email 24h/reset 30min con provider Identity/Data Protection distinti,
+solo ultimo link valido e singolo consumo tramite digest in UserTokens già esistente.
+Concorrenza protetta da lock/transazione sulla propria riga utente. Sender in memoria
+solo nei test, keyring e origine HTTPS da fornire esplicitamente, nessun default su disco.
+[Dettagli B](account-recovery-baseline.md), [report](sprint1-progress.md).
+Suite finale locale A+B: 112 test pass/0 skipped; backend e frontend verdi,
+nessun leak Gitleaks rilevato; schema invariato. La prima prova aveva 111 casi.
+Nessun endpoint, sessione, MFA o UI. SecurityStamp aggiornato al reset, non prova di
+revoca immediata delle sessioni. Dopo i gate è autorizzata pubblicazione A+B e CI.
+Prossimo blocco da autorizzare separatamente: S1-004C, non iniziato.
+
+## Blocco precedente — S1-004A
+
+IdentityCore/UserManager sullo store esistente, validator 15–128 scalari NFC,
+denylist pubblica locale versionata/licenziata, hasher standard a 220.000 iterazioni,
+lockout 5/15 minuti e quote Redis distribuite per operazione/origine/account.
+Servizio scoped e composition point **non chiamati dall'API**; nessun endpoint,
+SignInManager, cookie, token, sender o tenant grant introdotto. Nessuna nuova migration.
+[Dettagli e prerequisiti](account-security-baseline.md), [report](sprint1-progress.md).
+Gate locali: 82 test superati/0 skipped, build 0 warning/errori, format verde,
+modello EF invariato, nessuna advisory NuGet o leak Gitleaks rilevato nelle scansioni.
+Richiede futura chiave HMAC server protetta/condivisa, IP da connessione/proxy fidati,
+rate policy/benchmark e timing da riesaminare sull'ambiente target. Nessun `.env` creato.
+Non implementare B/C/D implicitamente e non riutilizzare l'autorizzazione ai vecchi push.
+
+## Blocco precedente — S1-003
 
 Due adapter sotto `src/backend/Persistence/`, DbContext/migrazioni/snapshot separati
 Identity/Tenants; ASP.NET Identity standard come singolo store account, membership
@@ -31,8 +61,8 @@ snapshot EF coerenti, nessun advisory NuGet o leak Gitleaks rilevato nelle scans
 Questi erano i gate locali del 18 ottobre. Il 19 ottobre sono stati riconfermati e
 aggiunta la verifica GitHub sopra. Debt npm riauditato il 19: stessa catena 5 high dev,
 0 critical e 0 segnalazioni production, non risolto. SEC-EX-001 invariata/scadenza 30 ottobre.
-Il prossimo blocco è S1-004, da autorizzare separatamente e suddividere secondo policy
-prima del codice; non saltare cookie/CSRF/revoca/email/MFA per accelerare la tabella.
+Lo stato precedente indicava S1-004 come prossimo blocco; ora solo A è stato autorizzato
+e implementato. B è il prossimo blocco da autorizzare, senza saltare sessioni/MFA.
 Le sezioni storiche successive descrivono gli esiti alla rispettiva data, non prevalgono
 su questo snapshot. SEC-EX-001 resta temporanea e non autorizza beta o dati cliente.
 

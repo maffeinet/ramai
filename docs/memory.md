@@ -4,6 +4,18 @@ Aggiornato: 2026-10-19, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
+S1-004B completato il 19 ottobre come flusso interno conferma/reset con token Identity
+24h/30min, marker ultimo link, consumo atomico e sender solo in memoria nei test.
+[Dettagli](account-recovery-baseline.md). S1-004C/D non iniziati: nessun endpoint,
+sessione, MFA o UI. Pubblicazione A+B autorizzata dopo i gate, in verifica nel report.
+La frase storica "nessun commit/push" del blocco A sotto non prevale sull'autorizzazione B.
+
+S1-004A autorizzato e completato localmente il 19 ottobre: componenti interni account,
+validator NFC/denylist, Identity hash/lockout, rate Redis e test. Nessun login/endpoint,
+email/reset, MFA o sessione: B/C/D non iniziati. Nessun nuovo commit/push.
+Schema e modelli invariati; [dettagli tecnici/limiti](account-security-baseline.md),
+[report](sprint1-progress.md). La CI pubblicata sotto copre solo S1-003 e precedenti.
+
 S1-003 completato localmente il 18 ottobre dopo istruzione di prosecuzione: adapter
 EF Core/Identity 10.0.12 e provider Npgsql 10.0.3, schemi/history separati Identity/Tenants,
 reader e migrazioni testate su PostgreSQL reale temporaneo. Nessuna modifica a dati

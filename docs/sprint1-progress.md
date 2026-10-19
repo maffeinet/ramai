@@ -7,7 +7,10 @@ Aggiornato: 2026-10-19, Europe/Rome.
 - S1-001: **completato nel solo perimetro documentale di analisi/approvazione tecnica**.
 - S1-002: modelli e contratti completati, pubblicati e verificati in CI il 19 ottobre.
 - S1-003: persistenza/migrazioni completate, pubblicate e verificate in CI il 19 ottobre.
-- S1-004–012: non avviati. Nessun login, sessione o UI Sprint 1 presente.
+- S1-004A/B: componenti interni account/password e conferma/reset completati;
+  pubblicazione finale A+B autorizzata e in verifica. S1-004 complessivo aperto,
+  C/D e S1-005+ non iniziati.
+- Nessun endpoint di autenticazione, sessione o UI Sprint 1 presente.
 - M0 chiuso con [SEC-EX-001](security-exception.md) accettata per solo sviluppo interno,
   riesame entro il 30 ottobre o prima secondo le sue condizioni, non prorogata.
 
@@ -282,3 +285,196 @@ README, memory/handoff, stato backlog e questo report aggiornati con l'evidenza
 acquisita. Il commit successivo che registra questi risultati è solo documentale:
 la run linkata qui verifica il commit applicativo 7da7758, non un hash futuro.
 S1-004 e task successivi non iniziati; nessuna deroga security nuova o prorogata.
+
+## S1-004A — Account, password e anti-brute-force, 2026-10-19
+
+Autorizzato esclusivamente questo sottoblocco, con preview file/dipendenze/test prima
+di scrivere. **Completato localmente come componenti interni**, non come login pubblico.
+S1-004 complessivo resta aperto; B/C/D, TenantContext e task successivi non iniziati.
+Nessun commit/push, migrazione, dato cliente o nuovo servizio esterno.
+
+### Risultato e acceptance del sottoblocco
+
+- IdentityCore/UserManager usa lo store account S1-003: creazione con email non
+  confermata, hash standard, email normalizzata univoca e risposta generica ai duplicati.
+- Password 15–128 scalari Unicode NFC, senza trim/troncamento o composizione imposta;
+  denylist offline versionata/licenziata e controlli contestuali. Dataset assente o
+  invalido non consente fallback permissivo.
+- IdentityV3 PBKDF2-HMAC-SHA512 a 220.000 iterazioni, salt standard, verifica/rehash
+  testati. Benchmark locale 7 campioni: mediana hash 71,0 ms, verify 71,6 ms;
+  non benchmark del futuro hosting o garanzia capacità 500 MAU.
+- Lockout standard 5 fallimenti/15 minuti, anche con password troppo corta;
+  reset su password corretta e scadenza dimostrati. Account disattivati, bloccati,
+  non confermati o con lockout disabilitato non ricevono esito credenziali Accepted.
+- Row lock parametrizzato sulla propria riga Identity serializza incrementi e rehash
+  fra richieste concorrenti; scope con refresh dello stato persistito, niente contatori
+  singleton/in-memory o nuove tabelle.
+- Lua Redis atomico: per operazione 300/min, origine server 120/min, account 10/min,
+  finestra fissa TTL 60s, HMAC per account/IP, RetryAfter generico 60s.
+  Quote condivise fra istanze; cap globale prima della creazione di partizioni nuove.
+- Account assente/errato/bloccato/disattivato/non confermato: stesso esito generico;
+  hash dummy per ridurre percorsi veloci. Risposte throttle equivalenti anche per
+  account inesistente; guasti DB/Redis fail-closed, senza dettagli nelle risposte.
+- Eventi strutturati operation/outcome e correlation ID; test catturano anche scope,
+  eccezioni/log framework e verificano assenza di password/hash/email/IP e connessione.
+
+Documentazione di design, prerequisiti e limiti:
+[account-security-baseline.md](account-security-baseline.md).
+
+### Dipendenze, corpus e file
+
+Nuova sola PackageReference **StackExchange.Redis 3.3.1** nel proprio adapter Identity,
+versione già presente in soluzione. Identity/EF 10.0.12 e Npgsql/provider 10.0.3
+invariati. Redis già approvato per short-lived state, nessuna infrastruttura aggiunta.
+SDK 10.0.402/runtime 10.0.13 locali. API/host non registrano ancora il componente:
+nessun SignInManager, cookie scheme, token provider, sender, endpoint o UI.
+
+Corpus pubblico SecLists/NCSC MIT fissato a commit e checksum, 99.839 voci non vuote;
+329 digest distinti per voci compatibili con il minimo 15 caratteri. Le altre sono
+già escluse dalla lunghezza: non si tratta di una lista manuale di pochi esempi.
+Non è comunque un controllo universale di tutti i breach. Licenza inclusa nel progetto
+e negli output; script di aggiornamento non riceve né invia password utente.
+
+File creati/modificati (24):
+
+| Area | File |
+| --- | --- |
+| Identity.Persistence | csproj: Redis e risorse/licenza, nessuna modifica al modello EF |
+| AccountSecurity | AccountCredentialService.cs, AccountOperationResult.cs, AccountPasswordValidator.cs, AccountRateLimiter.cs, AccountRequestContext.cs, AccountSecurityRegistration.cs, DummyPasswordWork.cs, NormalizedPasswordHasher.cs, PasswordText.cs |
+| AccountSecurity/Data | ncsc-eligible.sha256, SecLists-LICENSE.txt |
+| Script | scripts/Update-PasswordBlocklist.ps1 |
+| IntegrationTests | AccountPasswordTests.cs, AccountSecurityFixture.cs, AccountSecurityTests.cs |
+| Documentazione | account-security-baseline.md nuovo; README, identity-security-policy, memory, handoff, questo report e tasks/SPRINT1_BACKLOG.md aggiornati |
+| Line ending | .gitattributes: LF esplicito per .sha256, necessario al checksum riproducibile |
+
+### Quality gate locali effettivi
+
+- Build Release: **0 warning/errori**; formatter applicato, verify-no-changes PASS.
+- Suite finale con servizi PostgreSQL/Redis reali temporanei:
+  **82 pass, 0 fail, 0 skipped** = 39 unit + 6 architecture + 37 integration.
+  I 58 casi precedenti conservati più 24 nuovi (15 senza infrastruttura e 9 opt-in).
+- Policy/hash/resource/normalizzazione, flussi account, guasti, concorrenza, quote,
+  TTL, log e timing verificati senza disabilitare gate o test precedenti.
+- Nessuna variazione del modello rispetto alla migration Identity esistente.
+- Scan NuGet anche transitive: nessuna advisory rilevata dalle fonti correnti.
+- Compose config --quiet e health dei servizi temporanei PASS; pgvector e baseline
+  infrastrutturale rimangono nella suite esistente. Nessun volume preesistente toccato.
+- Esecuzione distinta senza opt-in: **67 pass / 15 skipped espliciti**, non confusa
+  con la suite reale sopra. Le prove infra richiedono RAMAI_RUN_INFRASTRUCTURE_TESTS=1.
+- Gitleaks **8.30.1** sui soli file modificati/non tracciati in copia temporanea,
+  output redatto: nessun leak; git diff --check PASS, soli avvisi LF/CRLF di Git.
+
+Il test di guasto iniziale ha rilevato NpgsqlException wrappata da InvalidOperationException;
+aggiunto il catch filtrato specifico senza mascherare tutte le eccezioni di programmazione.
+Prove successive verdi. Il confronto timing locale sintetico (3 campioni per caso)
+ha dato mediana account presente 94,8 ms, assente 77,7 ms: query/lock/update diversi,
+**nessuna prova constant-time o di eliminazione dell'enumerazione temporale**.
+
+### Limiti residui e confine dei blocchi
+
+- Il composition point è usato dai test, **non** da Program.cs: nessun endpoint già
+  protetto o login utilizzabile. Rate policy HTTP, trusted proxy/IP, limiti input/body,
+  response mapping e test del trasporto vanno integrati nei blocchi autorizzati futuri.
+- Chiave HMAC server casuale >=32 byte, stabile/condivisa fra istanze e fuori repo/log
+  richiesta all'integrazione; nei test solo memoria. Gestione/rotazione e hosting
+  non attivati implicitamente; nessun `.env` creato.
+- Rate a finestra fissa non è sliding window; soglie/NAT, timing, carico e CPU hashing
+  richiedono verifica sull'hosting scelto prima di beta. Nessuna garanzia anti-DoS assoluta.
+- Corpus comune/compromesso noto limitato e storico: copertura e aggiornamento da
+  riesaminare prima di utenti reali. Nessun servizio di reputazione acquistato o password
+  inviata in rete. Non dichiarare che una password assente sia "non compromessa".
+- ID-03/04/05, audit segregato/retention e gate privacy non completati. Nessuna attestazione
+  NIS2/GDPR, nessuna deroga auth introdotta o coperta da SEC-EX-001.
+- Frontend e workflow invariati: gate npm non rieseguiti qui. Debt ESLint/npm rimane
+  quello dell'audit del 19 ottobre precedente al blocco, riesame entro 30 ottobre o prima.
+- **Nessun commit/push né nuova run GitHub**: le run 39210403963/39210620565 verificano
+  la baseline pubblicata fino a S1-003, non queste modifiche locali.
+
+## S1-004B — Conferma email e recupero password, 2026-10-19
+
+L'utente ha autorizzato esclusivamente B, preview prima del codice e pubblicazione
+GitHub dopo completamento/verifiche. La frase finale "una volta completato, pubblica"
+è stata esplicitata come autorizzazione post-gate, non durante l'implementazione.
+La pubblicazione includerà anche A già locale, necessario a B; nessun task C/D/UI.
+Stato: componenti interni completati; pubblicazione finale autorizzata in verifica.
+
+### Implementazione
+
+- Provider Identity/Data Protection distinti per conferma **24h** e reset **30min**;
+  nessun AddDefaultTokenProviders, cookie, SignInManager, MFA o sessione.
+- Generazione/verifica e modifica account affidate a UserManager, non token/hashing
+  artigianali. Keyring esplicito fornito dal chiamante; soltanto effimero nei test.
+- Solo ultimo link valido per utente/scopo: digest del token opaco in UserTokens
+  esistente, nessun token persistito in chiaro e nessuna migration/tavola nuova.
+- Lock/transazione sulla propria riga Users serializzano reissue/consumo; conferma
+  e reset una sola volta, reset aggiorna password/SecurityStamp atomicamente al consumo.
+- Email non verificata impedisce reset; account inattivi non recuperabili da questi
+  flussi. Password policy A applicata, nessuna riattivazione o sblocco lockout implicito.
+- Sender richiesto esplicitamente, in memoria solo nei test. Risposte request equivalenti
+  per account assente/esistente; nessun token/UserId nella risposta. Guasto sender
+  mascherato con log sintetico, non si dichiara consegna email garantita.
+- Quote Redis distinte: request 60/min globale, 20/min origine, 3/15min account;
+  consume 120/min globale, 60/min origine, 5/15min account. RetryAfter recovery
+  conservativo 900s; A conserva quote e retry originali.
+- Link solo da origine HTTPS server, niente email nella query, return path locale
+  canonico; schemi/host arbitrari, backslash, escape, query e fragment rifiutati.
+- Code limitato e decodificato senza dettagli nei rifiuti; messaggi senza ToString
+  sensibile; eventi strutturati con correlation ID e test log su valori/token/link.
+
+[Design, operazioni e limiti B](account-recovery-baseline.md).
+
+### File e dipendenze
+
+20 file toccati da B, di cui 10 nuovi; insieme ad A la pubblicazione prevede 34 file.
+
+| Area | File |
+| --- | --- |
+| AccountRecovery nuovi | AccountRecoveryRegistration.cs, AccountRecoveryService.cs, IAccountRecoverySender.cs, RecoveryLinks.cs, RecoveryTokenProviders.cs |
+| AccountSecurity | AccountRateOperation.cs nuovo; AccountRateLimiter.cs e AccountOperationResult.cs aggiornati mantenendo compatibilità A |
+| Progetto | Identity.Persistence.csproj: FrameworkReference Microsoft.AspNetCore.App, nessun nuovo NuGet B |
+| Test | AccountRecoveryTests.cs, RecoveryLinksTests.cs, InMemoryRecoverySender.cs nuovi; AccountSecurityFixture.cs estesa con opt-in recovery, A resta senza provider |
+| Documenti | account-recovery-baseline.md nuovo; README, identity-security-policy, backlog, questo report, memory e handoff aggiornati |
+
+Versioni invariate: Identity/EF 10.0.12, Npgsql/provider 10.0.3, Redis 3.3.1 già aggiunto
+in A e già previsto nello stack. SDK locale 10.0.402/runtime 10.0.13; immagini Compose
+pgvector/pgvector:0.8.6-pg17 e redis:7.2.16-alpine3.21, root Compose invariato.
+Nessun riferimento host → adapter aggiunto, nessun avvio automatico delle migrazioni.
+
+### Gate locali, distinti dalla futura esecuzione GitHub
+
+- Build Release: 0 warning/errori; format check verde.
+- Suite con PostgreSQL/Redis reali: **112 pass, 0 fail, 0 skipped**;
+  39 unit + 6 architecture + 67 integration. I 82 casi A conservati più 30 nuovi B
+  (17 senza infrastruttura, 13 opt-in). Prima prova a 111 casi prima dell'ultimo test quote.
+- Scadenze provate con timestamp standard protetti nel passato, solo fixture: 23h/25h
+  per conferma, 29min/31min per reset; purpose/utente/keyring errati e tampering rifiutati.
+- Reissue concorrente lascia un solo marker corrente; reset concorrenti hanno un
+  solo vincitore. Replay, vecchio link, cambio password, policy password non conforme,
+  richieste generiche/quote e guasti sender/DB/Redis verificati.
+- Log applicativi/framework, eccezioni e scope catturati: nessun email/password/hash,
+  SecurityStamp, bearer URL/code o connessione rilevati; nessuna stampa token.
+- Snapshot EF Identity invariato, nessuna migration necessaria.
+- 7 test environment loader superati.
+- Frontend: npm ci, lint, type-check e production build PASS, file frontend invariati.
+- NuGet advisory scan incluse transitive: nessuna segnalazione dalle fonti correnti.
+- npm audit: stessa catena 5 high dev (GHSA-vfj7-8cjw-p6xm), 0 critical;
+  --omit=dev 0 segnalazioni. ESLint 9 deprecato e limiti peer già documentati, non risolti.
+
+Solo database/namespace e Compose temporanei con credenziali casuali in memoria;
+risorse di verifica rimosse, volumi esistenti e `.env` non alterati.
+Gitleaks 8.30.1 sui 34 file A+B candidati, in copia temporanea con output redatto:
+nessun leak; whitespace e link locali PASS. Stato GitHub da registrare dopo il push,
+senza confonderlo con queste evidenze locali. Nessun gate/advisory nascosto o forzato.
+
+### Limiti e prossimo passo
+
+Program.cs non collega il componente: nessuna route/pagina dei link, API di token,
+login, sessione, MFA o UI. Invio SMTP/provider email, keyring persistente protetto,
+delivery/retention affidabili, body/HTTP limit, referrer/access log e proxy sono gate
+da implementare/verificare separatamente, non readiness commerciale implicita.
+Invio post-commit senza outbox non è atomicità DB/email; retry/consegna non garantiti.
+Soglie/NAT/timing e DoS restano da tarare prima della beta, senza claim constant-time.
+SecurityStamp cambiato non dimostra revoca immediata sessioni: S1-004C dovrà provarla.
+SEC-EX-001 non prorogata né estesa ad auth. S1-004 complessivo ancora aperto.
+**Prossimo blocco da autorizzare: S1-004C — login/logout, cookie/sessioni, CSRF e revoca**;
+non iniziato da questa richiesta. S1-004D e S1-005+ non iniziati.

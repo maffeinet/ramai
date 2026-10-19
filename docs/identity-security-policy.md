@@ -1,7 +1,13 @@
 # RAMAI — Baseline identità locale, sicurezza e privacy
 
 Data proposta: 2026-10-16. Approvazione: 2026-10-17, Europe/Rome.
-Stato: **PARAMETRI TECNICI APPROVATI — CONTROLLI NON ANCORA IMPLEMENTATI**.
+Stato: **PARAMETRI TECNICI APPROVATI — IMPLEMENTAZIONE PARZIALE INTERNA**.
+Aggiornamento 19 ottobre: S1-004A implementa componenti ID-01 e primi controlli ID-02,
+verificati localmente, non ancora collegati a endpoint/login. Dettagli e limiti in
+[account-security-baseline.md](account-security-baseline.md). S1-004B aggiunge conferma
+email/reset interni con provider standard, lifetimes 24h/30min e sender solo nei test:
+[dettagli B](account-recovery-baseline.md). Nessun endpoint o email reale; ID-04/05 e
+parti HTTP/operative non implementate. Nessuna approvazione beta o attestazione normativa.
 Riferimento: [ADR-009](adr/ADR-009-identity-access.md), S1-001.
 Approvazione esplicita dell'utente: "ok parametri tecnici S1-001 approvati".
 NIS2/GDPR sono riferimenti di progetto, non una dichiarazione di conformità legale.
@@ -144,7 +150,8 @@ membership, schema e migrazioni. S1-004: ID-01–05, includendo test email/reset
 se troppo ampio dividerlo in task piccoli, non saltare le protezioni. S1-005/007/008:
 ID-06 e ID-07. S1-010/011: negative tests e CI/security scans. S1-012: review e prove.
 
-Tutti i controlli sono pianificati, non implementati. MFA e gate privacy prima della
+I controlli erano interamente pianificati alla data di approvazione; lo stato parziale
+S1-004A è riportato sopra, senza dichiarare completato il lifecycle. MFA e gate privacy prima della
 beta non sono implicitamente rinviati a dopo la vendita. Questa baseline non amplia
 SEC-EX-001 a vulnerabilità runtime, auth o isolamento tenant e non rinnova la deroga.
 S1-001 è completato nel perimetro documentale di analisi/approvazione tecnica.

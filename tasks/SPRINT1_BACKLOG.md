@@ -1,7 +1,7 @@
 # RAMAI — Sprint 1 proposto: Identity, Tenant e DB baseline
 
 Data piano: 2026-10-16. Aggiornamento: 2026-10-19.
-Stato: **S1-001 COMPLETATO; S1-002/003 COMPLETATI E PUBBLICATI; S1-004+ NON AVVIATI**.
+Stato: **S1-001 COMPLETATO; S1-002/003 PUBBLICATI; S1-004A/B COMPLETATI; PUBBLICAZIONE A+B IN VERIFICA; S1-004 APERTO**.
 Pubblicazione autorizzata del 19 ottobre, commit 7da7758;
 [CI verde con 58 test senza skipped](https://github.com/maffeinet/ramai/actions/runs/39210403963).
 Le sezioni dei singoli task mantengono lo storico delle implementazioni locali.
@@ -145,6 +145,22 @@ pgvector o dati; recovery verificata in ambiente di test; nessun reset di volumi
 Test: integration PostgreSQL reale, vincoli membership/TenantId e architecture.
 
 ### S1-004 — Autenticazione e sessione
+
+Suddivisione concordata, con autorizzazione separata per ciascun blocco:
+
+- **S1-004A completato localmente il 19 ottobre**: account/password, validator NFC,
+  denylist locale con provenienza, Identity hash/rehash, lockout e rate limit Redis
+  interni, test reali e log minimizzati. [Dettagli](../docs/account-security-baseline.md)
+  e [quality gate](../docs/sprint1-progress.md). Nessun endpoint o sessione.
+- **S1-004B completato il 19 ottobre**: conferma/reset interni con token Identity
+  purpose-bound 24h/30min, solo ultimo link valido e consumo atomico, sender in memoria
+  nei test. [Dettagli](../docs/account-recovery-baseline.md). Nessun endpoint o email reale.
+- S1-004C: login/logout e sessioni/cookie/CSRF/revoca, non iniziato.
+- S1-004D: MFA e recovery secondo policy, non iniziato.
+
+Il completamento A/B non completa il trasporto HTTP o l'intero S1-004. Alla fine di B
+l'utente ha autorizzato commit/push A+B e controllo GitHub; non durante implementazione.
+S1-005+ non iniziati.
 
 Output dipendente dall'ADR: login/logout, scadenza e revoca, provisioning credenziali
 o callback IdP. Token sensibili non in localStorage, URL o log.
