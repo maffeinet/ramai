@@ -1,9 +1,9 @@
 # RAMAI — Sprint 1 proposto: Identity, Tenant e DB baseline
 
 Data piano: 2026-10-16. Aggiornamento: 2026-10-19.
-Stato: **S1-001 COMPLETATO; S1-002/003 PUBBLICATI; S1-004A/B COMPLETATI; PUBBLICAZIONE A+B IN VERIFICA; S1-004 APERTO**.
-Pubblicazione autorizzata del 19 ottobre, commit 7da7758;
-[CI verde con 58 test senza skipped](https://github.com/maffeinet/ramai/actions/runs/39210403963).
+Stato: **S1-001 COMPLETATO; S1-002/003 PUBBLICATI; S1-004A/B COMPLETATI E PUBBLICATI; S1-004 APERTO**.
+Ultima pubblicazione applicativa autorizzata del 19 ottobre, commit `ca7edf4`;
+[CI verde con 112 test senza skipped](https://github.com/maffeinet/ramai/actions/runs/39230830575).
 Le sezioni dei singoli task mantengono lo storico delle implementazioni locali.
 Questo piano non modifica AGENTS.md e non autorizza feature fuori Sprint 0.
 

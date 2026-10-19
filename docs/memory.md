@@ -7,14 +7,18 @@ Aggiornato: 2026-10-19, Europe/Rome.
 S1-004B completato il 19 ottobre come flusso interno conferma/reset con token Identity
 24h/30min, marker ultimo link, consumo atomico e sender solo in memoria nei test.
 [Dettagli](account-recovery-baseline.md). S1-004C/D non iniziati: nessun endpoint,
-sessione, MFA o UI. Pubblicazione A+B autorizzata dopo i gate, in verifica nel report.
+sessione, MFA o UI. A+B pubblicati nel commit `ca7edf4` dopo i gate e secret scan.
+[CI GitHub verde](https://github.com/maffeinet/ramai/actions/runs/39230830575):
+112 test senza skipped, build senza warning/errori, format e gate frontend verdi.
+Restano 5 high npm dev/ESLint deprecato, SEC-EX-001 non prorogata.
 La frase storica "nessun commit/push" del blocco A sotto non prevale sull'autorizzazione B.
 
 S1-004A autorizzato e completato localmente il 19 ottobre: componenti interni account,
 validator NFC/denylist, Identity hash/lockout, rate Redis e test. Nessun login/endpoint,
 email/reset, MFA o sessione: B/C/D non iniziati. Nessun nuovo commit/push.
 Schema e modelli invariati; [dettagli tecnici/limiti](account-security-baseline.md),
-[report](sprint1-progress.md). La CI pubblicata sotto copre solo S1-003 e precedenti.
+[report](sprint1-progress.md). Questo paragrafo è lo storico A prima della pubblicazione
+A+B; la run 39230830575 sopra copre ora entrambi i blocchi.
 
 S1-003 completato localmente il 18 ottobre dopo istruzione di prosecuzione: adapter
 EF Core/Identity 10.0.12 e provider Npgsql 10.0.3, schemi/history separati Identity/Tenants,

@@ -9,7 +9,7 @@ baseline pubblicata e CI verde. Debito non risolto, riesame entro 30 ottobre o p
 S1-001 documentale completato; S1-002 modelli/contratti completato localmente il 17 ottobre;
 S1-003 persistence/migrazioni completato localmente il 18 ottobre dopo richiesta di
 prosecuzione e avvio Docker. S1-004A/B componenti account/password e conferma/reset
-completati il 19 ottobre; pubblicazione finale A+B autorizzata e in verifica.
+completati e pubblicati il 19 ottobre nel commit `ca7edf4`, CI verde con 112 test.
 S1-004 complessivo aperto, C/D e S1-005+ non iniziati.
 Il 19 ottobre l'utente ha autorizzato verifica, commit/push e controllo GitHub del
 lavoro già svolto. Pubblicato nel commit `7da7758ea89f319c2e8c056f97f5c2e823b55476`;
@@ -18,7 +18,8 @@ success, entrambi i job verdi: 58 test backend senza skipped e tutti i gate fron
 Questo aggiornamento solo documentale registra l'evidenza della run del codice;
 il suo eventuale commit successivo non è il commit testato da quella run.
 Quella pubblicazione non autorizzava S1-004. Successivamente l'utente ha autorizzato
-solo S1-004A, senza commit/push: nuove modifiche ancora locali, non coperte dalle run sopra.
+solo S1-004A, inizialmente senza commit/push; il successivo blocco B ha autorizzato
+la pubblicazione A+B documentata sotto. Le run sopra restano evidenze storiche S1-003.
 
 ## Ultimo blocco — S1-004B
 
@@ -30,7 +31,13 @@ solo nei test, keyring e origine HTTPS da fornire esplicitamente, nessun default
 Suite finale locale A+B: 112 test pass/0 skipped; backend e frontend verdi,
 nessun leak Gitleaks rilevato; schema invariato. La prima prova aveva 111 casi.
 Nessun endpoint, sessione, MFA o UI. SecurityStamp aggiornato al reset, non prova di
-revoca immediata delle sessioni. Dopo i gate è autorizzata pubblicazione A+B e CI.
+revoca immediata delle sessioni.
+Pubblicati A+B nel commit `ca7edf4c156901a47a09fff36d15570799ffe652`, 34 file,
+Gitleaks sul commit senza leak. [CI GitHub verde](https://github.com/maffeinet/ramai/actions/runs/39230830575),
+head verificato: 112 test (39 unit, 6 architecture, 67 integration), nessuno skipped;
+build 0 warning/errori, format e gate frontend verdi. Restano ESLint deprecato e
+5 high npm dev; SEC-EX-001 non prorogata. Questo aggiornamento solo documentale
+registra la run del codice, non attribuisce quella run a un commit futuro.
 Prossimo blocco da autorizzare separatamente: S1-004C, non iniziato.
 
 ## Blocco precedente — S1-004A

@@ -8,7 +8,7 @@ Aggiornato: 2026-10-19, Europe/Rome.
 - S1-002: modelli e contratti completati, pubblicati e verificati in CI il 19 ottobre.
 - S1-003: persistenza/migrazioni completate, pubblicate e verificate in CI il 19 ottobre.
 - S1-004A/B: componenti interni account/password e conferma/reset completati;
-  pubblicazione finale A+B autorizzata e in verifica. S1-004 complessivo aperto,
+  pubblicati nel commit `ca7edf4`, CI verde con 112 test senza skipped. S1-004 complessivo aperto,
   C/D e S1-005+ non iniziati.
 - Nessun endpoint di autenticazione, sessione o UI Sprint 1 presente.
 - M0 chiuso con [SEC-EX-001](security-exception.md) accettata per solo sviluppo interno,
@@ -395,8 +395,8 @@ ha dato mediana account presente 94,8 ms, assente 77,7 ms: query/lock/update div
 L'utente ha autorizzato esclusivamente B, preview prima del codice e pubblicazione
 GitHub dopo completamento/verifiche. La frase finale "una volta completato, pubblica"
 è stata esplicitata come autorizzazione post-gate, non durante l'implementazione.
-La pubblicazione includerà anche A già locale, necessario a B; nessun task C/D/UI.
-Stato: componenti interni completati; pubblicazione finale autorizzata in verifica.
+La pubblicazione include anche A già locale, necessario a B; nessun task C/D/UI.
+Stato: componenti interni completati e pubblicati; CI GitHub verificata verde.
 
 ### Implementazione
 
@@ -440,7 +440,7 @@ in A e già previsto nello stack. SDK locale 10.0.402/runtime 10.0.13; immagini 
 pgvector/pgvector:0.8.6-pg17 e redis:7.2.16-alpine3.21, root Compose invariato.
 Nessun riferimento host → adapter aggiunto, nessun avvio automatico delle migrazioni.
 
-### Gate locali, distinti dalla futura esecuzione GitHub
+### Gate locali, distinti dall'esecuzione GitHub
 
 - Build Release: 0 warning/errori; format check verde.
 - Suite con PostgreSQL/Redis reali: **112 pass, 0 fail, 0 skipped**;
@@ -463,8 +463,24 @@ Nessun riferimento host → adapter aggiunto, nessun avvio automatico delle migr
 Solo database/namespace e Compose temporanei con credenziali casuali in memoria;
 risorse di verifica rimosse, volumi esistenti e `.env` non alterati.
 Gitleaks 8.30.1 sui 34 file A+B candidati, in copia temporanea con output redatto:
-nessun leak; whitespace e link locali PASS. Stato GitHub da registrare dopo il push,
-senza confonderlo con queste evidenze locali. Nessun gate/advisory nascosto o forzato.
+nessun leak; whitespace e link locali PASS. Nessun gate/advisory nascosto o forzato.
+
+### Pubblicazione ed evidenza GitHub — 2026-10-19
+
+Commit applicativo A+B: `ca7edf4c156901a47a09fff36d15570799ffe652`, 34 file.
+Gitleaks 8.30.1 anche sul commit effettivo prima del push: nessun leak rilevato.
+Push su origin/main completato senza force; repository pulito/allineato dopo il push.
+
+[RAMAI CI — run 39230830575](https://github.com/maffeinet/ramai/actions/runs/39230830575)
+verifica esattamente quel commit: **completed / success**, job backend e frontend verdi.
+Log GitHub verificati: restore/build Release (0 warning, 0 errori), format check,
+**112 test backend: 39 unit + 6 architecture + 67 integration, 0 fail/0 skipped**,
+con infrastruttura PostgreSQL/Redis; npm ci, lint, type-check e production build verdi.
+Anche npm ci su GitHub segnala ESLint 9 deprecato e 5 vulnerabilità high già note:
+non risolte dalla CI verde, SEC-EX-001 resta limitata allo sviluppo interno.
+Secret scan, audit NuGet e 7 test loader sopra sono verifiche locali, non nuovi gate CI.
+Questo aggiornamento documentale registra la run del codice: il suo commit successivo
+non è il commit applicativo verificato da quella run. Nessun task C/D iniziato.
 
 ### Limiti e prossimo passo
 

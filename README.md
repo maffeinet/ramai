@@ -198,10 +198,13 @@ Il 19 ottobre 2026 pubblicati documentazione e task S1-001/002/003 nel commit
 verde non significano prodotto pronto alla vendita.
 Sprint 1: S1-001 approvato; S1-002 modelli/contratti e S1-003 persistenza/migrazioni
 completati. Stato, verifiche locali e conferma CI della pubblicazione sono nel
-[report Sprint 1](docs/sprint1-progress.md). S1-004A aggiunge localmente componenti
+[report Sprint 1](docs/sprint1-progress.md). S1-004A aggiunge componenti
 interni account/password e anti-brute-force, non ancora collegati all'API:
 [dettagli e limiti A](docs/account-security-baseline.md). S1-004B aggiunge conferma/reset
 interni con sender solo nei test: [dettagli B](docs/account-recovery-baseline.md).
+A+B pubblicati nel commit `ca7edf4`, [CI verde](https://github.com/maffeinet/ramai/actions/runs/39230830575):
+112 test backend senza skipped, build 0 warning/errori, format e gate frontend verdi.
+Restano i warning npm/ESLint sotto SEC-EX-001, non risolti dalla pipeline verde.
 Nessun endpoint di autenticazione, login o sessione presente; S1-004C/D non iniziati.
 
 Per riprendere il progetto leggere [memory](docs/memory.md), [handoff](docs/handoff.md)
