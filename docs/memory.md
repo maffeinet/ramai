@@ -1,6 +1,6 @@
 # RAMAI — Memoria del progetto
 
-Aggiornato: 2026-10-18, Europe/Rome.
+Aggiornato: 2026-10-19, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
@@ -8,7 +8,11 @@ S1-003 completato localmente il 18 ottobre dopo istruzione di prosecuzione: adap
 EF Core/Identity 10.0.12 e provider Npgsql 10.0.3, schemi/history separati Identity/Tenants,
 reader e migrazioni testate su PostgreSQL reale temporaneo. Nessuna modifica a dati
 o volumi preesistenti. [Procedure e limiti](database-migrations.md),
-[report](sprint1-progress.md). S1-004/login non avviato; nessun commit/push.
+[report](sprint1-progress.md). Pubblicato il 19 ottobre nel commit `7da7758`,
+[pipeline verde](https://github.com/maffeinet/ramai/actions/runs/39210403963):
+58 test backend senza skipped e tutti i gate frontend. S1-004/login non avviato.
+Audit npm del 19 conferma la stessa catena 5 high dev, 0 critical/0 production:
+SEC-EX-001 rimane in vigore solo per sviluppo interno, non prorogata.
 I paragrafi storici S1-002 sotto restano riferiti al 17 ottobre.
 
 ## Scopo e fonti

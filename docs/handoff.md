@@ -10,7 +10,11 @@ S1-001 documentale completato; S1-002 modelli/contratti completato localmente il
 S1-003 persistence/migrazioni completato localmente il 18 ottobre dopo richiesta di
 prosecuzione e avvio Docker. S1-004/login e task successivi non iniziati.
 Il 19 ottobre l'utente ha autorizzato verifica, commit/push e controllo GitHub del
-lavoro già svolto. Pubblicazione in corso; esito e riferimenti nel report Sprint 1.
+lavoro già svolto. Pubblicato nel commit `7da7758ea89f319c2e8c056f97f5c2e823b55476`;
+[run 39210403963](https://github.com/maffeinet/ramai/actions/runs/39210403963) conclusa
+success, entrambi i job verdi: 58 test backend senza skipped e tutti i gate frontend.
+Questo aggiornamento solo documentale registra l'evidenza della run del codice;
+il suo eventuale commit successivo non è il commit testato da quella run.
 Nessuna autorizzazione a iniziare S1-004 in questo blocco.
 
 ## Ultimo blocco — S1-003
@@ -24,7 +28,9 @@ Test reali eseguiti su Compose temporaneo con password casuale; dati/volumi esis
 non modificati. Risorse temporanee rimosse. Nessun `.env` creato.
 Gate finali locali: build 0 warning/errori, 58 test superati/0 skipped, format e
 snapshot EF coerenti, nessun advisory NuGet o leak Gitleaks rilevato nelle scansioni.
-Nessuna nuova run GitHub; debt npm preesistente non risolto né riauditato qui.
+Questi erano i gate locali del 18 ottobre. Il 19 ottobre sono stati riconfermati e
+aggiunta la verifica GitHub sopra. Debt npm riauditato il 19: stessa catena 5 high dev,
+0 critical e 0 segnalazioni production, non risolto. SEC-EX-001 invariata/scadenza 30 ottobre.
 Il prossimo blocco è S1-004, da autorizzare separatamente e suddividere secondo policy
 prima del codice; non saltare cookie/CSRF/revoca/email/MFA per accelerare la tabella.
 Le sezioni storiche successive descrivono gli esiti alla rispettiva data, non prevalgono

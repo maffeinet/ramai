@@ -5,8 +5,8 @@ Aggiornato: 2026-10-19, Europe/Rome.
 ## Stato
 
 - S1-001: **completato nel solo perimetro documentale di analisi/approvazione tecnica**.
-- S1-002: completato localmente per modelli e contratti; dettagli sotto.
-- S1-003: persistenza/migrazioni completate localmente; dettagli e limiti sotto.
+- S1-002: modelli e contratti completati, pubblicati e verificati in CI il 19 ottobre.
+- S1-003: persistenza/migrazioni completate, pubblicate e verificate in CI il 19 ottobre.
 - S1-004–012: non avviati. Nessun login, sessione o UI Sprint 1 presente.
 - M0 chiuso con [SEC-EX-001](security-exception.md) accettata per solo sviluppo interno,
   riesame entro il 30 ottobre o prima secondo le sue condizioni, non prorogata.
@@ -255,5 +255,30 @@ Verifiche locali rieseguite oggi:
 
 Nessun force/override di dipendenze o modifica alla scadenza dell'eccezione.
 Nessun `.env`, dato cliente o credenziale effimera da pubblicare; container/volumi
-temporanei rimossi e volumi preesistenti preservati. Scansione secret finale prima
-del commit e stato GitHub verranno registrati come evidenze separate dai gate locali.
+temporanei rimossi e volumi preesistenti preservati.
+
+### Evidenza effettiva GitHub, distinta dalle prove locali
+
+Commit applicativo/documentale autorizzato:
+`7da7758ea89f319c2e8c056f97f5c2e823b55476`, 47 file revisionati.
+Gitleaks 8.30.1: nessun leak sia nella copia dei file candidati, sia nel diff del
+commit effettivo prima del push. Pubblicazione su origin/main senza force push.
+
+[RAMAI CI — run 39210403963](https://github.com/maffeinet/ramai/actions/runs/39210403963),
+headSha esattamente 7da7758ea89f319c2e8c056f97f5c2e823b55476: **completed / success**.
+Entrambi i job GitHub-hosted Ubuntu 24.04 conclusi con successo:
+
+- backend: restore, build (0 warning/errori), format e test con servizi reali;
+  **39 unit + 6 architecture + 13 integration = 58 pass, 0 fail, 0 skipped**;
+- frontend: npm ci, lint, type-check e production build PASS;
+- nei log frontend ancora deprecazione ESLint 9 e 5 high, non nascoste o risolte.
+
+Questo conferma il funzionamento del nuovo codice anche sul runner Linux con SDK
+10.0.401 fissato nel workflow, oltre al locale 10.0.402. Workflow invariato: secret
+scan, advisory scan e test loader sopra sono verifiche locali manuali, non nuovi
+gate automatici aggiunti. Non è stata effettuata alcuna distribuzione/deploy.
+
+README, memory/handoff, stato backlog e questo report aggiornati con l'evidenza
+acquisita. Il commit successivo che registra questi risultati è solo documentale:
+la run linkata qui verifica il commit applicativo 7da7758, non un hash futuro.
+S1-004 e task successivi non iniziati; nessuna deroga security nuova o prorogata.

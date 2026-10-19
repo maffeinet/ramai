@@ -192,8 +192,10 @@ S0-012 è pubblicato nel commit `6d5f697`, con
 Il 16 ottobre 2026 l'utente ha approvato la chiusura M0 con
 [SEC-EX-001 accettata temporaneamente](docs/security-exception.md) per il solo sviluppo
 interno: riesame entro il 30 ottobre o prima secondo le condizioni registrate.
-Ultima [CI pubblicata verde](https://github.com/maffeinet/ramai/actions/runs/38887663889),
-commit `4c441b3`. Chiusura Foundation non significa prodotto pronto alla vendita.
+Il 19 ottobre 2026 pubblicati documentazione e task S1-001/002/003 nel commit
+`7da7758`, con [CI verde](https://github.com/maffeinet/ramai/actions/runs/39210403963):
+58 test backend senza skipped e gate frontend superati. Chiusura Foundation e CI
+verde non significano prodotto pronto alla vendita.
 Sprint 1: S1-001 approvato; S1-002 modelli/contratti e S1-003 persistenza/migrazioni
 completati. Stato, verifiche locali e conferma CI della pubblicazione sono nel
 [report Sprint 1](docs/sprint1-progress.md). Login e task S1-004+ non iniziati.
