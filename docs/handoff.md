@@ -7,7 +7,15 @@ zero skipped**. display-name originale upstream con chiusura vendor motivata nel
 [review](frontend-tooling-review.md), 109 fixture upstream e 24 casi wrapper nuovi.
 Install strict/lint/audit lab e gate frontend baseline PASS. Backend Release/format
 e 112 test reali verdi/0 skipped; infrastruttura temporanea dedicata rimossa.
-Pubblicazione/CI da verificare dopo scan finale. Nessuna migrazione o S1-004C,
+Pubblicato bcaca48d3afcceff06af553889d76b1f9dd726a8 dopo secret scan 70 file senza
+leak e gate verdi. [CI 39347649384](https://github.com/maffeinet/ramai/actions/runs/39347649384)
+success, backend/frontend, 112 test/0 skipped. Ripetuti cloni del commit pubblicato:
+370/370 Windows/Linux e tutti i gate verdi. CI non esegue il laboratorio.
+Questo handoff aggiornato è successivo al commit testato dalla run citata.
+Prossimo passo per l'utente: review del costo/manutenzione bridge e autorizzazione
+separata di un'eventuale migrazione; non adottare automaticamente o aprire altri
+task nelle riprese notturne. Se nessuna novità utile, non ripubblicare gli stessi esiti.
+Nessuna migrazione o S1-004C,
 SEC-EX-001 aperta. I blocchi sotto conservano lo storico dei gap ora colmati.
 
 Stato precedente: review estesa NON verde. [Review e istruzioni notturne](frontend-tooling-review.md).

@@ -7,7 +7,10 @@ Aggiornato: 2026-10-19, Europe/Rome.
 20 ottobre, ripresa 02:18: **370/370 verdi, zero skipped** in locale e nuovi cloni
 Windows/Linux. display-name upstream con chiusura vendor motivata nella
 [review](frontend-tooling-review.md). Install/lint/audit lab, gate frontend e
-backend Release/format/112 test verdi. Pubblicazione da confermare nell'handoff;
+backend Release/format/112 test verdi. Pubblicato bcaca48, CI reale
+[39347649384](https://github.com/maffeinet/ramai/actions/runs/39347649384) verde;
+cloni del commit pubblicato confermano 370/370. CI non esegue il laboratorio.
+Questo aggiornamento documentale è successivo al commit verificato;
 nessuna migrazione o S1-004C, SEC-EX-001 aperta. Sotto: storico dei gap ora colmati.
 
 20 ottobre, 01:19: Next no-duplicate-head corretto nel laboratorio con sorgente

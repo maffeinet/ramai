@@ -610,7 +610,13 @@ install/lint/type-check/build e audit production baseline PASS nei due cloni.
 Backend Release 0 warning/errori, format PASS, 112 test PASS/0 skipped con
 infrastruttura temporanea reale, poi rimossa senza toccare dati utente.
 Report, memory, handoff, eccezione, README laboratorio e provenienza aggiornati.
-Pubblicazione/CI da confermare dopo scan finale; pipeline attiva non esegue il lab.
+Pubblicato bcaca48d3afcceff06af553889d76b1f9dd726a8, 70 file pertinenti,
+Gitleaks 8.30.1 senza leak e whitespace/link PASS. Run reale
+[39347649384](https://github.com/maffeinet/ramai/actions/runs/39347649384) success,
+backend/frontend, 112 test/0 skipped. Pipeline attiva non esegue il lab.
+Cloni del commit pubblicato ripetuti: 370/370 Windows/Linux e tutti i gate verdi;
+evidenze e limiti nella review. Questo aggiornamento documentale è successivo
+al commit testato dalla run citata; nessuna estensione implicita di quell'evidenza.
 SEC-EX-001 aperta, nessuna migrazione o S1-004C. I risultati sotto sono storici.
 
 ### Ripresa 01:19 — Next chiuso, React ancora non equivalente

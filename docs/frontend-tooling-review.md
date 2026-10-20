@@ -30,8 +30,17 @@ password casuale solo nel processo, Compose dedicato ramai-conformance-night-022
 porte 45432/46379. Rimossi soltanto container/rete/volumi temporanei appena creati
 per la prova, nessun dato utente rimosso. Nessuna modifica applicativa o workflow.
 
-Pubblicazione da verificare dopo scan finale. La CI attiva NON esegue il laboratorio:
-la futura run verde verifica app/backend, non questi 370 test. readyForAdoption=false:
+Pubblicato nel commit bcaca48d3afcceff06af553889d76b1f9dd726a8 dopo Gitleaks
+8.30.1 su tutti i 70 file candidati (nessun leak), whitespace/link e gate verdi.
+[CI reale 39347649384](https://github.com/maffeinet/ramai/actions/runs/39347649384)
+conclusa success: backend/frontend, 112 test backend/0 skipped, format e build verdi.
+La CI attiva NON esegue il laboratorio: la run verifica app/backend, non i 370 test.
+Ripetuti inoltre cloni del commit pubblicato bcaca48, non più del vecchio HEAD:
+370/370 su Windows/Linux e tutti i gate install/lint/audit lab/frontend verdi,
+nessuna diff nei sorgenti laboratorio rispetto al commit. Evidenze finali:
+C:/Users/helpdesk.ISV/AppData/Local/Temp/ramai-clean-conformance-89af3766eb6c4995be9bacecaff70f64/evidence.
+Questo aggiornamento documentale successivo non è il commit testato dalla run citata.
+readyForAdoption=false:
 review manutenzione vendor e approvazione separata prima della migrazione,
 equivalenza opzioni/autofix non esaustiva. SEC-EX-001 aperta, 5 high dev attive,
 nessuna proroga o S1-004C. Le sezioni seguenti sono storico dei gap ora colmati.
