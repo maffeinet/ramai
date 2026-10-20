@@ -1,0 +1,132 @@
+[
+  {
+    "id": "valid",
+    "extension": "tsx",
+    "code": "export default function Good() { return <main><p>RAMAI</p></main>; }",
+    "expected": []
+  },
+  {
+    "id": "jsx-key",
+    "extension": "tsx",
+    "code": "export default function List() { return [1,2].map(x => <span>{x}</span>); }",
+    "expected": [
+      "react/jsx-key"
+    ]
+  },
+  {
+    "id": "hooks-order",
+    "extension": "tsx",
+    "code": "\"use client\"; import {useState} from \"react\"; export default function Bad({flag}: {flag: boolean}) { if(flag) useState(0); return null; }",
+    "expected": [
+      "react-hooks/rules-of-hooks"
+    ]
+  },
+  {
+    "id": "hooks-deps",
+    "extension": "tsx",
+    "code": "\"use client\"; import {useEffect} from \"react\"; export default function Bad({value}: {value: string}) { useEffect(()=>{console.log(value)}, []); return null; }",
+    "expected": [
+      "react-hooks/exhaustive-deps"
+    ]
+  },
+  {
+    "id": "alt",
+    "extension": "tsx",
+    "code": "import Image from \"next/image\"; export default function Bad() { return <Image src=\"/a.png\" width={10} height={10} />; }",
+    "expected": [
+      "jsx-a11y/alt-text"
+    ]
+  },
+  {
+    "id": "aria",
+    "extension": "tsx",
+    "code": "export default function Bad() { return <div aria-wrong=\"true\"/>; }",
+    "expected": [
+      "jsx-a11y/aria-props"
+    ]
+  },
+  {
+    "id": "next-sync-script",
+    "extension": "tsx",
+    "code": "export default function Bad() { return <script src=\"https://example.invalid/a.js\"/>; }",
+    "expected": [
+      "@next/next/no-sync-scripts"
+    ]
+  },
+  {
+    "id": "next-inline-script",
+    "extension": "tsx",
+    "code": "import Script from \"next/script\"; export default function Bad() { return <Script>{`console.log(1)`}</Script>; }",
+    "expected": [
+      "@next/next/inline-script-id"
+    ]
+  },
+  {
+    "id": "next-relative-location",
+    "extension": "tsx",
+    "code": "export function go() { window.location.assign(\"/dashboard\"); }",
+    "expected": [
+      "@next/next/no-location-assign-relative-destination"
+    ]
+  },
+  {
+    "id": "react-deprecated",
+    "extension": "tsx",
+    "code": "import React from \"react\"; export class Bad extends React.Component { componentWillMount() {} render() { return null; } }",
+    "expected": [
+      "react/no-deprecated"
+    ]
+  },
+  {
+    "id": "explicit-any",
+    "extension": "tsx",
+    "code": "export function identity(value: any) { return value; }",
+    "expected": [
+      "@typescript-eslint/no-explicit-any"
+    ]
+  },
+  {
+    "id": "unused",
+    "extension": "tsx",
+    "code": "export function identity() { const unused = 1; return 0; }",
+    "expected": [
+      "@typescript-eslint/no-unused-vars"
+    ]
+  },
+  {
+    "id": "duplicate-enum",
+    "extension": "tsx",
+    "code": "export enum Bad { A=1, B=1 }",
+    "expected": [
+      "@typescript-eslint/no-duplicate-enum-values"
+    ]
+  },
+  {
+    "id": "jsx-binding-valid",
+    "extension": "tsx",
+    "code": "function Child() { return <span/>; } export default function Good() { return <Child/>; }",
+    "expected": []
+  },
+  {
+    "id": "shadowed-location-valid",
+    "extension": "tsx",
+    "code": "export function go(window: {location:{assign:(url:string)=>void}}) { window.location.assign(\"/dashboard\"); }",
+    "expected": []
+  },
+  {
+    "id": "props-immutable",
+    "extension": "tsx",
+    "code": "\"use client\"; export default function Bad(props:{value:number}) { props.value = 2; return <div>{props.value}</div>; }",
+    "expected": [
+      "react-hooks/immutability"
+    ]
+  },
+  {
+    "id": "render-purity",
+    "extension": "tsx",
+    "code": "\"use client\"; export default function Bad() { const value = Date.now(); return <div>{value}</div>; }",
+    "expected": [
+      "react-hooks/purity"
+    ]
+  }
+]

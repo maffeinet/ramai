@@ -1,0 +1,77 @@
+{
+  "normalization": "UTF-8; CRLF to LF; trimEnd; one final LF",
+  "react": {
+    "package": "eslint-plugin-react@7.37.5",
+    "gitCommit": "2c98b83c451a4297edf1787d9a616e50687e27e8",
+    "integrity": "sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==",
+    "license": "vendor/react/LICENSE"
+  },
+  "next": {
+    "package": "@next/eslint-plugin-next@16.3.8",
+    "integrity": "sha512-eCR9RcLTZrVS+K3+VOhi0xMdUUGNuriCHHhU1ZoABC/QQ/Gp0OWbLKQxV2/9DkmihYdYRcQWFmZXW8M1AMUXYw==",
+    "license": "vendor/next/LICENSE.md",
+    "licenseSource": "next@16.3.8/license.md"
+  },
+  "files": {
+    "vendor/react/upstream-tests/display-name.js": "df4a9c2163cf3d663684b9003b9ba865c1cef0b546c8274178d1ae23e7d512ed",
+    "vendor/react/lib/rules/display-name.js": "79c686db3ead96f6a3eb4913a5d7b8240a4af9436e5a931727fa5c8dc1b4096a",
+    "vendor/react/lib/util/Components.js": "151a97d58f4f2dac8df14bd29e0d8310336ab92e37dbc3b60aceeef51a64745f",
+    "vendor/react/lib/util/variable.js": "5103f78e701729c6d37bf8f13a2b38b4321694a72475922eaf1263bc937400f4",
+    "vendor/react/lib/util/propTypes.js": "bcee4893df35149ff78c72b6839decea2ef025b8fc162f6c8fb2c3a5814dc912",
+    "vendor/react/lib/util/annotations.js": "0ee704096da1847e165ea39ce00e2c090b39f13d4f418c78103c4eb402ccce62",
+    "vendor/react/lib/util/props.js": "6ded67e8340ff69ddd6ff90583994d4fdd7daca00cec59d615393b3c8ee00dd2",
+    "vendor/react/lib/util/propWrapper.js": "132912be6438713385b26c64d8efde65bbac441fea3f7c4b7c83fdb6e512d416",
+    "vendor/react/lib/util/isFirstLetterCapitalized.js": "eda356ed3d7e48ac96b3de45ba4e514b4a671ab3128200477d944d23f93beb1a",
+    "vendor/react/lib/util/jsx.js": "0d79b47ee189552e9525bd6589ea935dbc3df0b5a71f7deca792281bfffe82eb",
+    "vendor/react/lib/util/isCreateElement.js": "f05ddb642f7b72d6e4b3895fa8f24e07463b58483f1abb2fe711dafece788ec1",
+    "vendor/react/lib/util/isDestructuredFromPragmaImport.js": "d870d29e1b3e482fdd475abfa72b84d2b2a081d09628d4ed9778bbbe584bf082",
+    "vendor/react/lib/util/usedPropTypes.js": "58d605ae11208c39c1cd02e90d14fc6704fff9003ba017681eaa986e9ef4ba3b",
+    "vendor/react/lib/util/defaultProps.js": "2cb67db97b1b14071bb369ae49769771f4af794155f6e6ddae3dadd32f8486df",
+    "vendor/react/lib/util/isCreateContext.js": "47c12e82b5173b31a2785299201a7f156b586e96381795e12f1bd5ae78615335",
+    "vendor/next/rules/no-duplicate-head.js": "2f3fe9b461c45f144e606ab989b409117af0e163edd2c9858d84cbf29426254c",
+    "vendor/next/LICENSE.md": "ee765244e2d59f5234d474f62e0766fa0c8b99af967fdd4c0cb8dcb0c76ea224",
+    "vendor/next/rules/no-location-assign-relative-destination.js": "61f2e7f61e2e9d72860ca15881533f63b9b169fc7774a5b6241771e32c717010",
+    "vendor/next/utils/define-rule.js": "2d490d33f3a9db380fa01452091cb1daf81dbbf0e09fbc4eefdbc379f6aba633",
+    "vendor/react/lib/rules/jsx-uses-react.js": "226c51659db4177a41fafda0bef8464c9a472da4799445fbf7ae016ee58d6174",
+    "vendor/react/lib/rules/jsx-uses-vars.js": "6e562dd84711562365fb02d3d083df1cf4a8ed545593bcb9e87622203bda750c",
+    "vendor/react/lib/rules/no-deprecated.js": "342faddd33e45e2de289b2e8f8874809e385547614b4270ded175f89ac3279d3",
+    "vendor/react/lib/util/ast.js": "548cf88d0e73c1559cdfe05348b8fbe9382ba78a250e1de24a4dc77dff061dc6",
+    "vendor/react/lib/util/componentUtil.js": "53c4cf250b7bae1186ef20b1f590cfe10030443dabd0f0d9754ac16f2c8cb9d7",
+    "vendor/react/lib/util/docsUrl.js": "3a9f36f88197252f066ce63d9a560f043533d2355d59601bd657a9706b65ccdc",
+    "vendor/react/lib/util/error.js": "667d5313fe51611223c3be1e3b5f624b8cc0ce81e7cd67d96cca8c55bbe15f69",
+    "vendor/react/lib/util/eslint.js": "d95839eb72de05e86d37c78f8058b442e3c92f9e8d4a2518eb42cc3e3eb084ae",
+    "vendor/react/lib/util/message.js": "ada7585b41ebd642d180c1057cd1155c5cdc4e06f52ab3247c43979ee4ca5b8a",
+    "vendor/react/lib/util/pragma.js": "7a6497cbc18cf36865cf284733768026c3f4b67d0d9e35e893cd5edcc301c959",
+    "vendor/react/lib/util/report.js": "b9290267cafdbd51cde2dabfc909e254cb592c7031653ba1313d8c049f291b5c",
+    "vendor/react/lib/util/version.js": "8e72563a22cc6f5ba2a5b55a89b958854fa80cd860218498f49f2cfc15ae42c9",
+    "vendor/react/LICENSE": "48b9925aeb237a8de7e9a020654979f937ba71a49a5b126326b0ed71f9600fb6",
+    "vendor/react/upstream-tests/jsx-uses-react.js": "7596bec958f20673177aeaf08e3c8f5d440f09b05d3bb9ffdcacf6712862a20e",
+    "vendor/react/upstream-tests/jsx-uses-vars.js": "19b0499da321425e4ab3a645a311f7fd6545d4160cf92feb22669e3af2ef5e2e",
+    "vendor/react/upstream-tests/no-deprecated.js": "e6ee571894fcf3fa28347c01a6d066b30c092ffed179cc7ad3da9068457116ee"
+  },
+  "adaptations": {
+    "vendor/react/lib/util/version.js": {
+      "sha256": "561b9512194b81925630e39c19d1d1c88497cff5e1eb5079c7cc8d1ae336604f",
+      "reason": "Use context.filename on ESLint 10; original getFilename fallback retained"
+    },
+    "vendor/react/lib/util/componentUtil.js": {
+      "sha256": "b4e816f59fdd41ea4927a85c0e0a748a12a3ff6ab232c5d0a2fe32973b935155",
+      "reason": "Fall back to class-only JSDoc adapter for removed SourceCode.getJSDocComment"
+    },
+    "vendor/next/rules/no-location-assign-relative-destination.js": {
+      "sha256": "ae1dd8cb6b8ce47af83c8c917f4c83d746f4637c858a50a10918a6da23e6f38a",
+      "reason": "Fail lint explicitly on cyclic or over-128-node fallback prefix resolution; no silent acceptance; inherited rule remains the oracle for ordinary fixtures"
+    }
+  },
+  "localFiles": {
+    "vendor/react/lib/util/classJSDoc.js": "956145811a1b0c759b2a93324f0a49c55f3ea5782355948b9e23b23a117aeb46",
+    "vendor/react/ESLINT-LICENSE": "3b6be04f862a077a4b97929dbf247299360824d9365f8603c263769303ace18c",
+    "vendor/react/package.json": "323f084ab43c0be767d9ad165cbbda2454fdbc79c8c69c391408ef03db3139f4",
+    "vendor/next/package.json": "323f084ab43c0be767d9ad165cbbda2454fdbc79c8c69c391408ef03db3139f4"
+  },
+  "eslintAdapter": {
+    "source": "eslint@9.39.5/lib/languages/js/source-code/source-code.js#getJSDocComment",
+    "scope": "ClassDeclaration/ClassExpression paths only; no runtime dependency on ESLint 9",
+    "license": "vendor/react/ESLINT-LICENSE"
+  }
+}

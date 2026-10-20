@@ -4,6 +4,43 @@ Aggiornato: 2026-10-19, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
+20 ottobre, ripresa 02:18: **370/370 verdi, zero skipped** in locale e nuovi cloni
+Windows/Linux. display-name upstream con chiusura vendor motivata nella
+[review](frontend-tooling-review.md). Install/lint/audit lab, gate frontend e
+backend Release/format/112 test verdi. Pubblicazione da confermare nell'handoff;
+nessuna migrazione o S1-004C, SEC-EX-001 aperta. Sotto: storico dei gap ora colmati.
+
+20 ottobre, 01:19: Next no-duplicate-head corretto nel laboratorio con sorgente
+upstream identica e sette test. Suite estesa 237: 235 pass/2 fail/0 skipped:
+restano export memo/forwardRef anonimi per display-name. React-x 5.28.2 testato
+in isolamento non risolve i gap, non adottato. Nessuna migrazione/pubblicazione.
+Evidenze correnti nella [review](frontend-tooling-review.md); le cifre sotto sono storiche.
+
+20 ottobre, ripresa notturna: [review aggiornata](frontend-tooling-review.md).
+Non usare il vecchio risultato 173 verde come approvazione: la copertura estesa
+trova due differenze ancora rosse, confermate Windows/Linux; 222 casi locali,
+220 pass/2 fail/0 skipped. Pubblicazioni autorizzate solo dopo gate e secret scan
+verdi, nessuna migrazione o S1-004C. Riprese orarie e riepilogo delle 09:00 locali
+programmati per il 20 ottobre; non promettere attività continua o puntualità garantita.
+Prototipo conformità autorizzato dopo l'analisi, 19 ottobre: tooling/frontend-conformance,
+173 test verdi, inventario 86/82 regole e audit del proprio lock 0 segnalazioni.
+Gap osservati Next/React/JSX recuperati nei casi testati, con bridge MIT e due helper
+adattati per ESLint 10. [Uso e limiti](../tooling/frontend-conformance/README.md).
+Tooling applicativo NON sostituito; equivalenza esaustiva/Linux/CI e review ancora
+da verificare, readyForAdoption=false. SEC-EX-001 aperta, nessun commit/push o S1-004C.
+
+Analisi alternative tooling del 19 ottobre: [rapporto](frontend-tooling-analysis.md).
+Prototipo isolato Oxlint + ESLint 10 con Hooks/TS supportati ha audit 0 e gate verdi
+sulla copia app, ma perde due controlli diagnostici osservati. Nessuna sostituzione
+applicata: prima test di conformità e gap chiusi, poi eventuale migrazione autorizzata.
+SEC-EX-001 aperta, nessun cambio allo stack, nessun commit/push o nuovo task.
+
+Riesame vulnerabilità successivo alla pubblicazione B, 19 ottobre: nessuna patch
+braces pubblicata, 5 high dev confermate; ESLint 10.13.0/config Next 16.4.2 falliscono
+strict-peer-deps in copia isolata. Config Next 16.4.2 con ESLint 9 risolve il lock ma
+non le 5 high. Nessuna modifica al frontend, nessuna deroga prorogata o chiusa.
+[Evidenze e alternative](security-exception.md). Nessun nuovo commit/push nel riesame.
+
 S1-004B completato il 19 ottobre come flusso interno conferma/reset con token Identity
 24h/30min, marker ultimo link, consumo atomico e sender solo in memoria nei test.
 [Dettagli](account-recovery-baseline.md). S1-004C/D non iniziati: nessun endpoint,

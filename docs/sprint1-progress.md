@@ -494,3 +494,141 @@ SecurityStamp cambiato non dimostra revoca immediata sessioni: S1-004C dovrà pr
 SEC-EX-001 non prorogata né estesa ad auth. S1-004 complessivo ancora aperto.
 **Prossimo blocco da autorizzare: S1-004C — login/logout, cookie/sessioni, CSRF e revoca**;
 non iniziato da questa richiesta. S1-004D e S1-005+ non iniziati.
+
+## Riesame vulnerabilità frontend dopo S1-004B — 2026-10-19
+
+Richiesta di correzione esaminata, nessuna feature aggiunta. Repository inizialmente
+pulito sul commit documentale `79996b4`. Esito: **nessuna correzione compatibile
+dimostrata**, non dichiarare il debito risolto.
+
+- Audit attuale: 5 high dev sulla sola catena Next/fast-glob/micromatch/braces,
+  0 critical. Registry braces latest 3.0.3, nessuna versione corretta pubblicata;
+  [advisory upstream](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) senza patch.
+- Prova isolata ESLint 10.13.0 + eslint-config-next 16.4.2 con strict-peer-deps:
+  ERESOLVE, plugin import 2.32.0 esclude ESLint 10; anche react/jsx-a11y non lo supportano.
+- Seconda prova isolata, config Next 16.4.2 con ESLint 9: lock risolvibile, ma audit
+  ancora 5 high. Solo prove package-lock, script disabilitati, nessun gate attribuito
+  a queste versioni candidate e nessuna modifica trasferita al frontend.
+- Nessun audit fix --force, override, soppressione o rimozione di regole.
+- Gate locali ripetuti sulla baseline invariata: npm ci --strict-peer-deps, lint,
+  type-check e production build PASS; npm audit --omit=dev 0 segnalazioni.
+  Audit completo non verde: 5 high; warning deprecazione ESLint 9 confermato.
+
+File documentali aggiornati: security-exception.md, questo report, memory.md e
+handoff.md. Manifest, lockfile, codice e workflow invariati. Nessun commit/push o
+nuova run GitHub eseguiti per questo riesame. SEC-EX-001 non prorogata: riesame entro
+30 ottobre/fine Sprint 1/prima di clienti o dati reali, al primo evento.
+Prossima scelta sul debito: attendere patch upstream entro le condizioni approvate,
+oppure autorizzare analisi separata di sostituzione/fork del tooling con copertura
+equivalente; non cambiare framework per nascondere l'audit. S1-004C non iniziato.
+
+## Analisi alternativa tooling frontend — 2026-10-19
+
+Autorizzata esclusivamente analisi di una strada alternativa con controlli equivalenti.
+[Report completo](frontend-tooling-analysis.md): inventario reale 86 regole TS/TSX,
+confronto Oxlint 1.88.0/Biome 2.5.15 e prototipo ibrido con ESLint 10.13.0,
+typescript-eslint 8.71.2 e Hooks 7.1.1; stack runtime invariato.
+
+17 casi sintetici (14 negativi, 3 positivi): baseline rileva 14/14; Oxlint e ibrido
+12/14, Biome 9/14. Ibrido senza la catena braces nel lock di laboratorio, audit 0,
+npm install e npm ci strict/ignore-scripts, lint, type-check e build PASS sulla
+copia dell'app. Warning root Next da lockfile annidati del laboratorio, documentato.
+Restano due gap diagnostici osservati: React no-deprecated e Next navigazione
+relativa; gestione JSX e mapping/opzioni restanti da verificare esaustivamente.
+
+Esito: candidato fattibile, **non adottare senza conformità dimostrata**. Creato
+frontend-tooling-analysis.md e aggiornati security-exception, memory, handoff e questo
+report. Nessun manifest/lock/config lint/workflow/codice del progetto modificato.
+Solo prove Windows locali; nessuna nuova CI, commit/push o task applicativo.
+Debito reale e condizioni SEC-EX-001 invariati. Proposta di migrazione da autorizzare
+separatamente con criterio di arresto se perde controlli. S1-004C non iniziato.
+
+## Prototipo conformità e chiusura gap osservati — 2026-10-19
+
+Autorizzato esclusivamente il laboratorio, non la sostituzione del tooling e non
+S1-004C. Creato tooling/frontend-conformance con manifest/lock isolati, inventario,
+config in memoria, bridge MIT di quattro regole, provenienza/hash, test e README.
+[Report tecnico aggiornato](frontend-tooling-analysis.md),
+[comandi e limiti](../tooling/frontend-conformance/README.md).
+
+Gap osservati Next/React e riferimenti JSX recuperati nei test. Test aggiuntivi hanno
+scoperto API rimosse in ESLint 10 (getFilename/JSDoc): due helper adattati e coperti,
+senza riscrivere il peer range dei vecchi plugin o introdurre la catena vulnerabile.
+
+- Laboratorio: npm install/npm ci strict e ignore-scripts PASS; lint PASS.
+- **173 test del prototipo superati, nessuno fallito/skipped**: 27 full preset,
+  34 Next, 88 fixture upstream, 18 edge case, 5 inventario/integrità e 1 isolamento.
+- Audit completo del lock laboratorio: 0 segnalazioni note, nessun ESLint 9 o
+  braces/fast-glob/micromatch/preset Next nell'albero candidato.
+- Mapping 86 TS/TSX e 82 JS/MJS con opzioni/severità conservate; non equivalenza
+  esaustiva delle implementazioni native o degli autofix. readyForAdoption=false.
+- Frontend originale: lint, type-check, production build PASS; audit production 0.
+  Manifest, lockfile, config lint, codice applicativo e CI invariati.
+
+Nessuna nuova prova backend/Linux/GitHub/clone pulito. Comparatore con baseline
+esterna ancora sotto SEC-EX-001; audit del laboratorio non bonifica l'oracolo.
+Le 5 high dev e ESLint 9 restano nel progetto attivo. Nessuna proroga/chiusura del
+debito, commit/push, S1-004C o altro task applicativo. Aggiornati anche memory,
+handoff, security-exception e analisi, preservando le modifiche documentali preesistenti.
+Prossimo passo separato: review/estensione conformità e validazione isolata Windows/Linux
+prima di approvare una futura migrazione e la manutenzione dei bridge.
+
+Controlli finali: Gitleaks 8.30.1 su 45 file candidati senza leak, link e whitespace
+verificati; nessuna diff in src/ o workflow. Audit completo baseline riconfermato
+5 high/0 critical sulla stessa advisory. 40 nuovi file nel solo laboratorio,
+5 documenti aggiornati inclusa l'analisi già locale; nessun contenuto precedente perso.
+
+## Review estesa e ripresa notturna — 2026-10-20
+
+[Review completa](frontend-tooling-review.md). Copertura aggiuntiva e cloni puliti
+Windows/Linux del 19 ottobre hanno dato 221 casi: 219 superati, 2 falliti, 0 skipped.
+Lint/install/audit laboratorio e gate frontend baseline verdi su entrambi i sistemi;
+non è CI GitHub. Corretto il noexec della prima prova Linux e ripetuta la verifica.
+Il checkout aggiornato, con un ulteriore test di bootstrap, dà 222: 220 pass/2 fail.
+
+Restano react/display-name su memo anonimo e no-duplicate-head su Document funzionale.
+Il laboratorio rimane bloccato, senza suppress/skip. Rafforzati guardia contro cicli
+Next, integrità vendor, report fail-closed e riproduzione con snapshot esplicito.
+L'ultimo bootstrap aggiornato necessita nuova prova in clone. Tooling attivo invariato.
+
+Utente autorizza riprese notturne e pubblicazione GitHub delle modifiche pertinenti
+dopo quality gate/secret scan verdi. Programmate riprese orarie limitate alla notte
+e punto alle 09:00 del 20 ottobre Europe/Rome; non garantita esecuzione in assenza
+di PC/app, permessi o capacità. Nessun nuovo commit/push al momento, nessuna
+migrazione o S1-004C. SEC-EX-001 aperta senza proroga.
+
+### Ripresa 02:18 — laboratorio verde, migrazione non approvata
+
+370/370 test, zero skipped, in locale e nuovi cloni puliti Windows/Linux.
+display-name originale upstream con chiusura vendor motivata nella
+[review](frontend-tooling-review.md): 14 sorgenti aggiunti invariati, hash/MIT;
+sei dipendenze helper esatte e Hermes 0.37.0 solo per la fixture Flow upstream.
+109 fixture upstream (anche opzioni/messageId/posizioni), 24 casi wrapper nuovi,
+isolamento bridge rafforzato. Manifest/lock soltanto del laboratorio aggiornati.
+Install strict/ignore-scripts, lint e audit lab PASS, zero advisory note;
+install/lint/type-check/build e audit production baseline PASS nei due cloni.
+Backend Release 0 warning/errori, format PASS, 112 test PASS/0 skipped con
+infrastruttura temporanea reale, poi rimossa senza toccare dati utente.
+Report, memory, handoff, eccezione, README laboratorio e provenienza aggiornati.
+Pubblicazione/CI da confermare dopo scan finale; pipeline attiva non esegue il lab.
+SEC-EX-001 aperta, nessuna migrazione o S1-004C. I risultati sotto sono storici.
+
+### Ripresa 01:19 — Next chiuso, React ancora non equivalente
+
+Modifiche solo al laboratorio e documentazione: no-duplicate-head upstream 16.3.8
+aggiunto al vendor/inventario/bridge con hash originale e nessuna nuova dipendenza;
+sette test di scope e molteplicità. Otto test display-name aggiuntivi conservano
+le evidenze del confronto, incluso forwardRef anonimo non segnalato dal nativo.
+Lint e audit laboratorio verdi. Suite locale e nuovi cloni puliti Windows/Linux:
+**237 casi ciascuno, 235 pass/2 fail/0 skipped**, fallimenti memo/forwardRef anonimi.
+Install/lint/audit laboratorio e install/lint/type-check/build/audit production
+frontend originali verdi su entrambi. Lo script di clone termina con errore per
+la conformità rossa, non mascherata. Backend non rieseguito.
+
+React-x 5.28.2 provato in artifacts isolato con install strict/ignore-scripts e
+audit 0: non segnala i due export anonimi e sommato al nativo duplica il caso
+memo assegnato a variabile. Non aggiunto al manifest/lock laboratorio o app.
+Chiusura vendor React ampia non introdotta. [Dettagli e riproduzione](frontend-tooling-review.md).
+Nessun commit/push o nuova run GitHub; sorgenti/workflow attivi invariati.
+SEC-EX-001 aperta senza proroga, nessuna migrazione o S1-004C.
+Scansione Gitleaks 8.30.1 dei 54 file candidati senza leak; git diff --check PASS.

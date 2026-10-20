@@ -24,9 +24,9 @@ Solo sviluppo interno RAMAI, tooling frontend del lockfile attuale:
   → fast-glob → micromatch → braces; non cinque falle indipendenti;
 - ESLint 9.39.5 fuori supporto; migrazione v10 non compatibile con i peer verificati.
 
-Ultimo audit npm: 19 ottobre, 5 high dev, 0 critical, 0 segnalazioni production;
-riconferma della stessa catena/advisory del 16 ottobre, senza modifica del lockfile.
-La prova di compatibilità peer ESLint resta quella del 16 ottobre, non rieseguita qui.
+Ultimo audit npm: riesame del 19 ottobre successivo alla pubblicazione A+B,
+5 high dev, 0 critical, 0 segnalazioni production; stessa catena/advisory del
+16 ottobre, senza modifica del lockfile. Compatibilità peer riesaminata sotto.
 Questo dato non certifica assenza di vulnerabilità o di esposizione del tooling.
 Inventario e prove in [sprint0-progress.md](sprint0-progress.md).
 
@@ -43,7 +43,47 @@ in copia isolata: ERESOLVE, non forzato. Aggiornare solo la configurazione Next 
 L'eccezione accettata consente di proseguire lo sviluppo interno senza dichiarare il prodotto
 pronto alla vendita. Cambiare framework non è giustificato dalle evidenze raccolte.
 
+## Riesame tecnico dopo S1-004B — 2026-10-19
+
+Richiesta utente: correggere le vulnerabilità. Nessuna chiusura o proroga implicita
+dell'eccezione: l'esito delle prove è **bloccato da dipendenze upstream**.
+
+- Registry npm: braces latest 3.0.3; elenco delle versioni pubblicate senza patch.
+  L'[advisory](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) indica ancora
+  "Patched versions: None". Non sono cinque vulnerabilità indipendenti.
+- @next/eslint-plugin-next stabile 16.4.2 mantiene fast-glob 3.3.1 e la stessa catena.
+- Prova in copia temporanea con package/lock/.npmrc del progetto:
+  `npm install --package-lock-only --ignore-scripts --strict-peer-deps --save-dev --save-exact eslint@10.13.0 eslint-config-next@16.4.2`:
+  **ERESOLVE**, peer di eslint-plugin-import 2.32.0 limitato a ESLint fino a 9.
+  Anche i peer correnti di eslint-plugin-react 7.37.5 e jsx-a11y 6.10.2 escludono 10.
+- Seconda copia temporanea: aggiornare soltanto eslint-config-next a 16.4.2 con
+  ESLint 9 risolve il lock con strict-peer-deps, ma `npm audit --json` restituisce
+  ancora **5 high** sulla stessa catena. Non è una correzione; nessun cambio trasferito.
+- Le prove isolate modificano solo lock/manifest temporanei; non attestano che la
+  configurazione nuova sia eseguibile. Nessun force, legacy-peer-deps, override,
+  downgrade Next o rimozione di regole applicati al repository.
+
+Manifest, lockfile e configurazione lint RAMAI restano invariati. Una sostituzione
+del tooling o un fork con patch richiederebbero proposta separata, verifica della
+copertura lint equivalente e manutenzione esplicita: non sono implementati qui.
+SEC-EX-001 resta aperta alle condizioni e scadenze già approvate, non rinnovata.
+
+Verifiche locali ripetute sulla baseline invariata: npm ci --strict-peer-deps,
+lint, type-check e production build superati; npm audit --omit=dev restituisce
+0 segnalazioni. Audit completo resta non verde (5 high); ESLint 9 resta deprecato.
+Nessuna nuova esecuzione GitHub, nessun commit/push di questo riesame.
+
 ## Esposizione e rischio residuo
+
+Analisi alternativa successiva al riesame: [confronto tooling](frontend-tooling-analysis.md).
+La prima prova Oxlint 1.88.0 + ESLint 10.13.0/TS/Hooks aveva audit 0 ma due controlli
+persi. Il successivo prototipo autorizzato in tooling/frontend-conformance recupera
+i gap osservati e i riferimenti JSX: 173 test verdi, mapping 86/82 regole e audit
+del proprio lock senza segnalazioni. Sorgenti di compatibilità MIT con provenienza
+e due adattamenti ESLint 10 espliciti, non certificati dal solo npm audit.
+Nessuna migrazione applicata, nessuna chiusura/proroga di SEC-EX-001. La baseline
+originale usata come oracolo rimane vulnerabile. Prima di adottare: review, copertura
+semantica aggiuntiva, manutenzione esplicita e verifiche clone pulito/Linux/CI.
 
 Il problema è classificato nel tooling dev, ma build agent e workstation restano
 esposti se elaborano input ostili. PR e contenuti esterni non diventano attendibili
@@ -91,6 +131,18 @@ nuova decisione, non riuso implicito della proposta.
 - Verificare artefatto produzione e dipendenze effettive prima di qualsiasi rilascio.
 
 ## Gate di uscita
+
+Ripresa 02:18: laboratorio 370/370 verde anche in nuovi cloni Windows/Linux,
+install/lint/audit lab PASS con display-name upstream. NON chiude SEC-EX-001:
+lock/tooling attivi invariati, migrazione non approvata. Costo vendor e referente
+manutenzione da valutare prima dell'adozione. [Review](frontend-tooling-review.md).
+Il paragrafo sotto è storico.
+
+Review notturna del 20 ottobre: il candidato resta non equivalente per display-name
+su export memo/forwardRef anonimi (237 casi, 235 pass/2 fail locali). Corretto solo
+il falso positivo no-duplicate-head nel laboratorio, nessuna migrazione o bonifica
+del lock attivo. React-x provato in isolamento non risolve i casi mancanti e non
+è stato aggiunto. SEC-EX-001 resta aperta, senza proroga.
 
 Chiudere SEC-EX-001 quando dependency tree corretto, gate frontend verdi, audit
 aggiornato e verifica CI acquisita. Prima della beta esterna servono revisione security

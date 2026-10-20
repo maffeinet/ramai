@@ -1,6 +1,59 @@
 # RAMAI — Handoff operativo
 
-Snapshot: 2026-10-19, Europe/Rome. Contesto stabile in [memory.md](memory.md).
+Snapshot: 2026-10-20, Europe/Rome. Contesto stabile in [memory.md](memory.md).
+
+Ultimo stato, ripresa 02:18: **370/370 verdi locali e nuovi cloni Windows/Linux,
+zero skipped**. display-name originale upstream con chiusura vendor motivata nella
+[review](frontend-tooling-review.md), 109 fixture upstream e 24 casi wrapper nuovi.
+Install strict/lint/audit lab e gate frontend baseline PASS. Backend Release/format
+e 112 test reali verdi/0 skipped; infrastruttura temporanea dedicata rimossa.
+Pubblicazione/CI da verificare dopo scan finale. Nessuna migrazione o S1-004C,
+SEC-EX-001 aperta. I blocchi sotto conservano lo storico dei gap ora colmati.
+
+Stato precedente: review estesa NON verde. [Review e istruzioni notturne](frontend-tooling-review.md).
+Ripresa 01:19 del 20 ottobre: chiuso no-duplicate-head con copia upstream 16.3.8
+identica e sette test aggiuntivi. Suite locale 237: 235 pass/2 fail/0 skipped;
+i due fallimenti ora sono display-name su export memo e forwardRef anonimi.
+React-x 5.28.2 provato solo in artifacts: non colma questi casi e sommandolo
+al nativo duplica alcune diagnostiche; non aggiunto al laboratorio. Nessun push.
+Nuovi cloni Windows/Linux conclusi: 237 casi ciascuno, 235 pass/2 fail/0 skipped;
+install/lint/audit laboratorio e tutti i gate frontend baseline verdi. La suite
+resta rossa correttamente. Evidenze e prossima azione nella review; backend non rieseguito.
+Gitleaks sui 54 file candidati senza leak, whitespace verificato. Prossimo lavoro:
+valutare un bridge AST circoscritto per i soli export wrapper o una correzione
+upstream verificabile, con matrice React estesa prima di dichiarare parità;
+non basta aggiungere React-x, né copiare la grande chiusura React senza motivazione.
+Il paragrafo successivo descrive lo stato precedente alla correzione Next.
+Due differenze native confermate su clone Windows e Linux: react/display-name
+perde React.memo anonimo; no-duplicate-head produce un errore aggiuntivo in Document
+funzionale. 221 casi nei cloni: 219 pass/2 fail; checkout aggiornato 222: 220 pass/2 fail.
+Non pubblicare il laboratorio fallente né adottarlo. Il 20 ottobre l'utente autorizza
+lavoro notturno e commit/push pertinenti soltanto con secret scan/gate verdi e CI
+verificata. Riprese orarie e punto alle 09:00 del 20 ottobre programmati; niente
+migrazione del tooling attivo, S1-004C o altri task. Le sezioni sotto sono storiche.
+
+Ultimo blocco: prototipo conformità autorizzato, non migrazione. Implementato
+tooling/frontend-conformance: 173 test verdi (0 fail/skipped), lint e npm ci strict
+verdi, audit del laboratorio 0. Gap osservati React/Next e JSX recuperati nei test;
+provenienza/licenze MIT e adattamenti getFilename/JSDoc documentati.
+[README laboratorio](../tooling/frontend-conformance/README.md),
+[report tecnico](frontend-tooling-analysis.md). Config/lock/codice frontend e CI
+attivi invariati; SEC-EX-001 resta aperta. Nessun commit/push o S1-004C.
+Prossimo passo da autorizzare: review dei bridge/copertura estesa e validazione
+clone pulito/Linux prima di un'eventuale migrazione. Non adottare automaticamente.
+
+Analisi alternative completata dopo il riesame: [evidenze e piano](frontend-tooling-analysis.md).
+Ibrido Oxlint + ESLint 10/TS/Hooks: audit 0, installazione strict, lint/type-check/build
+verdi in copia temporanea, ma due gap diagnostici nei 17 casi comparativi.
+Non migrare automaticamente: prima conformità/gap e approvazione del lavoro dedicato.
+Nessun cambio frontend/stack o pubblicazione; SEC-EX-001 resta aperta senza proroga.
+
+Ultima richiesta: correggere le vulnerabilità frontend dopo S1-004B.
+Riesame eseguito: braces senza patch, 5 high dev invariate; ESLint 10.13.0 con config
+Next 16.4.2 fallisce strict-peer-deps, sola config aggiornata con ESLint 9 mantiene
+le 5 high. Prove isolate senza script/force, nessun cambio manifest/lock o codice.
+[Evidenze](security-exception.md). SEC-EX-001 aperta senza proroga, nessun nuovo
+commit/push o esecuzione GitHub per questo riesame. Non iniziare C automaticamente.
 
 ## Stato in una frase
 
