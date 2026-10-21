@@ -11,8 +11,12 @@ workspace/settings, contratti chiusi, ruolo/MFA dal contesto verificato, CSRF,
 ProblemDetails/correlation, quota provisioning Redis distribuita e test HTTPS reali.
 278 test verdi/0 skipped (101/169/8), Release 0 warning/errori, format/frontend/EF
 PASS, Gitleaks staged 73 file senza leak. Audit 5 high dev/0 production riconfermato,
-nessuna proroga. Risorse test proprie rimosse, volumi utente intatti. Nuovo commit/
-push/CI ancora da verificare e registrare, non assunti. S1-009/UI non iniziata,
+nessuna proroga. Risorse test proprie rimosse, volumi utente intatti. Pubblicato
+`06f054d`, 73 file e scan del commit senza leak;
+[CI 39564651224](https://github.com/maffeinet/ramai/actions/runs/39564651224) **success**,
+SHA verificato, 278 test/0 skipped anche su GitHub-hosted Linux, build/format/frontend
+verdi. Questa nota documentale successiva non è lo SHA testato da quella run.
+S1-009/UI non iniziata,
 nessuna esposizione esterna o completamento commerciale impliciti. Stato sotto storico.
 
 Ripresa notturna 23:07: **S1-008 parziale interno**, [piano e decisione necessaria](workspace-api-plan.md).

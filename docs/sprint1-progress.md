@@ -8,7 +8,7 @@ Utente approva "tutto quanto è in sospeso" dopo richiesta di estensione host-on
 ADR-010 e pubblicazione dei prerequisiti C/D/005/006/007 con S1-008. Nessuna UI/S1-009,
 altro task, deploy o migrazione tooling. Blocchi di approvazione precedenti superati
 dalla nuova istruzione, non aggirati. S1-008 **completato localmente nel perimetro
-API/RBAC**, [baseline e contratti](workspace-api-baseline.md).
+API/RBAC e pubblicato/verificato in CI**, [baseline e contratti](workspace-api-baseline.md).
 
 File nuovi del completamento HTTP:
 
@@ -42,8 +42,16 @@ link locali e whitespace verificati. Docker dedicato
 ramai-s1008-final healthy, vector 0.8.6 e Redis PONG; dopo i test container/rete/
 volumi propri rimossi e assenza verificata. Nessun dato/volume utente modificato.
 
-Commit/push/CI da registrare dopo esecuzione effettiva: gate locali non equivalgono
-a nuova run GitHub o clone Linux. Restano limiti operativi/security e beta non
+Commit e push effettuati: `06f054dc57e6be0495323acdfd131e7851d5542d`, 73 file,
+secret scan staged e del commit senza leak; working tree pulito dopo pubblicazione.
+[Run del commit](https://github.com/maffeinet/ramai/actions/runs/39564651224)
+**success** su GitHub-hosted Ubuntu 24.04, SHA verificato: backend 0 warning/errori,
+format e **278 test PASS/0 skipped** (101 unit, 169 integration, 8 architecture);
+frontend npm ci/lint/type-check/build PASS. Cleanup servizi/volumi CI PASS.
+Il verde Linux deriva dalla CI reale, non da un nuovo clone Linux locale.
+Questo aggiornamento documentale registra la run del codice 06f054d: un successivo
+commit documentale non è lo SHA testato da quella run e avrà la propria pipeline.
+Restano limiti operativi/security e beta non
 autorizzata nella baseline; UI/S1-009 è il prossimo task da autorizzare separatamente.
 
 ## Checkpoint precedenti

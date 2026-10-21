@@ -15,9 +15,14 @@ frontend npm ci/lint/tipi/build e modelli EF PASS. Gitleaks 72 candidati inizial
 poi diff staged di tutti i 73 file senza leak, link/whitespace PASS.
 Audit riconfermato: 5 high dev, 0 production,
 ESLint deprecato; SEC-EX-001 non prorogata. Risorse Docker del solo progetto finale
-rimosse e assenza verificata; dati utente intatti. Nessun nuovo commit/push ancora
-eseguito. Dopo pubblicazione verificare SHA/run reale, non attribuire CI storiche
-al locale. S1-008 completato localmente, non intero Sprint 1 o beta. Prossimo task
+rimosse e assenza verificata; dati utente intatti. Pubblicato commit
+`06f054dc57e6be0495323acdfd131e7851d5542d`, 73 file, secret scan anche del commit
+senza leak. [CI reale](https://github.com/maffeinet/ramai/actions/runs/39564651224)
+**success**, SHA 06f054d verificato: 278 test/0 skipped su Linux, build 0 warning/
+errori, format e frontend verdi, cleanup CI PASS. Non è una run storica riattribuita
+al nuovo codice. Questo aggiornamento documentale successivo registra la prova del
+commit applicativo, non è esso stesso lo SHA testato. S1-008 completato e pubblicato,
+non intero Sprint 1 o beta. Prossimo task
 da autorizzare S1-009/UI, non iniziato. Nessuna automazione notturna rimasta attiva.
 Le note "attendere approvazione" sottostanti sono checkpoint precedenti.
 

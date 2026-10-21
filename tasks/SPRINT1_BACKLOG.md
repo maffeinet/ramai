@@ -1,6 +1,11 @@
 # RAMAI — Sprint 1 proposto: Identity, Tenant e DB baseline
 
 Data piano: 2026-10-16. Aggiornamento: 2026-10-20.
+Checkpoint pubblicazione 21 ottobre: C/D e S1-005/006/007/008 pubblicati con
+autorizzazione esplicita nel commit `06f054d`;
+[CI reale verde](https://github.com/maffeinet/ramai/actions/runs/39564651224),
+278 test/0 skipped e gate backend/frontend PASS. S1-009/UI non iniziato; nessuna
+beta o chiusura complessiva Sprint 1. Le note locali sotto sono checkpoint storici.
 Stato: **S1-001 COMPLETATO; S1-002/003 PUBBLICATI; S1-004A/B COMPLETATI E PUBBLICATI; S1-004 APERTO**.
 Aggiornamento 20 ottobre: **S1-004C implementato localmente**, non pubblicato;
 S1-004D MFA ora implementato localmente, verifica finale nel report; UI e isolamento
@@ -222,10 +227,11 @@ Test: tenant A/B, ID validi dell'altro tenant, lista vuota, update, contesto man
 
 ### S1-008 — API e autorizzazioni
 
-**COMPLETATO LOCALMENTE il 21 ottobre nel perimetro API/RBAC**, dopo approvazione
+**COMPLETATO E PUBBLICATO il 21 ottobre nel perimetro API/RBAC**, dopo approvazione
 dei sospesi ADR-010/pubblicazione. [Baseline](../docs/workspace-api-baseline.md),
 278 test totali verdi/0 skipped, Release/format/frontend/EF PASS e secret scan senza
-leak. Commit/push/CI effettivi nel report; nessuna UI/S1-009 o beta. Sotto: checkpoint
+leak. Commit/push/CI effettivi nel report (06f054d, run 39564651224 success);
+nessuna UI/S1-009 o beta. Sotto: checkpoint
 interno precedente al completamento HTTP.
 
 **AVVIATO, PARZIALE INTERNO**, ripresa notturna 20 ottobre: contratti, servizio RBAC,
