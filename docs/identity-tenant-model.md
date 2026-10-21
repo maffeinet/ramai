@@ -1,5 +1,9 @@
 # S1-002 — Modello Identity/Tenants e contratti
 
+Stato successivo, 20 ottobre: [S1-005 TenantContext](tenant-context-baseline.md)
+implementa risoluzione/selezione interna tramite i reader, con test reali. Questa
+pagina conserva lo storico S1-002; non implica endpoint o isolamento business completi.
+
 Aggiornamento S1-003, 18 ottobre: vincoli DB e reader ora implementati negli adapter
 separati, senza alterare il modello di tenancy o introdurre auth. Questa pagina
 conserva il perimetro storico S1-002; stato corrente e dettagli in

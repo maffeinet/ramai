@@ -9,8 +9,21 @@ email/reset interni con provider standard, lifetimes 24h/30min e sender solo nei
 [dettagli B](account-recovery-baseline.md). Nessun endpoint o email reale; ID-04/05 e
 parti HTTP/operative non implementate. Nessuna approvazione beta o attestazione normativa.
 Riferimento: [ADR-009](adr/ADR-009-identity-access.md), S1-001.
+Aggiornamento 20 ottobre: [S1-004C](account-session-baseline.md) aggiunge sessioni/API
+opt-in e prove ID-05 nel perimetro descritto. Non completa ID-04/06/07, UI o beta.
+Aggiornamento successivo: [S1-004D](account-mfa-baseline.md) implementa TOTP/enrollment,
+recovery monouso, lock/replay, materiale cifrato e revoca. L'obbligo Owner/Admin
+richiede ancora l'integrazione con TenantContext/RBAC: ID-04 non autorizza la beta.
 Approvazione esplicita dell'utente: "ok parametri tecnici S1-001 approvati".
+Aggiornamento S1-005: [TenantContext interno](tenant-context-baseline.md) verifica
+membership/ruolo e richiede prova MFA per emettere contesto Owner/Admin. Endpoint
+workspace e RBAC dei comandi sono ancora da integrare; non completa ID-06/07 o beta.
 NIS2/GDPR sono riferimenti di progetto, non una dichiarazione di conformità legale.
+
+Aggiornamento 21 ottobre: [S1-007](tenant-isolation-baseline.md) e
+[S1-008](workspace-api-baseline.md) implementano isolamento ORM e RBAC API interno,
+membership/ruolo riletti, MFA Owner/Admin, selezione protetta e test HTTP reali.
+Non completa governance/audit segregato, email reale, UI o autorizzazione beta.
 La review normativa/organizzativa e le prove di efficacia restano da svolgere.
 
 ## Ambito e significato di compliance

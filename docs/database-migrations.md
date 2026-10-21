@@ -1,5 +1,11 @@
 # S1-003 — Persistence e migrazioni
 
+Aggiornamento 20 ottobre S1-006: [provisioning](workspace-provisioning-baseline.md)
+aggiunge la migrazione 20261020123949_WorkspaceProvisioning e la tabella Tenants
+WorkspaceProvisioningRequests. Down rifiuta la perdita di registrazioni già usate;
+le ownership/separazioni sottostanti restano invariate. Nessuna migrazione sui dati
+utente applicata automaticamente.
+
 Implementazione locale: 2026-10-18. Scope limitato alla baseline database;
 nessun login, sessione, endpoint o provisioning pubblico. Approvazione di prosecuzione
 dopo S1-002 e conferma Docker disponibile. Riferimenti: [ADR-009](adr/ADR-009-identity-access.md),
@@ -79,9 +85,9 @@ con privilegi di amministrazione solo per fare migrazioni automatiche.
 ```powershell
 dotnet tool restore
 dotnet ef migrations has-pending-model-changes --project src/backend/Persistence/Ramai.Modules.Identity.Persistence
-dotnet ef migrations has-pending-model-changes --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence
+dotnet ef migrations has-pending-model-changes --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence --context TenantsStoreContext
 dotnet ef migrations script --idempotent --project src/backend/Persistence/Ramai.Modules.Identity.Persistence
-dotnet ef migrations script --idempotent --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence
+dotnet ef migrations script --idempotent --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence --context TenantsStoreContext
 ```
 
 Per applicare, impostare `RAMAI_MIGRATION_CONNECTION` solo nell'ambiente del processo
@@ -92,7 +98,7 @@ Con la variabile impostata correttamente, ordine esplicito Identity poi Tenants:
 
 ```powershell
 dotnet ef database update --project src/backend/Persistence/Ramai.Modules.Identity.Persistence
-dotnet ef database update --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence
+dotnet ef database update --project src/backend/Persistence/Ramai.Modules.Tenants.Persistence --context TenantsStoreContext
 Remove-Item Env:RAMAI_MIGRATION_CONNECTION
 ```
 

@@ -1,20 +1,441 @@
 # Sprint 1 — Progress report
 
-Aggiornato: 2026-10-19, Europe/Rome.
+Aggiornato: 2026-10-21, Europe/Rome.
 
-## Stato
+## Stato corrente — 21 ottobre, completamento S1-008
 
+Utente approva "tutto quanto è in sospeso" dopo richiesta di estensione host-only
+ADR-010 e pubblicazione dei prerequisiti C/D/005/006/007 con S1-008. Nessuna UI/S1-009,
+altro task, deploy o migrazione tooling. Blocchi di approvazione precedenti superati
+dalla nuova istruzione, non aggirati. S1-008 **completato localmente nel perimetro
+API/RBAC**, [baseline e contratti](workspace-api-baseline.md).
+
+File nuovi del completamento HTTP:
+
+- src/backend/Ramai.Api/Composition/WebTenantsRegistration.cs;
+- src/backend/Ramai.Api/Composition/WorkspaceRequestBudget.cs;
+- src/backend/Ramai.Api/Workspaces/WorkspaceEndpoints.cs e WorkspaceHttpInput.cs;
+- tests/Ramai.IntegrationTests/WorkspaceHttpTests.cs;
+- docs/workspace-api-baseline.md.
+
+Modificati Program.cs/progetto API, WebIdentityRegistration (reader già esistente),
+AccountTransportMiddleware (estensione HTTPS/body/errors), DependencyBoundaryTests
+(sole eccezioni host approvate, divieti fra moduli mantenuti), AccountSecurityFixture
+(cleanup esclusivo namespace test quota). README/ADR-010/policy/struttura e documenti
+di continuità aggiornati. File del primo step interno elencati nel checkpoint sotto;
+pubblicazione include anche prerequisiti C/D/005/006/007 e documentazione collegata.
+
+Gate locali Windows: **278 pass, 0 fail, 0 skipped** (101 unit, 169 integration,
+8 architecture), Release 0 warning/errori, format verify PASS. Aggiunti 28 test HTTP,
+incluso Kestrel HTTPS, ruolo/membership/account revocati, IDOR/CSRF/input e quota
+distribuita fra host. Primo giro fallito per IUserAccountReader non registrato:
+corretta DI con implementazione reale esistente; nessun test soppresso/mock auth.
+Nessun nuovo NuGet/schema/servizio. EF Identity/Tenants nessuna modifica modello.
+SDK 10.0.402, Node 24.19.0, npm 11.17.0, Next 16.3.8/React 19.3.0 invariati;
+EF/Identity 10.0.12, Npgsql EF 10.0.3 e Redis client 3.3.1 invariati.
+
+Frontend npm ci/lint/type-check/build PASS. Audit del 21: stessa catena 5 high dev,
+0 critical, audit production 0; warning ESLint 9 fuori supporto. SEC-EX-001 aperta
+senza proroga né soppressioni. Gitleaks 8.30.1 sui 72 candidati iniziali e poi
+sul diff staged completo di 73 file senza leak (aggiunta documentazione struttura);
+link locali e whitespace verificati. Docker dedicato
+ramai-s1008-final healthy, vector 0.8.6 e Redis PONG; dopo i test container/rete/
+volumi propri rimossi e assenza verificata. Nessun dato/volume utente modificato.
+
+Commit/push/CI da registrare dopo esecuzione effettiva: gate locali non equivalgono
+a nuova run GitHub o clone Linux. Restano limiti operativi/security e beta non
+autorizzata nella baseline; UI/S1-009 è il prossimo task da autorizzare separatamente.
+
+## Checkpoint precedenti
+
+- Ripresa notturna 23:07: **S1-008 PARZIALE INTERNO**, non API completa.
+  Contratti, RBAC applicativo e adapter scoped verificati: 250 test verdi/0 skipped
+  (101 unit, 141 integration, 8 architecture), Release/format/frontend/EF PASS.
+  [Piano, file e proposta di composizione](workspace-api-plan.md). Per integrare
+  HTTP serve approvazione estensione host-only ADR-010, attualmente Identity-only.
+  Nessuna modifica del grafo/riferimento, nessun nuovo endpoint o push effettuati.
+
+- Notte 20/21 ottobre: **S1-007 completato localmente**, [baseline isolamento](tenant-isolation-baseline.md).
+  222 test pass/0 skipped (79 unit, 135 integration, 8 architecture), Release
+  0 warning/errori, format e frontend lint/tipi/build PASS; EF nessun cambiamento.
+  Autorizzati S1-007 e poi S1-008, documentazione per step e commit/push pertinenti
+  dopo scan/gate verdi e CI reale verificata; inclusione prerequisiti C/D/005/006
+  da confermare dopo il rifiuto automatico documentato sotto.
+  Nessuna UI/S1-009 o deploy. Le note successive conservano checkpoint storici.
+
+## S1-008 — Primo step indipendente, ripresa notturna
+
+File creati, nessun altro codice produttivo modificato in questo step:
+
+- src/backend/Ramai.Application/Contracts/Tenants/WorkspaceOperations.cs;
+- src/backend/Ramai.Application/Tenancy/WorkspaceOperationsService.cs;
+- src/backend/Persistence/Ramai.Modules.Tenants.Persistence/WorkspaceDataStore.cs;
+- tests/Ramai.UnitTests/WorkspaceOperationsTests.cs;
+- tests/Ramai.IntegrationTests/WorkspaceOperationsIntegrationTests.cs;
+- docs/workspace-api-plan.md.
+
+Report/memory/handoff/backlog aggiornati. Nessun nuovo NuGet/schema/riferimento.
+Servizio risolve sessione/membership ogni volta, legge workspace per tutti i membri
+ammessi e autorizza settings/solo nome a Owner/Admin con MFA. Nessun input Role,
+UserId o TenantId sulla mutazione; porta interna riceve un contesto verificato,
+adapter usa TenantDataContext e non il percorso bootstrap globale. Validazione nome
+1–256 UTF-16 dopo trim, controlli/caratteri sostitutivi rifiutati senza troncamenti.
+Porta che restituisce scope/ruolo non corrispondente causa rifiuto, non un fallback.
+
+22 unit + 6 integration nuovi PASS; suite totale 250 PASS, 0 fail/skipped, Release
+0 warning/errori, format verify e frontend lint/type-check/build PASS. Test reali
+PostgreSQL/Redis con login/MFA esistenti, non auth simulata; Owner A/Member B,
+Admin, modifica lecita solo del tenant corrente, downgrade/revoca membership e
+account rifiutati alla richiesta seguente. Non sono test HTTP dei nuovi endpoint.
+EF Identity e Tenants nessun cambiamento; Docker ramai-s1008-internal healthy,
+pgvector 0.8.6 e Redis PONG. Nessun dato/volume utente toccato.
+
+S1-008 resta aperto: host, endpoint /api/v1, ProblemDetails e matrice HTTP/CSRF/IDOR
+non implementati. ADR-010 attuale permette soltanto adapter Identity nel composition
+root: proposta estensione Tenants documentata, attende decisione umana secondo
+AGENTS 18. Nessun aggiramento con altri layer/reflection o indebolimento test.
+Pubblicazione resta in attesa della distinta conferma sui prerequisiti dopo rifiuto
+automatico precedente; nessun tentativo git nuovo. Nessuna CI/Linux/clone nuovo.
+SEC-EX-001/catena npm dev restano aperte senza proroga; audit non rieseguito.
+Gitleaks 8.30.1 su tutti i 65 file locali candidati senza leak, link locali di
+17 documenti Markdown e whitespace PASS. Container/rete/volumi del solo progetto
+ramai-s1008-internal rimossi, assenza verificata; fixture ricreabili e dati utente
+intatti. HEAD 31129fa invariato, index vuoto; nessun nuovo commit o pipeline.
+
+## S1-007 — Isolamento letture/scritture, 20 ottobre
+
+Creati TenantDataContext, TenantDataContextFactory, TenantQueryBoundary, TenantsModel
+nel persistence adapter Tenants, TenantIsolationTests e tenant-isolation-baseline.md.
+Modificati TenantsStoreContext (mapping condiviso), helper WithIdentity dei test
+provisioning (riuso interno), DependencyBoundaryTests (bootstrap allowlist), procedure
+migrazioni (specificare contesto), report/backlog/memory/handoff. Nessun NuGet nuovo.
+Versioni restano SDK 10.0.402, EF 10.0.12, Npgsql EF 10.0.3, PostgreSQL/pgvector
+0.8.6-pg17, Redis 7.2.16-alpine3.21; frontend Next 16.3.8 invariato.
+
+20 nuovi test isolamento verdi; corretto un test che attendeva il rifiuto di una
+chiave manomessa troppo tardi: EF lo rifiuta già all'assegnazione. Aggiunti insert
+lecito, current key e batch misto senza scrittura parziale; nessun test soppresso.
+Suite completa 222/222 senza skipped; format verify PASS e build 0 warning/errori.
+Frontend lint/type-check/build PASS; Docker progetto isolato ramai-s1007-check
+healthy, pgvector 0.8.6 e Redis PONG. Nessun dato/volume utente o schema nuovo.
+EF pending-model PASS con --context TenantsStoreContext; primo comando senza
+contesto ambiguo dopo il nuovo contesto operativo, istruzioni aggiornate.
+Gitleaks 8.30.1 sui 59 file locali candidati: nessun leak; git diff --check PASS.
+Pubblicazione/CI ancora da registrare: i verdi storici non verificano
+questo codice. Nessuna nuova prova clone pulito/Linux locale. SEC-EX-001 e cinque
+high npm dev note non risolte né prorogate; audit non rieseguito in questo step.
+Limiti ORM/RBAC/revoca in corso espliciti nella baseline; nessuna beta autorizzata.
+
+Tentativo di pubblicazione: comando staging/scan-staged/commit/push respinto prima
+dell'esecuzione dalla revisione automatica: include prerequisiti C/D/005/006, scope
+giudicato più ampio dell'autorizzazione esplicita 007/008. Nessun nuovo commit/push
+o CI; chiesta conferma del perimetro, nessun aggiramento. Scan su directory dei
+59 file era già PASS; scan staged non eseguito. S1-008 non iniziato in questa ripresa.
+Risorse temporanee S1-007 rimosse (container/rete/volumi propri), assenza verificata;
+nessun dato utente eliminato. Le fixture sintetiche possono essere ricreate dai test.
+
+## Checkpoint precedenti
+
+- Blocco corrente: **S1-006 completato nel perimetro interno**, 201 test locali verdi,
+  [baseline](workspace-provisioning-baseline.md). Nuova migrazione Tenants per
+  idempotenza, nessuna applicazione ai dati utente o nuova API. Scope S1-007+ escluso;
+  nessun commit/push, modifiche C/D/S1-005/demo preservate.
+
+- Ultima ripresa: **S1-005 completato nel perimetro applicativo interno**,
+  [baseline e limiti](tenant-context-baseline.md). 178 test backend locali verdi;
+  nessun nuovo endpoint workspace o wiring API→Tenants, da integrare in S1-008.
+  C/D/demo locali preservati; nessun commit/push. S1-006 aggiunto nel blocco successivo.
+
+- Ripresa diurna 20 ottobre: **S1-004D implementato localmente**, autorizzazione
+  esplicita MFA/TOTP e recupero; [baseline D](account-mfa-baseline.md). Modifiche C/demo
+  preservate. Nessun commit/push o nuova CI; S1-005 aggiunto nella ripresa successiva,
+  nessuna UI. Questo
+  aggiornamento prevale sullo stato storico "D non iniziato" sottostante.
+
+- Aggiornamento 20 ottobre: S1-004C implementato localmente (API/sessioni opt-in),
+  seguito da D/MFA, gate locali verdi registrati sotto. Nessun commit/push;
+  tenant isolation e UI non iniziati. Le sezioni A/B/C successive conservano lo storico.
 - S1-001: **completato nel solo perimetro documentale di analisi/approvazione tecnica**.
 - S1-002: modelli e contratti completati, pubblicati e verificati in CI il 19 ottobre.
 - S1-003: persistenza/migrazioni completate, pubblicate e verificate in CI il 19 ottobre.
 - S1-004A/B: componenti interni account/password e conferma/reset completati;
   pubblicati nel commit `ca7edf4`, CI verde con 112 test senza skipped. S1-004 complessivo aperto,
-  C/D e S1-005+ non iniziati.
-- Nessun endpoint di autenticazione, sessione o UI Sprint 1 presente.
+  C/D e S1-005/006 interni implementati localmente; S1-007+ non iniziati.
+- Endpoint/sessioni API C e MFA D presenti solo con configurazione opt-in; nessuna UI.
 - M0 chiuso con [SEC-EX-001](security-exception.md) accettata per solo sviluppo interno,
   riesame entro il 30 ottobre o prima secondo le sue condizioni, non prorogata.
 
-## S1-001 — Decisioni e threat model
+## S1-006 — Provisioning workspace e primo Owner, 20 ottobre
+
+Autorizzazione esplicita per il solo S1-006. Annunciati file, transazione, retry,
+MFA e test prima delle modifiche; riletti AGENTS, handoff, S1-005, modello/policy,
+acceptance e procedure migrazioni. Nessun endpoint o nuovo wiring API→Tenants,
+nessuna modifica stack/boundary e nessun nuovo NuGet o servizio.
+
+File creati:
+
+- Application/Contracts/Tenants/WorkspaceProvisioning.cs;
+- Application/Tenancy/SessionSubject.cs e WorkspaceProvisioningService.cs;
+- Persistence/Ramai.Modules.Tenants.Persistence/WorkspaceProvisioningRequest.cs
+  e WorkspaceProvisioningStore.cs;
+- Migrations/20261020123949_WorkspaceProvisioning.cs e relativo Designer.cs;
+- tests/Ramai.UnitTests/WorkspaceProvisioningTests.cs;
+- tests/Ramai.IntegrationTests/WorkspaceProvisioningIntegrationTests.cs;
+- docs/workspace-provisioning-baseline.md.
+
+Percorsi Application/Persistence relativi a src/backend. Modificati:
+TenantContextResolver (piccola estrazione dei controlli sessione già esistenti,
+senza modificarne la policy), TenantsStoreContext e snapshot, PersistenceTests e
+PersistenceModelTests per due migrazioni/nuova tabella posseduta dal modulo.
+README/backlog/report/memory/handoff/procedure migrazioni aggiornati. File precedenti
+C/D/S1-005/demo ancora locali: non attribuire a questo task tutto git status.
+
+Admission: sessione valida, account attivo/confermato via contract e MFA richiesta
+per il nuovo Owner; ID/ruolo creator non forniti dal client. Non serve già un tenant
+attivo per creare il primo workspace. Nome trim/limiti, chiave non vuota; TenantId
+casuale server. Unica transazione nel modulo Tenants per Tenant+Owner+registrazione,
+nessuna query o scrittura diretta a Identity dall'adapter Tenants.
+
+Registro tenant-scoped con TenantId e PK actor/request. Retry stesso payload → stesso
+TenantId, diverso payload → Conflict; concorrenti risolti dalla PK senza tenant orfani.
+Contesto DB separato per tentativo, errore pre-commit annulla tutto; esito commit
+incerto si riconcilia con stessa chiave. Replay ricontrolla Owner attivo e il servizio
+ripete admission, mai successo dopo revoca. Log sintetico con correlation ID, nessun
+nome workspace/request key/password. Non è audit segregato o esposizione HTTP pronta.
+
+### Migrazione e qualità S1-006
+
+Migrazione aggiuntiva 20261020123949_WorkspaceProvisioning, solo schema Tenants;
+Up preserva tenant/membership esistenti, Identity e pgvector. Down rifiuta registri
+non vuoti (55000, wrapper InvalidOperationException del provider verificato), non
+resetta la memoria dei retry. La recovery con dati richiede review/backup; non
+svuotare le righe per forzare il rollback. Nessuna migrazione sui volumi utente.
+
+SDK 10.0.402; EF/Identity e CLI 10.0.12, Npgsql EF 10.0.3, stack frontend e immagini
+Compose invariati. Build Release 0 warning/errori; format PASS. Coerenza modello EF
+PASS e script idempotente generato in artifacts/s1006-tenants-idempotent.sql (ignorato
+da Git, non applicato a dati utente). Frontend lint/tipi/build PASS.
+
+Test coprono admission/creazione Owner reale, retry/conflict, 12 tentativi concorrenti,
+errore dopo SaveChanges prima del commit con zero righe residue, takeover con tenant ID
+come request key, scoping actor, revoca/replay, upgrade/rollback con dati sintetici.
+Prime iterazioni hanno rilevato extension ASP.NET non disponibile nel layer Application
+(usato FindFirst.Value standard, senza dipendenza extra), provider log fixture diverso
+dall'host e wrapper dell'errore migrazione. Corretti senza soppressioni/test skipped.
+Gate finali locali:
+
+- **201 pass, 0 fail, 0 skipped**: 79 unit, 115 integration, 7 architecture;
+  incremento 23 test (15 unit + 8 integration) rispetto ai 178 di S1-005.
+- Release 0 warning/errori; format --verify-no-changes PASS; nessuna nuova dipendenza.
+- Modello EF senza modifiche pendenti, script idempotente generato, upgrade/
+  rollback vuoto preservano i dati; rollback con registrazioni rifiutato senza perdita.
+- Frontend lint, type-check e production build PASS; nessun cambio frontend/tooling/CI.
+- Compose config PASS; PostgreSQL/Redis healthy, vector 0.8.6 e Redis PONG verificati.
+  Password Docker solo in memoria; risorse ramai-s1006-check rimosse, nessun dato o
+  volume utente cancellato. Nessun .env scritto o auto-migrate del runtime.
+- Gitleaks 8.30.1 su 53 file locali candidati, inclusi untracked C/D/S1-005/demo:
+  nessun leak, output redatto; link Markdown e git diff --check PASS. Solo avvisi Git
+  CRLF→LF della policy esistente, non warning della build.
+- Nessun commit/push, nuova esecuzione GitHub o verifica Linux/clone pulito.
+
+Limiti: integrazione HTTP/CSRF/quote pubbliche e selezione sessione in S1-008, filtri
+e write guards S1-007 non iniziati. Admission Identity è una verifica tramite contratto,
+non una transazione/lock cross-module: revoche di operazioni già ammesse non annullano
+retroattivamente il commit, come documentato nella policy. Ancora niente UI/email
+reale/deploy o beta esterna. Nessuna nuova CI/Linux/clone pulito per il codice locale;
+SEC-EX-001/warning npm invariati, nessuna proroga o audit npm nuova.
+
+## S1-005 — TenantContext interno, 20 ottobre
+
+Utente autorizza esclusivamente S1-005. Riletti AGENTS, handoff, acceptance,
+modello/contratti e ADR-009/010. Piano file/test annunciato prima del codice,
+incluso il limite composition: nessuna nuova dipendenza API→Tenants implicita.
+Scope interno richiesto dal task; trasporto HTTP/DI host e salvataggio nel ticket
+protetto sono integrazioni S1-008, non una selezione browser già disponibile.
+
+Creati:
+
+- src/backend/Ramai.Application/Contracts/Tenants/TenantContext.cs;
+- src/backend/Ramai.Application/Tenancy/TenantContextResolver.cs;
+- tests/Ramai.UnitTests/TenantContextTests.cs;
+- tests/Ramai.IntegrationTests/TenantContextIntegrationTests.cs;
+- docs/tenant-context-baseline.md.
+
+Modificati per il codice/test: AccountSessions.cs e RedisSessionTicketStore.cs
+per condividere la stessa durata assoluta di dodici ore, senza cambiarla;
+MfaTests.cs rende internal il solo generatore test TOTP per riusarlo nella prova
+del contesto Owner, senza cambiare l'implementazione MFA. Documenti aggiornati:
+README, policy, identity-tenant-model, report, memory, handoff e backlog.
+Non attribuire a S1-005 tutte le modifiche git locali preesistenti di C/D/demo.
+
+Resolve controlla principal cookie univoco, scadenza assoluta, stato account/stamp
+e membership attiva a ogni chiamata. Nessuna selezione implicita; mismatch/ruolo
+ignoto rifiutati. Select tratta TenantId solo come proposta, restituisce una copia
+verificata del principal senza ruoli e preserva inizio/stamp; nessun input mutato.
+Owner/Admin richiedono MFA; ruolo solo dal DB. Contesto immutabile, nessuno stato
+globale/AsyncLocal o query diretta a un altro modulo; eccezioni senza fallback grant.
+
+### Acceptance e qualità S1-005
+
+- Contesto assente: SelectionRequired con Context null, nessun primo-tenant fallback.
+- Identità/account/membership invalidi: rifiutati; verifiche reali di disattivazione,
+  conferma revocata, lockout, stamp, membership inattiva e cambio ruolo.
+- Claim duplicati/malformati/mismatch e ruolo client: non conferiscono contesto.
+  Il servizio non legge HTTP: firma/TTL idle/ticket Redis sono compito del cookie
+  handler C; non si spaccia un principal finto per prova crittografica.
+- Selezione interna validata; persistenza nel ticket e CSRF del futuro endpoint
+  restano S1-008. Nessun test HTTP/claim browser o E2E workspace dichiarato completo.
+- Venti richieste concorrenti con scope e DbContext distinti su A/B non condividono
+  né sovrascrivono contesto. Owner A/Member B con MFA reale e accesso a C negato.
+- Build Release **0 warning/0 errori**; suite **178 pass, 0 fail, 0 skipped**:
+  64 unit, 107 integration, 7 architecture. Incremento: 25 unit + 7 integration.
+  Include regressione completa C/D, test MFA su HTTPS Kestrel e confini invariati.
+- Primo build ha rilevato un nullable warning bloccante nel nuovo test; corretto
+  verificando il tipo del principal. Nessuna soppressione, test escluso o nuovo NuGet.
+- SDK 10.0.402; versioni stack, manifest, lockfile, Compose e schema invariati.
+- PostgreSQL/pgvector e Redis di test isolati (ramai-s1005-check), password solo
+  nel processo, nessun .env scritto o volume utente toccato.
+
+- Format --verify-no-changes PASS; frontend lint/type-check/production build PASS.
+- Docker Compose config PASS, PostgreSQL/Redis healthy, vector 0.8.6 e Redis PONG.
+  Rimossi soltanto container/rete/volumi temporanei del progetto ramai-s1005-check.
+- Gitleaks 8.30.1 sui 38 file locali candidati C/D/S1-005/documentazione (inclusi
+  untracked): nessun leak; output redatto. Link locali e git diff --check PASS.
+  Gli avvisi Git CRLF→LF sono normalizzazione della policy esistente, non errori.
+- Nessuna esecuzione Linux/clone pulito/GitHub per questo codice locale.
+
+Una review finale ha esteso anche alla selezione il rifiuto dei claim tenant
+malformati, mantenendo i test e ripetendo i gate. Nessuna regola/test soppressi.
+Restano SEC-EX-001/5 high dev npm già documentate (nessuna nuova audit o proroga),
+integrazione host S1-008, provisioning S1-006, filtri/protezioni write S1-007, UI,
+email/recovery operativo e review security prima di esterni. Prossimo task S1-006,
+non iniziato automaticamente.
+
+## S1-004D — MFA TOTP e recupero, 20 ottobre
+
+Annunciati perimetro, file, dipendenze e test prima delle modifiche. Riletti AGENTS,
+policy ID-04/05, backlog, sessioni/ADR e report/handoff/memory alla ripresa richiesta.
+Nessun nuovo NuGet: provider Authenticator e recovery standard Identity, Data
+Protection e infrastruttura già approvata. SDK 10.0.402, runtime test 10.0.13;
+Identity/EF 10.0.12, Npgsql EF 10.0.3 e StackExchange.Redis 3.3.1 invariati.
+
+Creati per D:
+
+- src/backend/Ramai.Application/Contracts/Identity/AccountMfa.cs;
+- src/backend/Persistence/Ramai.Modules.Identity.Persistence/Sessions/AccountMfaService.cs;
+- src/backend/Persistence/Ramai.Modules.Identity.Persistence/Sessions/ProtectedIdentityTokenStore.cs;
+- src/backend/Ramai.Api/Authentication/MfaEndpoints.cs;
+- tests/Ramai.IntegrationTests/MfaTests.cs;
+- docs/account-mfa-baseline.md.
+
+Modificati per D: AccountSessions.cs, AccountSessionServices.cs,
+WebIdentityRegistration.cs, AccountEndpoints.cs e WebSessionTests.cs, oltre a README,
+account-session-baseline, policy, questo report, backlog, memory e handoff.
+Molti file C sono ancora untracked: non attribuire a D tutti i file di git status.
+Nessun file frontend/CI/laboratorio o nuova migrazione modificati in D.
+
+Enrollment pending 10 minuti legato allo stamp; conferma con password e nuovo TOTP,
+chiave precedente conservata fino a conferma riuscita. Token MFA cifrati per utente/
+slot, nessun fallback plaintext. Row lock e consumo atomico impediscono replay su
+istanze concorrenti; digest TOTP tenuti tre minuti, recovery standard consumati una
+volta. Cinque errori MFA/15 minuti indipendenti dal contatore password, quote Redis.
+Conferma/rotazione/recovery cambiano stamp e revocano sessioni precedenti. Nessuna
+sessione password-only con MFA attiva, nessun endpoint per disabilitarla senza prova.
+
+Il login recovery include una prova server-side monouso, legata allo stamp e valida
+cinque minuti per un enrollment/rigenerazione con password nuovamente verificata:
+anche l'ultimo recovery rimasto può ripristinare il dispositivo. Non esposta nel JSON.
+Gestione con un ulteriore recovery esplicito richiede nuovo login dopo revoca;
+documentati tutti i passaggi. Non effettuare logout/login nello stesso handler:
+il ticket store mantiene Renew XX anti-resurrezione, non indebolito per il recupero.
+
+Problemi individuati e corretti durante i cicli: import composition mancante,
+analizzatore xUnit2031, fixture C con entità obsoleta dopo aggiornamento concorrente,
+e logout/login nella stessa richiesta incompatibile con Renew XX. Aggiunti test,
+nessun controllo soppresso o test saltato. Primo checkpoint dedicato 10/10 verde,
+poi 142/142 e 143/143 verdi; gate della suite finale estesa registrati sotto.
+
+### Gate D — esclusivamente locali
+
+- Build Release PASS: **0 warning, 0 errori**; format --verify-no-changes PASS.
+- Suite completa finale **146 pass, 0 fail, 0 skipped**: 39 unit, 100 integration,
+  7 architecture. D aggiunge 19 casi rispetto ai 127 test di C, senza rimuoverne.
+  Include ultimo recovery/prova monouso, corse tra host e percorso MFA completo
+  su socket HTTPS Kestrel reale; nessuna modifica al trust store o bypass TLS.
+- Frontend invariato: lint, type-check e production build PASS (Next 16.3.8).
+- Docker Compose config PASS; container dedicati ramai-s1004d-check healthy,
+  pgvector 0.8.6 e Redis PONG verificati. Immagini già previste: pgvector/pgvector
+  0.8.6-pg17 e Redis 7.2.16-alpine3.21, nessun cambio Compose.
+- Secret Docker casuale solo in memoria; nessun .env scritto o dati utente modificati.
+- Gitleaks 8.30.1 (download ufficiale con SHA-256 verificato): 32 file candidati
+  C/D/documentazione, inclusi untracked, nessun leak. Output redatto; non garanzia
+  assoluta né nuova scansione della storia Git. Whitespace e link locali verificati.
+- Nessun commit/push; non attribuire a C/D i verdi storici di GitHub. Rimossi
+  container/rete/volumi Docker dedicati ai test, senza toccare volumi utente.
+
+Limiti: niente Linux/clone pulito/GitHub per C/D, obbligo MFA Owner/Admin da collegare
+a ruoli server-side, isolamento e UI non iniziati. Mancano email reale/self-service
+HTTP completo, recupero assistito con tutti i fattori persi, audit segregato/retention,
+runbook keyring e review umana. SEC-EX-001/5 high npm dev già documentate restano
+aperte senza proroga: nessun nuovo audit npm o migrazione tooling in questo blocco.
+I warning non equivalgono a un'autorizzazione agli utenti esterni.
+
+## S1-004C — Sessioni API, 20 ottobre
+
+Utente autorizza il piano C dopo chiarimento sulla sicurezza. File/dipendenze/test
+annunciati prima del codice. ADR-010 consente il riferimento API→adapter soltanto
+nel composition root; handler tramite contratti Application e test architetturale
+aggiuntivo. [Baseline dettagliata](account-session-baseline.md).
+
+Creati: contratti AccountSessions, tre componenti Sessions nell'adapter, Composition/
+WebIdentityRegistration, Authentication/AccountEndpoints, AccountTransportMiddleware,
+WebSessionFixture/WebSessionTests, ADR-010 e baseline sessioni. Modificati Program e
+csproj API, registration/esito/credential snapshot A, fixture test per pulizia dei
+namespace generati, test architettura, backlog, README/policy/report/memory/handoff.
+Piano demo locale preesistente preservato e aggiornato con target 30 novembre e
+nome pubblico Agentilio; nessuna rinomina o acquisto/attivazione provider.
+
+Cookie host-only Secure/HttpOnly/Strict, ticket Redis cifrato con TTL/rinnovo atomico
+senza resurrezione dopo logout, 30 minuti idle/12 ore assolute; stamp/account da DB
+per richiesta. Password reset e revoca cambiano l'idoneità della sessione. MFA attiva
+non aggirabile dalla via password-only. Antiforgery anche sul login; body/origin/HTTPS,
+rate A e errori 401/429/503 senza dettagli. Nessun principal business/ruolo tenant.
+Auth disabilitata di default; configurazione completa/certificato/keyring necessari
+per attivarla, nessuna chiave effimera di produzione o schema DB nuovo.
+
+Nessun nuovo NuGet: framework ASP.NET Core e versioni EF/Identity/Npgsql/Redis
+preesistenti. Primo ciclo test ha rilevato configurazione
+TestServer tardiva (404), poi Redis disposed reso 503; prova TLS Windows richiedeva
+DefaultKeySet solo nel certificato test SChannel. Nessun test saltato/soppresso,
+nessun downgrade TLS runtime. MFA, UI, account self-service HTTP e review beta restano
+da completare. Nessuna pubblicazione GitHub: i verdi storici non testano C locale.
+
+### Gate finali C — locali, non GitHub/Linux
+
+- SDK 10.0.402; target .NET 10 invariato. Nessuna versione NuGet aggiornata.
+- docker compose config PASS; PostgreSQL/pgvector e Redis healthy su progetto
+  temporaneo ramai-s1004c-check, secret generato solo nel processo.
+- Build Release PASS: 0 warning, 0 errori; format --verify-no-changes PASS.
+- Suite completa: **127 pass, 0 fail, 0 skipped**: 39 unit, 7 architecture,
+  81 integration. Incremento 15 test rispetto ad A/B: 14 sessioni/HTTP e un confine
+  architetturale. Include Kestrel HTTPS reale, non soltanto TestServer.
+- Rinnovo concorrente/logout (20 interleaving), idle/assoluto, stamp/reset/revoca,
+  account non idonei/MFA, CSRF/origine/body, quota account e 120/min socket con
+  X-Forwarded-For falsificati, ticket cifrati/manomessi, restart keyring e guasti.
+- Frontend invariato: lint, type-check, production build PASS. Nessuna migrazione
+  tooling o nuovo lockfile frontend; SEC-EX-001 resta aperta senza proroga.
+- Rimossi esclusivamente container/rete/volumi temporanei creati per la prova,
+  database e namespace test generati. Nessun dato utente rimosso.
+- Gitleaks 8.30.1: 26 file locali candidati, nessun leak rilevato, output redatto.
+  Include le cinque modifiche del piano demo preesistente, preservate. Whitespace
+  PASS e collegamenti locali di 10 documenti verificati. Nessun nuovo secret reale.
+  Avvisi Git soltanto di normalizzazione line ending già definita in .gitattributes.
+
+Non eseguita CI GitHub di C o verifica Linux di C, nessun commit/push. Prima della
+beta: MFA/D, UI/E2E, tenant isolation, operatività email/keyring/backup/audit e review
+umana security. Prossimo blocco: S1-004D, non dichiarare completa la demo.
+
+## Storico S1-001 — Decisioni e threat model
 
 L'utente ha approvato esplicitamente il 17 ottobre: "ok parametri tecnici S1-001 approvati".
 Decisioni documentate in [ADR-009](adr/ADR-009-identity-access.md) e

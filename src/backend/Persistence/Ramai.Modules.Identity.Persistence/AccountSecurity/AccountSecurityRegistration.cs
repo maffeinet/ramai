@@ -13,6 +13,11 @@ public static class AccountSecurityRegistration
     public static IServiceCollection AddRamaiAccountSecurity(this IServiceCollection services,
         Action<DbContextOptionsBuilder> configureDatabase, IConnectionMultiplexer redis, byte[] rateKey,
         string rateNamespace = "identity-rates")
+        => services.AddRamaiAccountSecurity(configureDatabase, _ => redis, rateKey, rateNamespace);
+
+    public static IServiceCollection AddRamaiAccountSecurity(this IServiceCollection services,
+        Action<DbContextOptionsBuilder> configureDatabase, Func<IServiceProvider, IConnectionMultiplexer> redis,
+        byte[] rateKey, string rateNamespace = "identity-rates")
     {
         services.AddLogging();
         services.AddDbContext<IdentityStoreContext>(options =>
@@ -38,7 +43,7 @@ public static class AccountSecurityRegistration
         services.AddSingleton<IPasswordValidator<AccountUser>, AccountPasswordValidator>();
         services.AddSingleton<IPasswordHasher<AccountUser>, NormalizedPasswordHasher>();
         services.AddSingleton<DummyPasswordWork>();
-        services.AddSingleton(_ => new AccountRateLimiter(redis, rateKey, rateNamespace));
+        services.AddSingleton(provider => new AccountRateLimiter(redis(provider), rateKey, rateNamespace));
         services.AddScoped<AccountCredentialService>();
         return services;
     }

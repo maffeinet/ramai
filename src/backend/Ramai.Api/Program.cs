@@ -3,6 +3,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Ramai.Api.Health;
 using Ramai.Api.Middleware;
 using Ramai.Infrastructure;
+using Ramai.Api.Authentication;
+using Ramai.Api.Composition;
+using Ramai.Api.Workspaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +18,8 @@ builder.Logging.AddJsonConsole(options =>
 });
 
 builder.Services.AddRamaiInfrastructure(builder.Configuration);
+var identityEnabled = builder.Services.AddConfiguredWebIdentity(builder.Configuration);
+if (identityEnabled) { builder.Services.AddConfiguredWebTenants(builder.Configuration); }
 builder.Services
     .AddHealthChecks()
     .AddCheck("application", () => HealthCheckResult.Healthy("Application is running."), ["self"])
@@ -24,6 +29,15 @@ builder.Services
 var app = builder.Build();
 
 app.UseMiddleware<CorrelationIdMiddleware>();
+if (identityEnabled)
+{
+    app.UseWorkspaceProblemDetails();
+    app.UseMiddleware<AccountTransportMiddleware>();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapAccountEndpoints();
+    app.MapWorkspaceEndpoints();
+}
 
 app.MapGet("/", () => Results.Ok(new { service = "RAMAI API", status = "foundation" }));
 app.MapHealthChecks("/health", new HealthCheckOptions

@@ -24,7 +24,8 @@ public sealed class DependencyBoundaryTests
         AssertReferences("Ramai.Domain", []);
         AssertReferences("Ramai.Application", ["Ramai.Domain"]);
         AssertReferences("Ramai.Infrastructure", ["Ramai.Application"]);
-        AssertReferences("Ramai.Api", ["Ramai.Application", "Ramai.Infrastructure"]);
+        // ADR-010: explicit host-only composition, never a cross-module dependency.
+        AssertReferences("Ramai.Api", ["Ramai.Application", "Ramai.Infrastructure", "Ramai.Modules.Identity.Persistence", "Ramai.Modules.Tenants.Persistence"]);
     }
 
     [Fact]
@@ -57,6 +58,19 @@ public sealed class DependencyBoundaryTests
                 element.Attribute("Include")!.Value.Replace('\\', '/')))
             .Order().ToArray();
         Assert.Equal(expected.Order().ToArray(), references);
+    }
+
+    [Fact]
+    public void Api_uses_identity_and_tenant_adapters_only_in_its_composition_root()
+    {
+        var root = Path.Combine(RepositoryRoot, "src", "backend", "Ramai.Api");
+        foreach (var file in Directory.GetFiles(root, "*.cs", SearchOption.AllDirectories)
+            .Where(file => !Path.GetRelativePath(root, file).StartsWith("Composition" + Path.DirectorySeparatorChar)
+                && !file.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar)))
+        {
+            Assert.DoesNotContain("Ramai.Modules.Identity.Persistence", File.ReadAllText(file));
+            Assert.DoesNotContain("Ramai.Modules.Tenants", File.ReadAllText(file));
+        }
     }
 
     [Fact]
@@ -117,6 +131,22 @@ public sealed class DependencyBoundaryTests
         foreach (var argument in type.GetGenericArguments())
         {
             AssertContractType(argument, application);
+        }
+    }
+
+    [Fact]
+    public void Global_tenant_context_is_restricted_to_reviewed_bootstrap_paths()
+    {
+        var root = Path.Combine(RepositoryRoot, "src", "backend");
+        var allowed = new[] { "TenantsStoreContext.cs", "TenantsStoreFactory.cs", "TenantMembershipReader.cs", "WorkspaceProvisioningStore.cs" };
+        foreach (var file in Directory.GetFiles(root, "*.cs", SearchOption.AllDirectories)
+            .Where(file => !file.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar)
+                && !file.Contains(Path.DirectorySeparatorChar + "Migrations" + Path.DirectorySeparatorChar)))
+        {
+            // ADR-010 approved host-only DI registration, not a handler/global query path.
+            if (Path.GetRelativePath(root, file) == Path.Combine("Ramai.Api", "Composition", "WebTenantsRegistration.cs")) { continue; }
+            if (allowed.Contains(Path.GetFileName(file))) { continue; }
+            Assert.DoesNotContain("TenantsStoreContext", File.ReadAllText(file));
         }
     }
 

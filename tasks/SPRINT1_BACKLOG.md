@@ -1,7 +1,10 @@
 # RAMAI — Sprint 1 proposto: Identity, Tenant e DB baseline
 
-Data piano: 2026-10-16. Aggiornamento: 2026-10-19.
+Data piano: 2026-10-16. Aggiornamento: 2026-10-20.
 Stato: **S1-001 COMPLETATO; S1-002/003 PUBBLICATI; S1-004A/B COMPLETATI E PUBBLICATI; S1-004 APERTO**.
+Aggiornamento 20 ottobre: **S1-004C implementato localmente**, non pubblicato;
+S1-004D MFA ora implementato localmente, verifica finale nel report; UI e isolamento
+restano da implementare, non è completato l'intero accesso sicuro.
 Ultima pubblicazione applicativa autorizzata del 19 ottobre, commit `ca7edf4`;
 [CI verde con 112 test senza skipped](https://github.com/maffeinet/ramai/actions/runs/39230830575).
 Le sezioni dei singoli task mantengono lo storico delle implementazioni locali.
@@ -155,8 +158,11 @@ Suddivisione concordata, con autorizzazione separata per ciascun blocco:
 - **S1-004B completato il 19 ottobre**: conferma/reset interni con token Identity
   purpose-bound 24h/30min, solo ultimo link valido e consumo atomico, sender in memoria
   nei test. [Dettagli](../docs/account-recovery-baseline.md). Nessun endpoint o email reale.
-- S1-004C: login/logout e sessioni/cookie/CSRF/revoca, non iniziato.
-- S1-004D: MFA e recovery secondo policy, non iniziato.
+- S1-004C: login/logout e sessioni/cookie/CSRF/revoca implementati localmente il
+  20 ottobre, opt-in con keyring protetto, nessun push. [Limiti e test](../docs/account-session-baseline.md).
+- S1-004D: MFA TOTP/enrollment, recovery monouso, cifratura/replay/lock e revoca
+  implementati localmente il 20 ottobre dopo autorizzazione esplicita. [Baseline D](../docs/account-mfa-baseline.md).
+  Verifiche nel report; niente commit/push. Obbligo MFA per ruolo ancora da integrare.
 
 Il completamento A/B non completa il trasporto HTTP o l'intero S1-004. Alla fine di B
 l'utente ha autorizzato commit/push A+B e controllo GitHub; non durante implementazione.
@@ -177,6 +183,12 @@ memoria per dati sintetici; email reale e MFA privilegiati sono gate prima della
 
 ### S1-005 — TenantContext
 
+**COMPLETATO LOCALMENTE nel perimetro interno il 20 ottobre**, dopo autorizzazione
+esplicita. 178 test backend verdi/0 skipped, build/format e gate frontend PASS.
+[Baseline e confini](../docs/tenant-context-baseline.md); nessun endpoint workspace
+o nuovo riferimento API→Tenants. Composition/HTTP da integrare in S1-008 con review.
+Nessun commit/push; S1-006+ non iniziati.
+
 Output: contratto del contesto richiesto dalle operazioni tenant-scoped.
 Acceptance: identità/membership inattiva o contesto assente rifiutati; header, query,
 route o body arbitrari non possono assegnare il tenant. Eventuale selezione workspace
@@ -185,12 +197,22 @@ Test: claim/tenant manomessi, appartenenza assente, contesti concorrenti distint
 
 ### S1-006 — Provisioning workspace
 
+**COMPLETATO LOCALMENTE nel perimetro interno il 20 ottobre**, dopo autorizzazione
+esplicita. 201 test backend verdi/0 skipped; build/format/frontend e modello EF PASS.
+[Baseline e migrazione](../docs/workspace-provisioning-baseline.md). Nessun nuovo
+endpoint/wiring API→Tenants o S1-007+; nessun commit/push.
+
 Output: creazione controllata tenant e prima membership Owner dal soggetto autenticato.
 Acceptance: atomicità/coerenza secondo confini dei moduli approvati, retry non duplica
 workspace, nessuna possibilità di autoproclamarsi Owner di un tenant esistente.
 Test: successo, duplicato/retry, fallimento parziale, tentativo su tenant altrui.
 
 ### S1-007 — Isolamento dati
+
+**COMPLETATO LOCALMENTE il 20 ottobre**, 222 test verdi/0 skipped, Release/format/
+frontend/modello EF PASS. [Baseline e limiti](../docs/tenant-isolation-baseline.md).
+Autorizzati pubblicazione dopo gate/scan e successivo S1-008 nella notte 20/21;
+UI/S1-009 non autorizzata. Esiti effettivi di scan/push/CI nel report.
 
 Output: query filter e protezioni scrittura per i dati tenant-scoped reali dello scope.
 Acceptance: letture, liste, update/delete applicabili non attraversano tenant; mismatch
@@ -199,6 +221,18 @@ disabilitato senza review. Non introdurre RLS o un nuovo tenancy model implicita
 Test: tenant A/B, ID validi dell'altro tenant, lista vuota, update, contesto mancante.
 
 ### S1-008 — API e autorizzazioni
+
+**COMPLETATO LOCALMENTE il 21 ottobre nel perimetro API/RBAC**, dopo approvazione
+dei sospesi ADR-010/pubblicazione. [Baseline](../docs/workspace-api-baseline.md),
+278 test totali verdi/0 skipped, Release/format/frontend/EF PASS e secret scan senza
+leak. Commit/push/CI effettivi nel report; nessuna UI/S1-009 o beta. Sotto: checkpoint
+interno precedente al completamento HTTP.
+
+**AVVIATO, PARZIALE INTERNO**, ripresa notturna 20 ottobre: contratti, servizio RBAC,
+adapter TenantDataContext e 28 test nuovi; 250 test totali verdi/0 skipped.
+[Piano/decisioni host](../docs/workspace-api-plan.md). Nessun nuovo endpoint/wiring
+HTTP: attende conferma estensione host-only ADR-010 e policy trasporto. Non Done;
+UI/S1-009 non iniziata, nessun nuovo commit/push.
 
 Output: contratti versionati /api/v1 per profilo, workspace e settings minimi approvati;
 ProblemDetails/correlation ID ed errori coerenti. Owner/Admin/Member lato server.

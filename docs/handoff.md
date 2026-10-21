@@ -1,6 +1,180 @@
 # RAMAI — Handoff operativo
 
-Snapshot: 2026-10-20, Europe/Rome. Contesto stabile in [memory.md](memory.md).
+Snapshot: 2026-10-21, Europe/Rome. Contesto stabile in [memory.md](memory.md).
+
+## Ripresa diurna 21 ottobre — autorizzazioni sbloccate
+
+Utente: "ok procedi con tutto quanto è in sospeso" dopo il riepilogo/richieste:
+approvati estensione ADR-010 host-only Tenants e commit/push dei prerequisiti
+C/D/005/006/007 insieme a S1-008 e documentazione pertinente, solo dopo gate/scan.
+Questo supera i precedenti blocchi, non li aggira. Nessuna UI/S1-009 o deploy.
+Implementati host/API S1-008, [baseline](workspace-api-baseline.md); 28 test HTTP
+nuovi verdi/0 skipped, incluso Kestrel HTTPS. **Regressione 278 PASS/0 skipped**
+(101 unit, 169 integration, 8 architecture), Release 0 warning/errori, format,
+frontend npm ci/lint/tipi/build e modelli EF PASS. Gitleaks 72 candidati iniziali e
+poi diff staged di tutti i 73 file senza leak, link/whitespace PASS.
+Audit riconfermato: 5 high dev, 0 production,
+ESLint deprecato; SEC-EX-001 non prorogata. Risorse Docker del solo progetto finale
+rimosse e assenza verificata; dati utente intatti. Nessun nuovo commit/push ancora
+eseguito. Dopo pubblicazione verificare SHA/run reale, non attribuire CI storiche
+al locale. S1-008 completato localmente, non intero Sprint 1 o beta. Prossimo task
+da autorizzare S1-009/UI, non iniziato. Nessuna automazione notturna rimasta attiva.
+Le note "attendere approvazione" sottostanti sono checkpoint precedenti.
+
+## Direzione corrente — demo stakeholder, 20 ottobre
+
+## Piano notturno autorizzato — 20/21 ottobre
+
+### Checkpoint ripresa 23:07 — S1-008 parziale interno
+
+Preparati [piano/file/test e proposta host](workspace-api-plan.md), poi contratti
+WorkspaceOperations, servizio Application, WorkspaceDataStore tenant-scoped,
+22 unit test e 6 integration test reali. Gate: **250 pass/0 skipped** (101 unit,
+141 integration, 8 architecture), Release 0 warning/errori, format verify,
+frontend lint/tipi/build e modelli EF Identity/Tenants PASS. Nessuna nuova API,
+dipendenza NuGet/schema, modifica frontend o grafo dei progetti. S1-008 NON Done:
+HTTP, ProblemDetails e test cookie/CSRF/IDOR dei nuovi endpoint restano mancanti.
+Gitleaks 8.30.1 sui 65 file locali candidati senza leak; link Markdown verificati
+su 17 documenti e whitespace PASS. Risorse Docker temporanee S1-008 rimosse e
+assenza verificata, dati/volumi utente intatti. HEAD invariato 31129fa, index vuoto;
+nessuna nuova CI/clone/Linux. Debito npm invariato, non riauditato o prorogato.
+
+Per il prossimo step chiedere decisione umana: estendere ADR-010 per riferimento
+API→adapter Tenants **soltanto in Composition**, handler via contratti Application;
+non inferire l'approvazione del nuovo riferimento dal solo nome del task S1-008.
+Non usare reflection/service locator o muovere adapter in Infrastructure per evitarla.
+La proposta API/policy errori è nel piano, non approvata o applicata al trasporto.
+Il blocco precedente sulla pubblicazione dei prerequisiti resta distinto e invariato.
+Non ripetere tentativi git respinti. Senza nuova risposta umana non ci sono altre
+implementazioni indipendenti pianificate: non ripetere gate uguali a ogni heartbeat
+né iniziare altri task per consumare le ore restanti. Attendere il punto delle 09:00.
+
+Utente autorizza ripresa notturna fino alle **09:00 del 21 ottobre 2026 Europe/Rome**,
+o fino all'esaurimento dei crediti, chiedendo il piano prima del lavoro. Perimetro:
+**S1-007 e poi S1-008**, come successivamente richiesto esplicitamente dall'utente,
+non le vecchie istruzioni del laboratorio frontend.
+Automazioni esistenti aggiornate, senza duplicati: riprese fino alle 08:45 e punto
+alle 09:00. Commit e push richiesti per 007/008; l'inclusione dei prerequisiti
+C/D/005/006 è stata respinta dalla revisione ed è in attesa di conferma umana,
+come sotto. Pubblicare soltanto con scope chiarito, gate/scan verdi e CI reale
+verificata. Nessun deploy, UI/S1-009 o task ulteriore autorizzato. Documentare
+ogni step; se i due blocchi finiscono prima, fermarsi senza ampliare lo scope.
+
+Checkpoint successivo: **S1-007 completato localmente**, 222 test PASS/0 skipped
+(79 unit, 135 integration, 8 architecture), build 0 warning/errori, format,
+frontend e modello EF PASS. [Baseline](tenant-isolation-baseline.md). 20 test A/B
+verdi, inclusi batch misti e bypass. Il limite approvazioni precedente è superato:
+comandi rieseguiti nel percorso autorizzato, nessun aggiramento. Secret scan,
+commit/push e CI da registrare; non assumere già effettuati. Prossimo S1-008
+autorizzato, nessuna UI. Docker ramai-s1007-check usato su porte 45432/46379,
+password effimera solo nel container/processo; container, rete e volumi propri
+rimossi al termine e assenza verificata. Volumi utente intatti.
+
+Pubblicazione bloccata dal controllo automatico PRIMA dell'esecuzione del comando
+git: selezione comprendente prerequisiti C/D/005/006 giudicata più ampia della
+richiesta esplicita 007/008. Nessun nuovo staging/commit/push eseguito da quel
+comando. Non aggirare né ripetere il push senza chiarimento umano del perimetro.
+Richiesta conferma per pubblicare anche i prerequisiti necessari e documentazione
+collegata; nessun altro task applicativo. S1-008 resta autorizzato ma non iniziato
+in questa ripresa. Gitleaks 8.30.1 su 59 file candidati senza leak; staged scan
+non eseguito perché il comando complessivo è stato respinto. Non dichiarare CI
+nuova o commit nuovo: HEAD resta il precedente 31129fa.
+
+Stato iniziale della notte (superato): S1-007 non completato, creati TenantDataContext, TenantDataContextFactory,
+TenantQueryBoundary e TenantsModel; mapping del contesto bootstrap condiviso senza
+cambio schema. Compilazione dei componenti passata, ma i nuovi TenantIsolationTests
+non sono stati compilati/eseguiti: l'ultimo tentativo è stato fermato da un errore
+del servizio di approvazione automatica per limite di utilizzo. Non è un giudizio
+di pericolosità del comando e non autorizza ad aggirare le approvazioni. Riprovare
+solo attraverso il percorso autorizzato; se resta bloccato, registrare i gate mancanti.
+I 201 test verdi sottostanti sono il checkpoint S1-006, **non** la suite S1-007.
+
+Priorità: review dei nuovi test/guard, compilazione e prove A/B reali (Find/tracking,
+entità detached, current/original TenantId, batch misti, filtri disabilitati/raw SQL/
+bulk e query compilate), regressione completa con infrastruttura temporanea dedicata,
+format/frontend/EF/secret scan, report/memory/handoff. Non promettere CI o verifica
+Linux se non effettivamente eseguite. Preservare tutte le modifiche C/D/S1-005/006/demo.
+Il riepilogo delle 09:00 deve indicare esiti effettivi, incompleti e limiti, anche se
+crediti, disponibilità macchina o approvazioni impediscono il lavoro.
+
+Ultimo blocco autorizzato: **S1-006 provisioning workspace/Owner completato localmente**.
+[Baseline](workspace-provisioning-baseline.md): Owner da sessione MFA
+verificata, TenantId server, registrazione idempotente e tre righe atomiche nello
+schema Tenants. Migrazione nuova, non applicata a dati utente; nessun endpoint,
+wiring API→Tenants o S1-007+. C/D/S1-005/demo preservati, nessun commit/push.
+Gate finali: **201 pass, 0 fail, 0 skipped** (79 unit, 115 integration, 7 architecture),
+Release 0 warning/errori, format e frontend lint/tipi/build PASS. Modello EF coerente,
+script idempotente generato; upgrade e rollback con preservazione/protezione verificati.
+Gitleaks 8.30.1 sui 53 file locali senza leak; link/whitespace PASS. PostgreSQL/Redis
+test healthy, pgvector 0.8.6/PONG; risorse temporanee S1-006 rimosse, dati utente intatti.
+Corretto provider log fixture e atteso wrapper errore migrazione, nessuna soppressione.
+Nessuna nuova CI/Linux/clone pulito: non attribuire al locale i verdi GitHub storici.
+Prossimo task da autorizzare: **S1-007 isolamento letture/scritture tenant-scoped**.
+API/onboarding/browser e wiring Tenants rimangono successivi, non pronti per esterni.
+
+Checkpoint precedente: **S1-005 TenantContext completato nel perimetro interno**.
+[Baseline TenantContext](tenant-context-baseline.md): contratti/resolver Application,
+selezione verificata contro membership, ruolo riletto e gate MFA Owner/Admin.
+Nessun nuovo riferimento API→Tenants: wiring/route workspace restano S1-008 con
+review del composition root, non aggirati. S1-006/007/008 e UI non iniziati.
+Modifiche C/D/demo preservate; nessun commit/push o tooling modificato.
+Gate locali: Release 0 warning/errori, format PASS, **178 pass/0 skipped**
+(64 unit, 107 integration, 7 architecture), frontend lint/tipi/build PASS.
+Gitleaks 8.30.1 su 38 file locali candidati senza leak; link/whitespace verificati.
+PostgreSQL/pgvector 0.8.6 e Redis healthy/PONG su risorse isolate, poi rimosse.
+Verificati revoche/stamp, MFA Owner A/Member B, estraneo C, membership inattiva,
+cambio ruolo e venti scope concorrenti. Nessuna nuova CI/Linux/clone pulito.
+Prossimo task da autorizzare: **S1-006 provisioning workspace e primo Owner**,
+senza saltare successivi filtri/protezioni write S1-007 e API/UI. Accesso esterno no.
+Questa riga prevale sul precedente "prossimo S1-005" sottostante.
+
+Ripresa corrente: **S1-004D MFA TOTP/recupero completato e verificato localmente**.
+[Baseline D](account-mfa-baseline.md) descrive codice, endpoint, protezioni e limiti.
+Riletti AGENTS, policy, backlog, sessioni/ADR e stato dei report. Modifiche C/demo
+preesistenti preservate; niente laboratorio frontend, commit/push o altri task.
+Gate finali: Release 0 warning/errori, format PASS, **146 test pass/0 skipped**
+(39 unit, 100 integration, 7 architecture), incluso MFA Kestrel HTTPS reale.
+Frontend lint/tipi/build verdi; Gitleaks 32 file senza leak, link/whitespace PASS.
+Secret MFA/recovery/stato cifrati, replay/consumo concorrente, 5 errori/15 minuti,
+revoca e recupero anche con ultimo codice testati. Prova recovery server-side
+monouso di cinque minuti per ripristino con password nuovamente richiesta.
+Documentati problemi corretti senza soppressioni e limiti operativi nella baseline.
+Prossimo blocco da autorizzare: **S1-005 TenantContext**, poi isolamento/RBAC e UI;
+obbligo MFA Owner/Admin da integrare coi ruoli, accesso/demo non pronti per esterni.
+Nessuna nuova CI/Linux/clone pulito per C/D: i verdi storici non li verificano.
+Rimossi container/rete/volumi del solo progetto di test ramai-s1004d-check.
+Tutte le note successive "MFA/D non iniziati" descrivono checkpoint precedenti.
+Le istruzioni heartbeat notturne scadute alle 08:45 non autorizzano altri lavori
+o pubblicazioni e non sostituiscono l'autorizzazione diurna esplicita a D.
+
+Checkpoint precedente: S1-004C implementato e verificato localmente;
+[sessioni/configurazione](account-session-baseline.md). API opt-in HTTPS,
+cookie e ticket Redis cifrati, timeout idle/assoluto, revoca/stamp per richiesta,
+CSRF e fail-closed. Nuovo ADR-010 per composition root; nessun confine di modulo
+aggirato. Build Release 0 warning/errori, format e **127 test PASS/0 skipped**
+(39 unit, 7 architecture, 81 integration), incluso Kestrel HTTPS reale; frontend
+lint/tipi/build verdi. Nessun commit/push o nuova CI di C. Gitleaks su 26 file senza
+leak, whitespace/link documentali PASS. MFA/UI/TenantContext non implementati,
+beta non autorizzata. Prossimo blocco applicativo: S1-004D MFA, non altro tooling.
+Scadenza demo indicata dall'utente: entro 30 novembre 2026 (target, non garanzia).
+Nome pubblico scelto: Agentilio; acquisto dominio/email/DNS a cura utente, non
+confermato come completato. Nessuna rinomina repository o modifica DNS eseguita.
+
+L'utente chiede di riallineare la roadmap e sviluppare una demo utile per le PMI,
+non continuare le esplorazioni tooling. [Roadmap](demo-roadmap.md) e
+[backlog demo](../tasks/DEMO_BACKLOG.md) definiscono il percorso proposto:
+login/workspace → conversazioni sintetiche → Today con fonti → bozza → feedback.
+Modalità iniziale proposta guidata locale, non beta pubblica o dati clienti;
+provider/modello/budget da approvare prima di chiamate esterne. Data presentazione
+richiesta all'utente, ancora da confermare. Nessuna data di consegna promessa.
+
+Il paragrafo precedente prevale sul piano iniziale documentale: S1-004C ora ha
+implementazione locale. Prossimi blocchi: S1-004D MFA, quindi contesto/isolation e
+UI protetta secondo backlog. Non saltare MFA/UI per dichiarare completato l'accesso.
+SEC-EX-001 resta aperta senza proroga; non ostacola automaticamente lo sviluppo
+interno autorizzato ma non autorizza esposizione pubblica/clienti o dati reali.
+La migrazione tooling resta non applicata; non riprenderne l'implementazione
+automaticamente al posto della verticale. Stato tecnico precedente sotto.
 
 Ultimo stato, ripresa 02:18: **370/370 verdi locali e nuovi cloni Windows/Linux,
 zero skipped**. display-name originale upstream con chiusura vendor motivata nella

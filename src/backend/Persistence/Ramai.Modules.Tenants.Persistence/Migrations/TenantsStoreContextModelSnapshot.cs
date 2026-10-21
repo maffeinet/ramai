@@ -77,10 +77,46 @@ namespace Ramai.Modules.Tenants.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Ramai.Modules.Tenants.Persistence.WorkspaceProvisioningRequest", b =>
+                {
+                    b.Property<Guid>("ActorUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("RequestName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ActorUserId", "RequestId");
+
+                    b.HasIndex("TenantId")
+                        .IsUnique();
+
+                    b.ToTable("WorkspaceProvisioningRequests", "tenants", t =>
+                        {
+                            t.HasCheckConstraint("CK_Provisioning_Ids", "\"ActorUserId\" <> '00000000-0000-0000-0000-000000000000'::uuid AND \"RequestId\" <> '00000000-0000-0000-0000-000000000000'::uuid");
+                        });
+                });
+
             modelBuilder.Entity("Ramai.Modules.Tenants.Domain.Membership", b =>
                 {
                     b.HasOne("Ramai.Modules.Tenants.Domain.Tenant", null)
                         .WithMany("Memberships")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ramai.Modules.Tenants.Persistence.WorkspaceProvisioningRequest", b =>
+                {
+                    b.HasOne("Ramai.Modules.Tenants.Domain.Tenant", null)
+                        .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

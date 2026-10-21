@@ -28,6 +28,11 @@ Ultimo audit npm: riesame del 19 ottobre successivo alla pubblicazione A+B,
 5 high dev, 0 critical, 0 segnalazioni production; stessa catena/advisory del
 16 ottobre, senza modifica del lockfile. Compatibilità peer riesaminata sotto.
 Questo dato non certifica assenza di vulnerabilità o di esposizione del tooling.
+
+Riconferma 21 ottobre prima della pubblicazione S1-008: npm ci/lint/type-check/build
+PASS sul lock invariato; audit completo ancora 5 high, stessa catena braces;
+audit --omit=dev 0 segnalazioni, 0 critical. ESLint 9.39.5 deprecato/fuori supporto.
+Nessuna correzione, soppressione, aggiornamento forzato o proroga della deroga.
 Inventario e prove in [sprint0-progress.md](sprint0-progress.md).
 
 Esclusi dalla deroga: nuove vulnerabilità, dipendenze runtime vulnerabili, leak,

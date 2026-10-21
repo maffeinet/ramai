@@ -2,5 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ramai.Application\Ramai.Application.csproj" />
     <ProjectReference Include="..\Ramai.Infrastructure\Ramai.Infrastructure.csproj" />
+    <ProjectReference Include="..\Persistence\Ramai.Modules.Identity.Persistence\Ramai.Modules.Identity.Persistence.csproj" />
+    <ProjectReference Include="..\Persistence\Ramai.Modules.Tenants.Persistence\Ramai.Modules.Tenants.Persistence.csproj" />
   </ItemGroup>
 </Project>

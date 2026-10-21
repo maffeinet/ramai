@@ -1,8 +1,90 @@
 # RAMAI — Memoria del progetto
 
-Aggiornato: 2026-10-19, Europe/Rome.
+Aggiornato: 2026-10-21, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
+
+21 ottobre: approvati i sospesi (ADR-010 host-only Tenants e pubblicazione
+prerequisiti C/D/005/006/007 con S1-008). **S1-008 completato localmente**,
+[baseline](workspace-api-baseline.md). API opt-in profilo/provisioning/selezione/
+workspace/settings, contratti chiusi, ruolo/MFA dal contesto verificato, CSRF,
+ProblemDetails/correlation, quota provisioning Redis distribuita e test HTTPS reali.
+278 test verdi/0 skipped (101/169/8), Release 0 warning/errori, format/frontend/EF
+PASS, Gitleaks staged 73 file senza leak. Audit 5 high dev/0 production riconfermato,
+nessuna proroga. Risorse test proprie rimosse, volumi utente intatti. Nuovo commit/
+push/CI ancora da verificare e registrare, non assunti. S1-009/UI non iniziata,
+nessuna esposizione esterna o completamento commerciale impliciti. Stato sotto storico.
+
+Ripresa notturna 23:07: **S1-008 parziale interno**, [piano e decisione necessaria](workspace-api-plan.md).
+Contratti/servizio RBAC/adapter tenant-scoped e 28 nuovi test; suite totale 250
+PASS/0 skipped, Release/format/frontend/EF PASS. Endpoint/wiring HTTP non introdotti.
+Gitleaks 65 file senza leak, link/whitespace PASS, Docker temporaneo S1-008 rimosso;
+dati utente intatti. Nessuna nuova CI/Linux o modifica al tooling attivo.
+Per continuare serve conferma estensione ADR-010 al composition root Tenants;
+non registrata come già approvata. Distinta conferma di pubblicazione prerequisiti
+ancora mancante. Nessun nuovo commit/push/CI, nessuna UI/S1-009 o altro task.
+
+Notte 20/21 ottobre: S1-007 completato localmente, [baseline](tenant-isolation-baseline.md),
+222 test verdi/0 skipped (79/135/8), Release/format/frontend e modello EF PASS.
+Autorizzazione più recente: completare 007 e 008, documentare ogni step, commit/push
+pertinenti dopo secret scan/gate e verifica CI reale. Inclusione prerequisiti locali
+C/D/005/006 da confermare, non lavoro estraneo. Nessuna UI/S1-009, deploy o migrazione tooling.
+Questo checkpoint precede lo step parziale S1-008 sopra; Gitleaks 59 file senza leak. Comando di pubblicazione
+respinto prima dell'esecuzione per scope prerequisiti più ampio: conferma umana
+richiesta, nessun nuovo commit/push/CI. Non aggirare la revisione. Risorse Docker
+isolate S1-007 rimosse, volumi utente intatti.
+I paragrafi sotto descrivono lo storico, non prevalgono su questa autorizzazione.
+
+20 ottobre, blocco corrente: **S1-006 provisioning interno completato localmente**.
+[Baseline](workspace-provisioning-baseline.md). Nuovo registro idempotente nello
+schema Tenants, Owner da soggetto verificato con MFA, nessun client TenantId/Role.
+Nessun nuovo servizio/NuGet, endpoint o wiring API; nessun commit/push/S1-007+.
+Gate: 201 test verdi/0 skipped (79 unit, 115 integration, 7 architecture), Release
+0 warning/errori, format e frontend PASS. EF modello/script PASS; Gitleaks 53 file
+senza leak, link/whitespace PASS. Risorse Docker di test rimosse, volumi utente intatti.
+La nuova migrazione non è stata applicata ai dati utente. Down rifiuta di perdere
+registrazioni idempotenti già usate; nessun reset/retention automatica del registro.
+Prossimo blocco da autorizzare S1-007, non avviato. Nessuna nuova CI per il locale.
+
+20 ottobre, ripresa successiva: **S1-005 TenantContext interno completato localmente**.
+[Baseline](tenant-context-baseline.md). Componenti Application attraverso contratti,
+nessun nuovo endpoint/composition API→Tenants, nessuna nuova dipendenza/schema.
+Membership/ruoli verificati ogni volta, niente tenant scelto implicitamente;
+Owner/Admin richiedono prova MFA. C/D/demo locali preservati, nessun commit/push.
+Gate: build Release 0 warning/errori, format e 178 test PASS/0 skipped (64 unit,
+107 integration, 7 architecture), frontend PASS, Gitleaks 38 file senza leak.
+Scope HTTP/DI e salvataggio selezione nel ticket rinviati esplicitamente a S1-008;
+non dichiarare già disponibile una UI/route workspace o isolamento business.
+Prossimo task da autorizzare S1-006, non iniziato. SEC-EX-001 invariata.
+
+20 ottobre, ripresa: **S1-004D completato localmente**, [baseline MFA](account-mfa-baseline.md).
+Release 0 warning/errori, format e 146 test PASS/0 skipped (39 unit, 100 integration,
+7 architecture), incluso MFA Kestrel HTTPS reale. Frontend lint/tipi/build PASS;
+Gitleaks 32 file senza leak e link/whitespace verificati.
+Nessun nuovo NuGet/schema/provider, frontend invariato.
+Nessun commit/push. C e piano demo locali preservati; isolamento/UI e beta ancora no.
+Questo aggiornamento prevale sullo stato storico "D non iniziato" sottostante.
+Prossimo blocco da autorizzare S1-005 TenantContext. Obbligo MFA Owner/Admin con
+ruoli, isolamento e UI ancora da integrare; nessun accesso esterno autorizzato.
+
+20 ottobre: S1-004C implementazione locale, [baseline sessioni](account-session-baseline.md),
+ADR-010 composition root, nessun nuovo NuGet/servizio esterno, migrazione DB o push.
+Gate locali: Release/format verdi, 127 test/0 skipped (anche Kestrel HTTPS reale),
+frontend lint/tipi/build verdi; Gitleaks 26 file senza leak, link/whitespace PASS.
+Cookie HTTPS/CSRF, ticket cifrati
+Redis e validazione DB per richiesta. Nessun tenant grant o bypass MFA: account con
+MFA attiva rifiutati fino a D. UI e D non iniziati. Demo target entro 30 novembre;
+nome pubblico Agentilio, registrazione dominio affidata all'utente, non confermata.
+RAMAI resta nome tecnico, nessuna rinomina o DNS modificato. Sotto: storico.
+
+20 ottobre, dopo il punto stakeholder: utente richiede riallineamento alla roadmap
+e prima demo utile. [Piano demo](demo-roadmap.md) e
+[backlog](../tasks/DEMO_BACKLOG.md): accesso/workspace, dataset sintetico,
+Today con evidenze, bozza senza invio, feedback. È una verticale proposta, non
+funzionalità implementata o beta. Prossimo blocco S1-004C; provider/budget AI,
+data presentazione e modalità di accesso da confermare. Nessun servizio esterno,
+nuova feature o commit/push in questo aggiornamento. Tooling non migrato;
+SEC-EX-001 resta aperta senza proroga. Priorità al prodotto, non altra ricerca lint.
 
 20 ottobre, ripresa 02:18: **370/370 verdi, zero skipped** in locale e nuovi cloni
 Windows/Linux. display-name upstream con chiusura vendor motivata nella

@@ -1,6 +1,21 @@
 # RAMAI
 
-Monolite modulare RAMAI. Il repository è attualmente nella fase **Sprint 0 / Foundation**.
+Monolite modulare RAMAI. **Foundation completata; Sprint 1 Identity/Tenants parziale.**
+
+Direzione corrente: [prima demo stakeholder](docs/demo-roadmap.md), percorso
+Today → evidenze → follow-up con dati sintetici. [Backlog demo](tasks/DEMO_BACKLOG.md).
+Login/sessioni API S1-004C implementati con attivazione esplicita:
+[configurazione e limiti](docs/account-session-baseline.md).
+[MFA TOTP e recupero S1-004D](docs/account-mfa-baseline.md) implementati localmente;
+[TenantContext S1-005](docs/tenant-context-baseline.md) disponibile come componente
+verificato, integrato nel trasporto HTTP S1-008.
+[Provisioning workspace S1-006](docs/workspace-provisioning-baseline.md) interno,
+con Owner verificato e retry idempotenti; esposto via API, non ancora UI onboarding.
+[Isolamento dati S1-007](docs/tenant-isolation-baseline.md) verificato sugli attuali
+dati Tenants; [API workspace/RBAC S1-008](docs/workspace-api-baseline.md) opt-in,
+con profilo, creazione/selezione azienda e settings minimi protetti.
+UI applicativa e AI non sono ancora implementate. Istruzioni sotto:
+bootstrap Foundation, non funzionalità già disponibili della demo.
 
 ## Obiettivo
 A fine Sprint 0 deve essere possibile clonare il repository, configurare `.env`, avviare PostgreSQL e Redis con Docker Compose, avviare API ASP.NET Core e frontend Next.js, verificare `/health` ed eseguire test/lint con esito positivo.
@@ -15,7 +30,9 @@ A fine Sprint 0 deve essere possibile clonare il repository, configurare `.env`,
 7. `reference_docs/11_Codex_Development_Specification_v1.0.pdf`
 8. `reference_docs/04_Technical_Architecture_v1.0.pdf`
 
-Non implementare ancora connector reali, AI Engine, Business Memory funzionale, billing o automazioni autonome.
+Il backlog Sprint 0 resta storico della Foundation. I nuovi blocchi seguono lo
+scope corrente documentato: niente connector reali, billing o azioni autonome
+nella prima demo, né attivazione implicita di provider AI o servizi esterni.
 
 ## Prerequisiti attuali
 

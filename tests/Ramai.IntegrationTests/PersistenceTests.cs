@@ -61,7 +61,7 @@ public sealed class PersistenceTests
             await identity.Database.MigrateAsync();
             await tenants.Database.MigrateAsync();
             Assert.Single(await identity.Database.GetAppliedMigrationsAsync());
-            Assert.Single(await tenants.Database.GetAppliedMigrationsAsync());
+            Assert.Equal(tenants.Database.GetMigrations(), await tenants.Database.GetAppliedMigrationsAsync());
             // Destructive recovery is deliberately restricted to this disposable DB.
             await tenants.GetService<IMigrator>().MigrateAsync(Migration.InitialDatabase);
             await identity.GetService<IMigrator>().MigrateAsync(Migration.InitialDatabase);

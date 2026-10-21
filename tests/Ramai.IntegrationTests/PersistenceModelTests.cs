@@ -13,7 +13,7 @@ public sealed class PersistenceModelTests
         using var identity = new IdentityStoreFactory().CreateDbContext([]);
         using var tenants = new TenantsStoreFactory().CreateDbContext([]);
         AssertOwnership(identity, "identity", ["Users", "UserClaims", "UserLogins", "UserTokens"]);
-        AssertOwnership(tenants, "tenants", ["Tenants", "Memberships"]);
+        AssertOwnership(tenants, "tenants", ["Tenants", "Memberships", "WorkspaceProvisioningRequests"]);
     }
 
     [Fact]

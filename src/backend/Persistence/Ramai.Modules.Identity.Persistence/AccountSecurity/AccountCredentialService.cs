@@ -121,9 +121,13 @@ public sealed class AccountCredentialService(UserManager<AccountUser> manager, I
             return new(AccountOperationStatus.Rejected);
         }
         await transaction.CommitAsync(cancellationToken);
-        // Email confirmation/MFA/session flows are not implemented here. Unconfirmed
-        // accounts cannot proceed; this result alone must never authorize a tenant.
-        return user.EmailConfirmed ? new(AccountOperationStatus.Accepted, user.Id) : new(AccountOperationStatus.Rejected);
+        // Still not a tenant grant or MFA completion. Capture only the state that
+        // was verified under the row lock; the session layer revalidates on use.
+        return user.EmailConfirmed ? new(AccountOperationStatus.Accepted, user.Id)
+        {
+            VerifiedStamp = user.SecurityStamp,
+            RequiresSecondFactor = user.TwoFactorEnabled
+        } : new(AccountOperationStatus.Rejected);
     }
 
     private AccountOperationResult Finish(bool registration, AccountOperationResult result)

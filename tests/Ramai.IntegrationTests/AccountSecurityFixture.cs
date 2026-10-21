@@ -89,8 +89,11 @@ internal sealed class AccountSecurityFixture : IAsyncDisposable
         // Only keys in this test's generated namespace, never FLUSHDB/shared state.
         foreach (var endpoint in Redis.GetEndPoints())
         {
-            var keys = Redis.GetServer(endpoint).Keys(pattern: $"ramai:{{{RateNamespace}}}:*").ToArray();
-            if (keys.Length > 0) { await Redis.GetDatabase().KeyDeleteAsync(keys); }
+            foreach (var ownedNamespace in new[] { RateNamespace, RateNamespace + "-rates", RateNamespace + "-workspace" })
+            {
+                var keys = Redis.GetServer(endpoint).Keys(pattern: $"ramai:{{{ownedNamespace}}}:*").ToArray();
+                if (keys.Length > 0) { await Redis.GetDatabase().KeyDeleteAsync(keys); }
+            }
         }
         Redis.Dispose();
         await Execute(_admin.ConnectionString, $"DROP DATABASE \"{_database}\" WITH (FORCE)");
