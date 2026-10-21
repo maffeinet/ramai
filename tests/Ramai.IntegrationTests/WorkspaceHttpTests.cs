@@ -15,7 +15,7 @@ using Ramai.Modules.Tenants.Persistence;
 
 namespace Ramai.IntegrationTests;
 
-public sealed class WorkspaceHttpTests
+public sealed partial class WorkspaceHttpTests
 {
     private static DbContextOptions<TenantsStoreContext> Options(string connection) =>
         new DbContextOptionsBuilder<TenantsStoreContext>().UseNpgsql(connection,
@@ -327,15 +327,12 @@ public sealed class WorkspaceHttpTests
                 var unavailable = await client.SendAsync(request);
                 await Problem(unavailable, HttpStatusCode.ServiceUnavailable);
                 var body = await unavailable.Content.ReadAsStringAsync();
-                Assert.DoesNotContain(s.Accounts.Password, body);
-                Assert.DoesNotContain(cookie, body);
+                SensitiveAssertions.Absent(body, s.Accounts.Password, cookie);
                 Assert.DoesNotContain("Exception", body);
             }
             var logs = string.Join('\n', s.Accounts.Logs.Entries);
             Assert.Contains("CorrelationId=workspace-http-check", logs);
-            Assert.DoesNotContain(s.Accounts.Password, logs);
-            Assert.DoesNotContain(cookie, logs);
-            Assert.DoesNotContain(Convert.ToBase64String(s.Accounts.RateKey), logs);
+            SensitiveAssertions.Absent(logs, s.Accounts.Password, cookie, Convert.ToBase64String(s.Accounts.RateKey));
         });
     }
 

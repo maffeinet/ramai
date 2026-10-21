@@ -2,7 +2,39 @@
 
 Snapshot: 2026-10-21, Europe/Rome. Contesto stabile in [memory.md](memory.md).
 
-## Ultimo checkpoint — S1-009 locale
+## Ultimo checkpoint — S1-009 pubblicato, S1-010 review-ready locale
+
+Nuova autorizzazione utente: commit/push/verifica CI S1-009, poi solo S1-010.
+Pubblicato `bbe24f4cb1ca316366623cdf04059959303a20f4`, 38 file, nuovo Gitleaks senza
+leak e gate rapidi frontend PASS. [CI reale](https://github.com/maffeinet/ramai/actions/runs/39580728584)
+success, SHA verificato: Ubuntu 24.04, 278 backend/0 skipped, 19 client/componenti,
+9 browser HTTPS; build 0 warning/errori, format/lint/tipi/build frontend, helper e
+cleanup PASS. Non è la prova CI del lavoro S1-010 seguente.
+
+[Piano](security-regression-plan.md) annunciato prima delle modifiche;
+[matrice/baseline S1-010](security-regression-baseline.md). Solo test/fixture/docs,
+nessuna modifica applicativa, dipendenza, schema o workflow. 22 prove backend nuove
+(19 casi HTTP + 3 assert self-test), due E2E reali nuovi; suite finale **300 PASS/
+0 skipped** (101/191/8), 19 client/componenti, 11 browser PASS. Release 0 warning/
+errori, format solution/helper e npm ci/lint/tipi/build PASS. Prima nullable canary
+DB corretta senza disattivare warning; confronto Cache-Control reso semantico
+(direttiva no-store obbligatoria), nessun test soppresso. Coppia CSRF valida estranea
+con sessione vittima negata, due utenti/host concorrenti isolati, replay cookie
+revocato negato su tutte le 12 operazioni protette. Assert anti-leak non stampano
+secret/payload neanche sul fallimento. Nuovo input ostile browser resta testo;
+logout fra schede verificato alla successiva azione, non push istantaneo di revoca.
+Gitleaks 8.30.1 su tutti i 17 candidati senza leak, link/whitespace PASS. Verificati
+zero DB test/chiavi Redis/temp privati/server UI residui; rimossi esclusivamente
+container/rete/volumi del progetto ramai-s1010-check, dati/volumi utente intatti.
+
+**S1-010 non chiuso in DoD**: manca review umana prima del merge e CI dello SHA
+nuovo. Nessun nuovo commit/push di questi test, HEAD rimane bbe24f4. Prossimo passo
+review del diff/matrice e autorizzazione pubblicazione/CI S1-010, poi S1-011 da
+autorizzare; non avviato qui. Audit invariato 5 high dev/0 production, SEC-EX-001
+senza proroga; nessun beta, AI, canale email operativo, deploy o nuovo tooling.
+Il checkpoint S1-009 locale sotto è storico e superato per pubblicazione/autorizzazione.
+
+## Checkpoint storico — S1-009 locale
 
 Autorizzato esplicitamente S1-009; prima proposti file/dipendenza/test nel
 [piano](protected-ui-plan.md). [Baseline finale](protected-ui-baseline.md).

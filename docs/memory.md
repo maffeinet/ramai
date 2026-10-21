@@ -4,6 +4,21 @@ Aggiornato: 2026-10-21, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
+21 ottobre, aggiornamento più recente: S1-009 pubblicato `bbe24f4`,
+[CI 39580728584](https://github.com/maffeinet/ramai/actions/runs/39580728584) success
+verificata su quello SHA: 278 backend/0 skipped, 19 client/componenti, 9 browser HTTPS,
+gate build/format/frontend verdi e cleanup PASS. Poi autorizzato/implementato
+[S1-010](security-regression-baseline.md) solo test/fixture/documenti: suite locale
+finale 300 backend PASS/0 skipped (101/191/8), 19 client/componenti e 11 browser PASS,
+Release 0 warning/errori, format solution/helper, npm ci/lint/tipi/build PASS.
+22 prove backend + 2 E2E nuove, nessuna dipendenza o modifica applicativa/workflow.
+**Review umana prima del merge e CI S1-010 ancora pendenti; non Done**. Nessun
+commit/push di S1-010 assunto dalla pubblicazione della UI. Audit 5 high dev/0
+production invariato, SEC-EX-001 non prorogata. S1-011/012/AI/deploy non iniziati.
+Le note successive sullo stato locale S1-009 sono checkpoint storici.
+Gitleaks finale 17 candidati senza leak, link/whitespace PASS. Risorse temporanee
+S1-010 proprie rimosse e zero fixture residue verificate, dati/volumi utente intatti.
+
 21 ottobre, aggiornamento successivo: **S1-009 UI protetta completata localmente**,
 [baseline e comandi](protected-ui-baseline.md). Login/password/TOTP/recupero,
 enrollment, selezione/provisioning workspace, settings Owner/Admin e logout sopra

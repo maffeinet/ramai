@@ -75,7 +75,7 @@ public sealed class WebSessionTests
         var body = await current.Content.ReadAsStringAsync();
         Assert.Equal(HttpStatusCode.OK, current.StatusCode);
         Assert.Contains(id.ToString(), body);
-        Assert.DoesNotContain(fixture.Email, body);
+        SensitiveAssertions.Absent(body, fixture.Email);
         Assert.DoesNotContain("tenant", body, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(HttpStatusCode.BadRequest, (await client.PostAsync("/api/v1/account/logout", null)).StatusCode);
         var logout = await WebSessionFixture.Write(client, "logout");
@@ -84,9 +84,7 @@ public sealed class WebSessionTests
         replay.DefaultRequestHeaders.Add("Cookie", cookie);
         Assert.Equal(HttpStatusCode.Unauthorized, (await replay.GetAsync("/api/v1/account/session")).StatusCode);
         var logs = string.Join('\n', fixture.Logs.Entries);
-        Assert.DoesNotContain(fixture.Password, logs);
-        Assert.DoesNotContain(fixture.Email, logs);
-        Assert.DoesNotContain(cookie.Split('=')[1], logs);
+        SensitiveAssertions.Absent(logs, fixture.Password, fixture.Email, cookie.Split('=')[1]);
         Assert.Contains("session-http-check", logs);
     }
 
@@ -221,9 +219,7 @@ public sealed class WebSessionTests
             .Keys(pattern: $"ramai:{{{fixture.RateNamespace}}}:session:*").Single();
         var value = await fixture.Redis.GetDatabase().StringGetAsync(key);
         var text = System.Text.Encoding.UTF8.GetString((byte[])value!);
-        Assert.DoesNotContain(fixture.Email, text);
-        Assert.DoesNotContain(fixture.Password, text);
-        Assert.DoesNotContain(userId.ToString(), text);
+        SensitiveAssertions.Absent(text, fixture.Email, fixture.Password, userId.ToString());
         var store = host.Services.GetRequiredService<RedisSessionTicketStore>();
         var reference = key.ToString().Split(':')[^1];
         var ticket = (await store.RetrieveAsync(reference))!;
@@ -337,6 +333,6 @@ public sealed class WebSessionTests
         var unavailable = await client.GetAsync("/api/v1/account/session");
         Assert.Equal(HttpStatusCode.ServiceUnavailable, unavailable.StatusCode);
         Assert.True(Guid.TryParseExact(Assert.Single(unavailable.Headers.GetValues("X-Correlation-ID")), "N", out _));
-        Assert.DoesNotContain(fixture.Password, await unavailable.Content.ReadAsStringAsync());
+        SensitiveAssertions.Absent(await unavailable.Content.ReadAsStringAsync(), fixture.Password);
     }
 }

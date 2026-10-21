@@ -9,7 +9,7 @@ export default class SafeReporter implements Reporter {
       for (const error of result.errors) {
         if (error.message?.includes("strict mode violation")) console.log("Failure class: ambiguous locator");
         else if (error.message?.includes("Timed out")) console.log("Failure class: expectation timeout");
-        const location = error.stack?.match(/workspace\.spec\.ts:\d+:\d+/)?.[0];
+        const location = error.stack?.match(/(?:workspace|security-regression)\.spec\.ts:\d+:\d+/)?.[0];
         if (location) console.log(`Failed operation: ${location}`);
       }
     }
