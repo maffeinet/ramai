@@ -15,11 +15,18 @@ con Owner verificato e retry idempotenti; esposto via API e UI protetta locale.
 dati Tenants; [API workspace/RBAC S1-008](docs/workspace-api-baseline.md) opt-in,
 con profilo, creazione/selezione azienda e settings minimi protetti.
 [UI protetta S1-009](docs/protected-ui-baseline.md) implementata e verificata
-localmente: login/MFA/recupero, workspace e logout. **Non ancora pubblicata o
-verificata in CI**. L'AI non è implementata. Istruzioni sotto: bootstrap Foundation
+localmente: login/MFA/recupero, workspace e logout. Pubblicata `bbe24f4`,
+[CI Linux verificata verde](https://github.com/maffeinet/ramai/actions/runs/39580728584)
+con 278 backend, 19 client/componenti e 9 browser PASS/0 skipped.
+L'AI non è implementata. Istruzioni sotto: bootstrap Foundation
 HTTP, non login sicuro pronto. L'accesso richiede HTTPS browser/API, origine
 autorizzata e `RAMAI_API_ORIGIN` server-side al build; dettagli e test nella baseline.
 Nessuna demo esterna o beta approvata.
+
+[S1-010 — regressione security](docs/security-regression-baseline.md):
+[PR #1](https://github.com/maffeinet/ramai/pull/1) con 300 backend/0 skipped,
+11 browser e 19 client/componenti PASS anche in CI Linux. Review umana ancora
+pendente, nessun merge automatico e task non chiuso in DoD.
 
 ## Obiettivo
 A fine Sprint 0 deve essere possibile clonare il repository, configurare `.env`, avviare PostgreSQL e Redis con Docker Compose, avviare API ASP.NET Core e frontend Next.js, verificare `/health` ed eseguire test/lint con esito positivo.

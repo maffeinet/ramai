@@ -115,14 +115,14 @@ try
         var manager = scope.ServiceProvider.GetRequiredService<UserManager<AccountUser>>();
         var accounts = new Dictionary<string, object>();
         var users = new Dictionary<string, AccountUser>();
-        foreach (var label in new[] { "member", "onboarding", "privileged", "outsider", "lifecycle" })
+        foreach (var label in new[] { "member", "onboarding", "privileged", "outsider", "lifecycle", "security" })
         {
             var email = $"{label}-{Guid.NewGuid():N}@example.invalid";
             var password = "quiet rivers carry violet lanterns " + Guid.NewGuid().ToString("N");
             var user = new AccountUser { Id = Guid.NewGuid(), UserName = email, Email = email, EmailConfirmed = true, IsActive = true };
             if (!(await manager.CreateAsync(user, password)).Succeeded) { throw new InvalidOperationException("Synthetic account setup failed."); }
             string? sharedKey = null;
-            if (label == "privileged")
+            if (label is "privileged" or "security")
             {
                 if (!(await manager.ResetAuthenticatorKeyAsync(user)).Succeeded || !(await manager.SetTwoFactorEnabledAsync(user, true)).Succeeded)
                 { throw new InvalidOperationException("Synthetic MFA setup failed."); }
@@ -132,8 +132,9 @@ try
         }
         var a = Tenant.Create(Guid.NewGuid(), "Alfa Demo", users["privileged"].Id); a.AddMember(users["member"].Id);
         var b = Tenant.Create(Guid.NewGuid(), "Beta Demo", users["outsider"].Id); b.AddMember(users["privileged"].Id);
-        tenants.Tenants.AddRange(a, b); await tenants.SaveChangesAsync();
-        var state = new { configuration, accounts, workspaces = new { a = a.TenantId, b = b.TenantId }, certificate = pem, privateKey = key, pfx };
+        var c = Tenant.Create(Guid.NewGuid(), "Security Demo", users["security"].Id);
+        tenants.Tenants.AddRange(a, b, c); await tenants.SaveChangesAsync();
+        var state = new { configuration, accounts, workspaces = new { a = a.TenantId, b = b.TenantId, c = c.TenantId }, certificate = pem, privateKey = key, pfx };
         await File.WriteAllTextAsync(statePath, JsonSerializer.Serialize(state)); PrivateFile(statePath);
         Console.WriteLine("Isolated UI fixture prepared; credentials remain in private temporary files.");
     }

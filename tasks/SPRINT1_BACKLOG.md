@@ -249,6 +249,10 @@ Test: HTTP integration/contract, matrice ruoli, CSRF ove applicabile, IDOR e inp
 
 ### S1-009 — UI verticale minima
 
+Aggiornamento successivo: **PUBBLICATO bbe24f4**,
+[CI Linux success](https://github.com/maffeinet/ramai/actions/runs/39580728584),
+278 backend/0 skipped, 19 client/componenti e 9 browser PASS. Evidenza nella baseline.
+
 **COMPLETATO LOCALMENTE il 21 ottobre**, [baseline](../docs/protected-ui-baseline.md).
 Login/MFA/recupero, area workspace/provisioning/settings/logout su API vere;
 19 test client/componenti e 9 E2E Chromium PASS, regressione backend 278 PASS,
@@ -261,6 +265,19 @@ guard UI non sostituisce authz API. Nessuna dashboard business fittizia o featur
 Test: component test ed E2E del percorso critico con dati sintetici, lint/tipi/build.
 
 ### S1-010 — Security regression
+
+Pubblicazione successiva autorizzata: branch codex/s1-010-security-regression,
+commit test e28b771, [PR #1](https://github.com/maffeinet/ramai/pull/1) aperta senza
+auto-merge. [CI PR success](https://github.com/maffeinet/ramai/actions/runs/39585109772)
+per e28b771: 300 backend/0 skipped, 19 client/componenti e 11 browser PASS.
+Review umana ancora pendente, nessun merge/Done finale.
+
+**IMPLEMENTATO/VERIFICATO LOCALMENTE E IN CI, REVIEW UMANA PENDENTE** il 21 ottobre.
+[Matrice/gate/checklist](../docs/security-regression-baseline.md): 300 backend
+PASS/0 skipped, 19 client/componenti e 11 browser PASS; build/format/lint/tipi verdi.
+22 prove backend + 2 E2E nuove, solo test/fixture/documenti. Non chiuso in DoD:
+manca review umana prima del merge. Push e CI S1-010 verificati sopra;
+nessun S1-011/012 avviato. La CI S1-009 non sostituisce la prova del nuovo SHA.
 
 Output: suite cross-tenant bloccante e test sessione/autorizzazione/IDOR/leak log;
 percorso utente reale minimo, non soltanto mock dell'autenticazione.

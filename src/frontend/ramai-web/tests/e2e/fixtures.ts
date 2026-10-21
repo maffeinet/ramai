@@ -2,7 +2,7 @@ import { test as base, chromium, type Browser } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { createHmac } from "node:crypto";
 type Account = { email: string; password: string; sharedKey: string | null };
-export type State = { uiOrigin: string; pin: string; workspaces: { a: string; b: string }; accounts: Record<string, Account> };
+export type State = { uiOrigin: string; pin: string; workspaces: { a: string; b: string; c: string }; accounts: Record<string, Account> };
 export function state(): State {
   const path = process.env.RAMAI_UI_TEST_STATE;
   if (!path) throw new Error("Isolated UI state missing");

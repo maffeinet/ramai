@@ -2,6 +2,60 @@
 
 Aggiornato: 2026-10-21, Europe/Rome.
 
+## Pubblicazione S1-010 per review
+
+Autorizzati esplicitamente branch/commit/push/PR, verifica CI e riepilogo umano,
+senza merge. Branch `codex/s1-010-security-regression`, commit test `e28b771`,
+17 file pertinenti e nuova scansione Gitleaks senza leak. Riconfermati Release
+0 warning/errori, format solution/helper, frontend lint/tipi/19 test prima del push.
+[PR #1](https://github.com/maffeinet/ramai/pull/1) aperta, auto-merge disattivato;
+[CI PR 39585109772](https://github.com/maffeinet/ramai/actions/runs/39585109772) e
+[push 39585048873](https://github.com/maffeinet/ramai/actions/runs/39585048873)
+**success**, SHA/log verificati: 300 backend PASS/0 skipped (101/191/8),
+19 client/componenti e 11 browser HTTPS PASS su GitHub-hosted Ubuntu 24.04.
+SDK CI 10.0.401, Release 0 warning/errori, format solution/helper, npm ci/lint/
+tipi/build, cleanup CI PASS. Questa evidenza riguarda il commit test e28b771,
+non il successivo aggiornamento documentale, che ha la propria CI nella PR.
+Review umana ancora pendente; nessun merge, S1-011/012 non iniziati.
+Checkpoint "locale/non pubblicato" sotto superato solo per pubblicazione.
+
+## Stato corrente — pubblicazione S1-009 e suite locale S1-010
+
+Utente autorizza commit/push S1-009, verifica CI e poi S1-010. Pubblicato
+`bbe24f4cb1ca316366623cdf04059959303a20f4`, soli 38 file previsti, Gitleaks senza
+leak prima del push. [Run reale 39580728584](https://github.com/maffeinet/ramai/actions/runs/39580728584)
+**success**, SHA verificato: 278 backend/0 skipped, build 0 warning/errori, format;
+frontend 19 client/componenti, lint/tipi/production build e 9 browser HTTPS verdi.
+GitHub-hosted Ubuntu 24.04, helper format e cleanup PASS. Questa è evidenza S1-009,
+non S1-010; i paragrafi "non pubblicato" sotto conservano il checkpoint precedente.
+
+Poi proposti [file/test](security-regression-plan.md), implementata la sola suite
+S1-010: [matrice endpoint/minacce, file e review checklist](security-regression-baseline.md).
+Nuovi WorkspaceSecurityRegressionTests e SensitiveAssertions, due E2E nel nuovo
+security-regression.spec; modifiche minime fixture/helper, partial WorkspaceHttpTests
+e assert sensibili Mfa/WebSession, reporter. Nessun codice applicativo/endpoint,
+migration, dipendenza, workflow o tooling modificato. README/report/memory/handoff,
+baseline UI e backlog aggiornati. Versioni .NET/Node/npm/Next/React/Playwright invariate.
+
+Gate locali Windows finali: **300 backend PASS/0 fail/0 skipped** (101 unit,
+191 integration, 8 architecture), 19 client/componenti PASS, **11 browser PASS**.
+22 casi backend e 2 browser aggiunti; Release 0 warning/errori, format solution e
+helper PASS, npm ci/lint/tipi/build PASS. PG/Redis healthy, vector 0.8.6/PONG.
+Validi due utenti/aziende reali concorrenti e coppia CSRF estranea; cookie revocato
+negato su tutte le 12 operazioni protette. Canary log reali e input browser ostile
+verificati; assert anti-leak stessi non espongono secret sul fallimento. Primo giro
+compilazione nullable e confronto letterale cache corretti, senza soppressioni.
+Gitleaks 8.30.1 su tutti i 17 candidati senza leak, link/whitespace PASS. Zero DB
+test/chiavi Redis/temp privati/server UI residui; container/rete/volumi del solo
+progetto temporaneo ramai-s1010-check rimossi e assenza verificata. Dati utente
+intatti, cache browser/anteprime sintetiche ignorate rimangono locali.
+
+Audit riconfermato: 5 high dev/0 production, ESLint9 EOL e colori runner warning;
+SEC-EX-001 invariata e senza proroga. **S1-010 pronto localmente per review, non
+Done complessivo**: review umana prima del merge e CI sul nuovo SHA mancanti.
+Nessun commit/push S1-010 effettuato, nessun verde Linux attribuito al nuovo diff.
+Prossimo passo review/istruzione di pubblicazione del blocco; S1-011/012 non iniziati.
+
 ## Stato corrente — S1-009 UI protetta, locale
 
 Autorizzato S1-009 e confermata demo guidata locale sintetica. Prima annunciati

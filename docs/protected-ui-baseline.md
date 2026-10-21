@@ -1,8 +1,18 @@
 # S1-009 — UI protetta
 
-21 ottobre 2026, Europe/Rome. Implementazione locale del solo S1-009;
-nessun commit/push, nuova CI o autorizzazione beta. [Piano iniziale](protected-ui-plan.md).
+21 ottobre 2026, Europe/Rome. S1-009 pubblicato e verificato nella CI sotto;
+nessuna autorizzazione beta. [Piano iniziale](protected-ui-plan.md).
 Nome pubblico Agentilio, repository/namespace RAMAI invariati.
+
+Aggiornamento successivo: utente autorizza commit/push/verifica CI, poi S1-010.
+Pubblicati i soli 38 file S1-009 nel commit
+`bbe24f4cb1ca316366623cdf04059959303a20f4` dopo nuova scansione senza leak.
+[CI reale 39580728584](https://github.com/maffeinet/ramai/actions/runs/39580728584)
+**success**, SHA verificato: GitHub-hosted Ubuntu 24.04, backend 278 PASS/0 skipped,
+Release 0 warning/errori, format; frontend npm ci/lint/tipi/build e 19 test PASS;
+9 browser HTTPS PASS, helper format e cleanup CI PASS. Stato locale/non pubblicato
+nei paragrafi sotto descrive il checkpoint iniziale, superato da questa evidenza.
+La CI non comprende i test aggiunti successivamente da S1-010.
 
 ## Cosa è disponibile
 
@@ -166,8 +176,9 @@ S1-009 non chiude S1-010/011/012, email operative, review security trasversale,
 accessibilità formale, test Firefox/WebKit o configurazione di hosting pubblico.
 Il recupero password/email pubblico non viene finto con fixture. Nessun AI,
 connector, billing, invio, beta esterna o conformità normativa dichiarata.
-CI Linux predisposta ma **non eseguita sul codice S1-009**: nessun nuovo commit/push.
-Le run verdi S1-008 non sono evidenza CI di questa UI.
+CI Linux S1-009 verificata nella run 39580728584 sopra. Le nuove prove
+[S1-010](security-regression-baseline.md) hanno propria PR/CI e28b771 verificate;
+non usare la run S1-009 come evidenza del nuovo codice.
 
 ## Demo e prossimo passo
 
@@ -176,5 +187,5 @@ accesso/workspace è ora implementata/verificata localmente. Per il valore AI re
 la verticale D2–D5: obiettivo condizionato 6–13 novembre per prima prova interna,
 prova generale entro 20 novembre e stakeholder entro 30 novembre 2026. Non è una
 garanzia: dipende da capacità, scope invariato e decisione tempestiva provider/budget.
-Prossimo blocco da autorizzare: S1-010 review/regressione security trasversale;
-pubblicazione S1-009 e verifica reale CI richiedono istruzione esplicita. Non avviati.
+L'utente ha poi autorizzato S1-010 e la sua pubblicazione in PR: suite estesa e CI
+del nuovo SHA verificate, review umana/merge ancora pendenti. S1-011/012 non iniziati.

@@ -77,14 +77,12 @@ public sealed class MfaTests
         var stored = await db.UserTokens.AsNoTracking().Select(x => x.Value!).ToArrayAsync();
         foreach (var value in stored)
         {
-            Assert.DoesNotContain(key, value);
-            foreach (var recovery in codes) { Assert.DoesNotContain(recovery, value); }
+            SensitiveAssertions.Absent(value, key);
+            SensitiveAssertions.Absent(value, codes);
         }
         var logs = string.Join('\n', fixture.Logs.Entries);
-        Assert.DoesNotContain(key, logs);
-        Assert.DoesNotContain(fixture.Password, logs);
-        Assert.DoesNotContain(Totp(key), logs);
-        foreach (var recovery in codes) { Assert.DoesNotContain(recovery, logs); }
+        SensitiveAssertions.Absent(logs, key, fixture.Password, Totp(key));
+        SensitiveAssertions.Absent(logs, codes);
         Assert.Contains("Account MFA operation", logs);
         Assert.Contains("session-http-check", logs);
     }
@@ -240,7 +238,7 @@ public sealed class MfaTests
         var response = await Login(client, fixture, Totp(key, 1));
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
         Assert.Equal("session-http-check", Assert.Single(response.Headers.GetValues("X-Correlation-ID")));
-        Assert.DoesNotContain(key, await response.Content.ReadAsStringAsync());
+        SensitiveAssertions.Absent(await response.Content.ReadAsStringAsync(), key);
         Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/account/session")).StatusCode);
     }
 
