@@ -3,8 +3,9 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RAMAI",
-  description: "RAMAI Foundation",
+  title: "Agentilio · Area riservata",
+  description: "Accesso sicuro al tuo spazio aziendale Agentilio.",
+  robots: { index: false, follow: false },
 };
 
 type RootLayoutProps = Readonly<{

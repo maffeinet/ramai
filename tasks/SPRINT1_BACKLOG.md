@@ -249,6 +249,12 @@ Test: HTTP integration/contract, matrice ruoli, CSRF ove applicabile, IDOR e inp
 
 ### S1-009 — UI verticale minima
 
+**COMPLETATO LOCALMENTE il 21 ottobre**, [baseline](../docs/protected-ui-baseline.md).
+Login/MFA/recupero, area workspace/provisioning/settings/logout su API vere;
+19 test client/componenti e 9 E2E Chromium PASS, regressione backend 278 PASS,
+0 skipped. Build/format/lint/tipi PASS, workflow validato. Nessun commit/push o
+CI S1-009 ancora effettuati. Non beta né demo AI; S1-010 non iniziato.
+
 Output: login, provisioning/selezione workspace se approvata, area protetta, logout.
 Acceptance: UI gestisce 401/403/scadenza/rete indisponibile senza esporre token;
 guard UI non sostituisce authz API. Nessuna dashboard business fittizia o feature extra.

@@ -10,12 +10,16 @@ Login/sessioni API S1-004C implementati con attivazione esplicita:
 [TenantContext S1-005](docs/tenant-context-baseline.md) disponibile come componente
 verificato, integrato nel trasporto HTTP S1-008.
 [Provisioning workspace S1-006](docs/workspace-provisioning-baseline.md) interno,
-con Owner verificato e retry idempotenti; esposto via API, non ancora UI onboarding.
+con Owner verificato e retry idempotenti; esposto via API e UI protetta locale.
 [Isolamento dati S1-007](docs/tenant-isolation-baseline.md) verificato sugli attuali
 dati Tenants; [API workspace/RBAC S1-008](docs/workspace-api-baseline.md) opt-in,
 con profilo, creazione/selezione azienda e settings minimi protetti.
-UI applicativa e AI non sono ancora implementate. Istruzioni sotto:
-bootstrap Foundation, non funzionalità già disponibili della demo.
+[UI protetta S1-009](docs/protected-ui-baseline.md) implementata e verificata
+localmente: login/MFA/recupero, workspace e logout. **Non ancora pubblicata o
+verificata in CI**. L'AI non è implementata. Istruzioni sotto: bootstrap Foundation
+HTTP, non login sicuro pronto. L'accesso richiede HTTPS browser/API, origine
+autorizzata e `RAMAI_API_ORIGIN` server-side al build; dettagli e test nella baseline.
+Nessuna demo esterna o beta approvata.
 
 ## Obiettivo
 A fine Sprint 0 deve essere possibile clonare il repository, configurare `.env`, avviare PostgreSQL e Redis con Docker Compose, avviare API ASP.NET Core e frontend Next.js, verificare `/health` ed eseguire test/lint con esito positivo.

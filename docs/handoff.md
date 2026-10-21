@@ -2,6 +2,37 @@
 
 Snapshot: 2026-10-21, Europe/Rome. Contesto stabile in [memory.md](memory.md).
 
+## Ultimo checkpoint — S1-009 locale
+
+Autorizzato esplicitamente S1-009; prima proposti file/dipendenza/test nel
+[piano](protected-ui-plan.md). [Baseline finale](protected-ui-baseline.md).
+UI login, MFA/enrollment/recovery, selezione e provisioning workspace, settings
+Owner/Admin e logout implementati sul trasporto esistente, nessun bypass auth.
+19 test client/componenti (3 rendering statico, non mount interattivo) e 9 E2E
+Chromium contro API HTTPS reale, PG/Redis/Identity/MFA veri: tutti PASS/0 skipped.
+Regressione backend 278 PASS/0 skipped, Release 0 warning/errori, format anche
+helper, npm ci/lint/tipi/build PASS. Screenshot desktop/mobile solo sintetici
+verificati; nessuna trace/registrazione di credenziali. Unica nuova dev dependency
+@playwright/test 1.64.1, nessun NuGet/servizio/modello/migration applicativa nuovo.
+Gitleaks 8.30.1 sui 38 candidati senza leak, link/whitespace PASS. Fixture DB/Redis/
+temp/server UI rimossi, zero residui verificati; container/rete/volumi del solo
+progetto test S1-009 rimossi. Cache browser/anteprime sintetiche ignorate rimangono
+locali, dati e volumi utente intatti.
+Workflow aggiornato per i test S1-009, actionlint 1.7.12 PASS; **nessuna run Linux
+o CI S1-009, nessun commit/push autorizzato da questo blocco**. HEAD resta 3c2e94f.
+Audit 5 high dev/0 production riconfermato, warning ESLint EOL e colori runner;
+SEC-EX-001 invariata e da riesaminare prima di novembre, non prorogata.
+
+Demo guidata locale con dati sintetici confermata dall'utente. UI tecnica pronta
+localmente, non agente AI o demo stakeholder completa. Date proposte condizionate
+6–13 novembre prova AI interna, 20 prova generale, entro 30 presentazione.
+Provider/modello/budget ancora da decidere. Non avviare D2/AI o S1-010/011/012 senza
+istruzione; prossimo passo suggerito pubblicazione/verifica CI se autorizzata e
+S1-010 review security trasversale. Restano email operative, release review e debt;
+niente beta. Per accesso manuale usare HTTPS/config della baseline, non bootstrap
+HTTP Foundation. Fixture E2E è effimera, non lascia server/account dimostrativi.
+Le sezioni sotto sono checkpoint precedenti e non negano l'autorizzazione UI nuova.
+
 ## Ripresa diurna 21 ottobre — autorizzazioni sbloccate
 
 Utente: "ok procedi con tutto quanto è in sospeso" dopo il riepilogo/richieste:

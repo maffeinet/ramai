@@ -54,6 +54,20 @@ jobs:
         run: dotnet format src/backend/Ramai.sln --verify-no-changes --no-restore
       - name: Test including real infrastructure
         run: dotnet test src/backend/Ramai.sln --configuration Release --no-build
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version-file: src/frontend/ramai-web/.nvmrc
+          cache: npm
+          cache-dependency-path: src/frontend/ramai-web/package-lock.json
+      - name: Install UI test dependencies
+        run: npm ci --prefix src/frontend/ramai-web
+      - name: Install isolated Chromium test runtime
+        working-directory: src/frontend/ramai-web
+        run: npx playwright install --with-deps chromium
+      - name: Check UI fixture helper formatting
+        run: dotnet format tests/Ramai.UiTestSetup/Ramai.UiTestSetup.csproj --verify-no-changes
+      - name: Protected UI with real HTTPS API and isolated synthetic data
+        run: npm --prefix src/frontend/ramai-web run test:e2e
       - name: Clean up ephemeral CI services and volumes
         if: ${{ always() && steps.credentials.outcome == 'success' }}
         run: docker compose --project-name ramai-ci down --volumes --remove-orphans
@@ -79,5 +93,7 @@ jobs:
         run: npm run lint
       - name: Type-check
         run: npm run type-check
+      - name: Client and component tests
+        run: npm run test:unit
       - name: Production build
         run: npm run build

@@ -2,6 +2,46 @@
 
 Aggiornato: 2026-10-21, Europe/Rome.
 
+## Stato corrente — S1-009 UI protetta, locale
+
+Autorizzato S1-009 e confermata demo guidata locale sintetica. Prima annunciati
+[file/dipendenza/test](protected-ui-plan.md); implementazione e inventario file in
+[baseline UI](protected-ui-baseline.md). Login, MFA/recupero, workspace/provisioning,
+settings e logout, con API vere e autorizzazione server-side; nessuna AI o nuova API.
+
+Modificati app root/layout/CSS, next.config e package/lock; creati tre route, cinque
+componenti/controller, client API validato, configurazioni Playwright, test client/
+componenti/E2E e helper console .NET test-only. Workflow CI esteso ai soli test UI
+del blocco; README, report, memory/handoff, policy, backlog e roadmap aggiornati.
+Inventario completo nella baseline. Nessun nuovo NuGet, schema o servizio.
+Nuova sola dev dependency @playwright/test 1.64.1; versioni applicative invariate.
+
+Gate locali Windows: **278 backend + 19 client/componenti + 9 E2E PASS**, 0 fail/
+skipped. Backend 101 unit/169 integration/8 architecture; frontend 16 client e 3
+rendering statico, interazioni nel browser reale. Release 0 warning/errori, format
+solution/helper, npm ci/lint/type-check/production build PASS. Compose dedicato,
+PG/Redis healthy, vector 0.8.6/PONG. TLS reale con pin del solo certificato fixture,
+nessun bypass globale; cookie Secure/HttpOnly/Strict e niente storage verificati.
+Prima due assert alert ambigui, corretti senza soppressioni. Test reali cross-tenant,
+RBAC, CSRF, revoca e recupero verdi; abort rete e page-cache lifecycle sono casi
+negativi simulati dichiarati. Screenshot workspace desktop/mobile controllati,
+nessun secret MFA in screenshot/trace/log. Workflow actionlint 1.7.12 PASS.
+Gitleaks 8.30.1 su tutti i 38 candidati senza leak; link Markdown e whitespace PASS
+(sola nota Git CRLF→LF README secondo policy). Verificati zero DB/namespace Redis/
+temp privati/server UI residui; rimossi solo container/rete/volumi test S1-009.
+Cache browser e anteprime sintetiche ignorate rimangono locali, dati utente intatti.
+
+Audit 21 ottobre: stessa catena 5 high dev, 0 critical/production, nessuna nuova
+segnalazione Playwright; ESLint 9 EOL e warning NO_COLOR/FORCE_COLOR non bloccante.
+SEC-EX-001 resta aperta, senza proroga. Nessun commit/push, nuova CI o clone Linux
+S1-009; non attribuire i verdi S1-008 a questa UI. Non beta e non intero Sprint 1.
+Prossimo S1-010 da autorizzare, non iniziato. Dettagli limiti/comandi nella baseline.
+
+Previsione condizionata: parte tecnica accesso/workspace verificata qui; prima prova
+AI interna proposta 6–13 novembre, prova generale entro 20 e stakeholder entro 30
+novembre. Richiede completamento verticale D2–D5, capacità e scelta provider/budget;
+non garanzia o attivazione di servizi. SEC-EX-001 deve essere riesaminata prima.
+
 ## Stato corrente — 21 ottobre, completamento S1-008
 
 Utente approva "tutto quanto è in sospeso" dopo richiesta di estensione host-only

@@ -1,6 +1,6 @@
 # RAMAI — Roadmap prima demo stakeholder
 
-Data: 2026-10-20, Europe/Rome.
+Data: 2026-10-20; aggiornamento 2026-10-21, Europe/Rome.
 Indirizzo utente: riallineare il progetto al valore per le PMI e sviluppare una
 prima demo utile agli stakeholder. Questo aggiornamento pianifica la verticale;
 non dichiara implementate le funzionalità mancanti o approvati servizi esterni.
@@ -22,10 +22,10 @@ un sottoinsieme esplicito: non completa tutte le user story o l'MVP.
 
 ## Modalità iniziale e limiti
 
-Assunzione proposta per accorciare il percorso: demo guidata locale da parte del
-team, con dati interamente sintetici, non beta pubblica o accesso autonomo clienti.
-Da confermare se gli stakeholder richiedono invece una prova remota autonoma:
-in tal caso servono deployment e ulteriori gate, senza bypass impliciti.
+**Confermato dall'utente il 21 ottobre:** demo guidata locale da parte del team,
+con dati interamente sintetici, non beta pubblica o accesso autonomo clienti.
+Un'eventuale prova remota richiede nuova decisione, deployment e ulteriori gate,
+senza bypass impliciti.
 
 - Due aziende fittizie per dimostrare separazione dei dati.
 - Dataset piccolo e riproducibile di conversazioni, con casi positivi e negativi.
@@ -43,11 +43,13 @@ prima della beta secondo la policy approvata; non dichiarati completati dalla de
 
 ## Stato di partenza verificato
 
-Foundation, diagnostica, logging e CI presenti. Identity/Tenants: modelli,
-persistenza e componenti interni password/recupero presenti. Login/sessioni,
-TenantContext applicativo completo, UI protetta e AI non implementati.
-Backend: ultimo gate 112 test verdi; laboratorio tooling separato 370 test verdi.
-Questi conteggi non misurano la percentuale di prodotto completato.
+Foundation, diagnostica, logging e CI presenti. Identity/Tenants S1-004C/D e
+005–008 pubblicati, CI reale 278 test verdi/0 skipped. S1-009 UI protetta ora
+implementata localmente: 278 backend, 19 client/componenti e 9 E2E HTTPS verdi,
+non ancora pubblicata o verificata in CI. [Baseline](protected-ui-baseline.md).
+AI/Today/fonti/bozze non implementati. D1 ha il percorso tecnico locale, non la
+review trasversale S1-010 o la readiness per clienti. Laboratorio tooling fuori
+percorso critico; i conteggi test non misurano una percentuale di prodotto.
 
 ## Milestone orientate al risultato
 
@@ -59,9 +61,10 @@ Questi conteggi non misurano la percentuale di prodotto completato.
 | D4 — Today e follow-up | Priorità spiegate, dettaglio e bozza modificabile | Ranking spiegabile, data ambigua segnalata, nessun invio; feedback minimo persistente |
 | D5 — Prova stakeholder | Percorso riproducibile su clone pulito | E2E e CI verdi, script presentazione, dataset ripristinabile, limiti e feedback registrati |
 
-D1 riusa il backlog Sprint 1: S1-004C → S1-005/006/007 → API/UI minime
-S1-008/009, con test per ogni blocco. Non marca completati S1-004D o l'intero
-Sprint 1: la review security completa mantiene i suoi gate.
+D1 riusa il backlog Sprint 1: S1-004C/D → S1-005/006/007 → API/UI minime
+S1-008/009, con test per ogni blocco. I blocchi sono implementati, S1-009 solo
+locale; non marca completato l'intero Sprint 1: review security, CI e bootstrap
+finali mantengono i loro gate.
 D2–D4 sono una verticale successiva dedicata, non un cambio retroattivo dello
 scope Sprint 1. Task dettagliati in [DEMO_BACKLOG](../tasks/DEMO_BACKLOG.md).
 
@@ -107,15 +110,19 @@ Nessun commit/push o deployment automaticamente autorizzato da questo piano.
 
 Target indicato dall'utente: entro il 30 novembre 2026, prova generale proposta
 nella settimana precedente. Non è una garanzia di consegna o data di beta.
+Previsione proposta il 21 ottobre: prima prova AI interna **6–13 novembre**,
+generale entro **20 novembre**, stakeholder entro **30 novembre**. Condizionata
+a capacità di lavoro, scope email/evidenze/Today/bozza senza invio invariato,
+chiusura gate e scelta tempestiva provider/modello/budget. La demo tecnica
+accesso/workspace è già verificata localmente in S1-009, non è ancora quella AI.
 Nome pubblico scelto: Agentilio; RAMAI resta il nome tecnico per ora. Dopo la scelta provider,
 stimare i blocchi con capacità disponibile e checkpoint D1/D3 prima della prova.
 
 Decisioni che cambiano tempi/perimetro:
-1. Data e durata della presentazione; demo guidata locale o accesso remoto autonomo.
+1. Data e durata esatte della presentazione (modalità locale sintetica confermata).
 2. Provider/modello AI e budget massimo per le prove sintetiche.
 3. Priorità commerciali diverse dal caso email/follow-up già previsto in specifica.
 
-Primo blocco implementativo: S1-004C (login/logout, sessioni, CSRF e revoca),
-con file/dipendenze/strategia test annunciati prima del codice. Implementazione C
-locale ora presente; [stato](account-session-baseline.md), gate nel report Sprint 1.
-Prossimo blocco security: S1-004D; nessun ritorno automatico a ricerche tooling.
+Prossimo blocco da autorizzare: S1-010 review/regressione security trasversale,
+con pubblicazione/verifica CI S1-009 solo su istruzione. Nessun avvio implicito
+D2–D4 o ritorno a ricerche tooling. S1-011/012 restano aperti.

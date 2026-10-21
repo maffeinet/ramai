@@ -26,6 +26,11 @@ membership/ruolo riletti, MFA Owner/Admin, selezione protetta e test HTTP reali.
 Non completa governance/audit segregato, email reale, UI o autorizzazione beta.
 La review normativa/organizzativa e le prove di efficacia restano da svolgere.
 
+Aggiornamento successivo 21 ottobre: [S1-009](protected-ui-baseline.md) aggiunge UI
+protetta locale e browser test reali (MFA, recupero, A/B, CSRF, revoca), senza
+modificare i parametri approvati. Nessuna email pubblica operativa, beta, chiusura
+S1-010/011/012 o dichiarazione di conformità implicita.
+
 ## Ambito e significato di compliance
 
 Identità locale ASP.NET Core Identity per RAMAI SaaS multi-azienda, con cookie web

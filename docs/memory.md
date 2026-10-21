@@ -4,6 +4,19 @@ Aggiornato: 2026-10-21, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
+21 ottobre, aggiornamento successivo: **S1-009 UI protetta completata localmente**,
+[baseline e comandi](protected-ui-baseline.md). Login/password/TOTP/recupero,
+enrollment, selezione/provisioning workspace, settings Owner/Admin e logout sopra
+le API reali, nessun nuovo endpoint o dipendenza infrastrutturale. Solo Playwright
+1.64.1 dev. Gate Windows: 278 backend + 19 client/componenti + 9 browser HTTPS PASS,
+0 skipped; build/format/lint/tipi PASS. CI configurata per i nuovi test e validata
+con actionlint, **nessun commit/push né CI S1-009**. Audit 5 high dev/0 production
+invariato e SEC-EX-001 non prorogata. Scope successivo S1-010 da autorizzare,
+non iniziato. Confermata demo guidata locale sintetica: prima prova AI proposta
+6–13 novembre, generale entro 20, stakeholder entro 30, condizionate a scope,
+capacità e scelta provider/budget. Non confondere UI tecnica con agente AI pronto.
+Le note seguenti conservano lo storico S1-008, superato per lo stato UI.
+
 21 ottobre: approvati i sospesi (ADR-010 host-only Tenants e pubblicazione
 prerequisiti C/D/005/006/007 con S1-008). **S1-008 completato localmente**,
 [baseline](workspace-api-baseline.md). API opt-in profilo/provisioning/selezione/
