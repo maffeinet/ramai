@@ -4,6 +4,24 @@
 Solo test/fixture e documentazione; nessun codice applicativo, schema, endpoint,
 NuGet o package npm modificato. Non S1-011/012, AI, deploy o beta.
 
+## Pubblicazione per review — checkpoint successivo
+
+Utente autorizza esplicitamente branch, commit/push e PR del solo S1-010.
+Branch `codex/s1-010-security-regression`, commit test
+`e28b771351af18648b9e383a04d8b51e755c1596`, 17 file; Gitleaks ripetuto senza leak,
+build/format e frontend lint/tipi/19 test riconfermati prima del push.
+[PR #1](https://github.com/maffeinet/ramai/pull/1) aperta verso main, auto-merge
+disattivato. [CI PR](https://github.com/maffeinet/ramai/actions/runs/39585109772)
+e [CI push](https://github.com/maffeinet/ramai/actions/runs/39585048873) **success**,
+SHA e log verificati: Ubuntu 24.04 GitHub-hosted, SDK 10.0.401, 300 backend
+PASS/0 fail/0 skipped (101/191/8), 19 client/componenti e 11 browser HTTPS PASS.
+Build 0 warning/errori, format solution/helper, npm ci/lint/tipi/build e cleanup
+servizi/volumi CI PASS. È la verifica Linux del nuovo codice, non un clone locale.
+Nessuna review umana registrata, nessun merge: S1-010 non chiuso in DoD.
+Questo aggiornamento documentale segue il commit testato e avrà la propria CI
+visibile nella PR; non cambia i test né riattribuisce la run a un altro SHA.
+Le note sullo stato locale/non pubblicato sotto sono checkpoint precedenti.
+
 ## Separazione delle evidenze
 
 **S1-009 pubblicato**: `bbe24f4cb1ca316366623cdf04059959303a20f4`, 38 file,
@@ -12,8 +30,8 @@ success, SHA verificato, Ubuntu 24.04 GitHub-hosted: 278 backend/0 skipped,
 19 client/componenti, 9 browser HTTPS, build/format/lint/tipi PASS e cleanup PASS.
 La pubblicazione è quella autorizzata nella prima fase; main remoto contiene S1-009.
 
-**S1-010 locale**: nuovi test non pubblicati e non eseguiti su GitHub/Linux.
-Non usare la run S1-009 per attribuire un verde a queste modifiche.
+**S1-010**: test pubblicati nella PR #1 e verificati su GitHub/Linux nelle run sopra.
+Le prove locali Windows restano distinte. Non usare la run S1-009 come loro evidenza.
 Review tecnica automatizzata e test non sostituiscono l'approvazione umana
 richiesta dal backlog prima del merge. Stato finale: vedi gate sotto.
 
@@ -133,8 +151,8 @@ server UI residui. Container/rete/volumi del solo progetto `ramai-s1010-check`
 rimossi e assenza verificata; nessun dato/volume utente toccato. Rimangono cache
 Chromium e screenshot sintetici ignorati già presenti dal blocco UI, senza secret.
 
-Implementazione e test locali pronti. **Review umana prima
-del merge e CI delle nuove modifiche ancora mancanti**: S1-010 non è chiuso in DoD.
+Implementazione e test locali/CI pronti. **Review umana prima
+del merge ancora mancante**: S1-010 non è chiuso in DoD.
 La pubblicazione S1-009 non autorizza un merge automatico del blocco seguente.
 La review umana deve esaminare in particolare:
 
@@ -155,5 +173,5 @@ EOL e warning NO_COLOR/FORCE_COLOR invariati. Riesame entro 30 ottobre/fine Spri
 prima di dati/clienti reali, primo evento; prima della demo di novembre serve review.
 Nessuna regola disattivata, audit fix --force o migrazione tooling.
 
-Prossimo passo: review umana del diff S1-010 e autorizzazione della sua
-pubblicazione/verifica CI; soltanto dopo, chiusura S1-010 e S1-011 da autorizzare.
+Prossimo passo: review umana della PR S1-010 e decisione esplicita sul merge dopo
+i gate. Nessun merge automatico; S1-011 resta da autorizzare e non è stato avviato.

@@ -2,6 +2,23 @@
 
 Aggiornato: 2026-10-21, Europe/Rome.
 
+## Pubblicazione S1-010 per review
+
+Autorizzati esplicitamente branch/commit/push/PR, verifica CI e riepilogo umano,
+senza merge. Branch `codex/s1-010-security-regression`, commit test `e28b771`,
+17 file pertinenti e nuova scansione Gitleaks senza leak. Riconfermati Release
+0 warning/errori, format solution/helper, frontend lint/tipi/19 test prima del push.
+[PR #1](https://github.com/maffeinet/ramai/pull/1) aperta, auto-merge disattivato;
+[CI PR 39585109772](https://github.com/maffeinet/ramai/actions/runs/39585109772) e
+[push 39585048873](https://github.com/maffeinet/ramai/actions/runs/39585048873)
+**success**, SHA/log verificati: 300 backend PASS/0 skipped (101/191/8),
+19 client/componenti e 11 browser HTTPS PASS su GitHub-hosted Ubuntu 24.04.
+SDK CI 10.0.401, Release 0 warning/errori, format solution/helper, npm ci/lint/
+tipi/build, cleanup CI PASS. Questa evidenza riguarda il commit test e28b771,
+non il successivo aggiornamento documentale, che ha la propria CI nella PR.
+Review umana ancora pendente; nessun merge, S1-011/012 non iniziati.
+Checkpoint "locale/non pubblicato" sotto superato solo per pubblicazione.
+
 ## Stato corrente — pubblicazione S1-009 e suite locale S1-010
 
 Utente autorizza commit/push S1-009, verifica CI e poi S1-010. Pubblicato

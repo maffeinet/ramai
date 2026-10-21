@@ -23,9 +23,10 @@ HTTP, non login sicuro pronto. L'accesso richiede HTTPS browser/API, origine
 autorizzata e `RAMAI_API_ORIGIN` server-side al build; dettagli e test nella baseline.
 Nessuna demo esterna o beta approvata.
 
-[S1-010 — regressione security](docs/security-regression-baseline.md): suite pronta
-localmente con 300 backend e 11 browser PASS, oltre ai 19 client/componenti.
-Review umana e CI delle nuove modifiche ancora pendenti; non chiuso in DoD.
+[S1-010 — regressione security](docs/security-regression-baseline.md):
+[PR #1](https://github.com/maffeinet/ramai/pull/1) con 300 backend/0 skipped,
+11 browser e 19 client/componenti PASS anche in CI Linux. Review umana ancora
+pendente, nessun merge automatico e task non chiuso in DoD.
 
 ## Obiettivo
 A fine Sprint 0 deve essere possibile clonare il repository, configurare `.env`, avviare PostgreSQL e Redis con Docker Compose, avviare API ASP.NET Core e frontend Next.js, verificare `/health` ed eseguire test/lint con esito positivo.

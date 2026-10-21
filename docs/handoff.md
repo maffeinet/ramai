@@ -2,6 +2,22 @@
 
 Snapshot: 2026-10-21, Europe/Rome. Contesto stabile in [memory.md](memory.md).
 
+## Pubblicazione S1-010 per review — aggiornamento successivo
+
+Utente autorizza branch/commit/push/PR S1-010, CI e riepilogo umano, **senza merge**.
+Creato `codex/s1-010-security-regression` da bbe24f4, commit test `e28b771`, soli
+17 file previsti, Gitleaks senza leak e gate rapidi riconfermati.
+[PR #1](https://github.com/maffeinet/ramai/pull/1) aperta, auto-merge nullo;
+[CI PR](https://github.com/maffeinet/ramai/actions/runs/39585109772) e
+[CI push](https://github.com/maffeinet/ramai/actions/runs/39585048873) success, SHA
+e log verificati: 300 backend/0 skipped (101/191/8), 19 client/componenti e 11 browser
+HTTPS su Ubuntu 24.04 GitHub-hosted; build 0 warning/errori, format/frontend/helper
+e cleanup PASS. Aggiornamento solo documentale successivo al codice testato, con
+propria CI visibile nella PR. Review umana ancora pendente, nessun merge/S1-011.
+Per il revisore: [matrice e checklist](security-regression-baseline.md), rivedere
+cookie/CSRF/MFA/revoca, isolamento concorrente e diagnostica anti-leak. I test non
+sono approvazione umana/compliance. Le note locali sotto sono storiche.
+
 ## Ultimo checkpoint — S1-009 pubblicato, S1-010 review-ready locale
 
 Nuova autorizzazione utente: commit/push/verifica CI S1-009, poi solo S1-010.

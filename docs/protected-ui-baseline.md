@@ -176,8 +176,9 @@ S1-009 non chiude S1-010/011/012, email operative, review security trasversale,
 accessibilità formale, test Firefox/WebKit o configurazione di hosting pubblico.
 Il recupero password/email pubblico non viene finto con fixture. Nessun AI,
 connector, billing, invio, beta esterna o conformità normativa dichiarata.
-CI Linux S1-009 verificata nella run 39580728584 sopra. Non usare questa evidenza
-per le nuove prove locali [S1-010](security-regression-baseline.md), non pubblicate.
+CI Linux S1-009 verificata nella run 39580728584 sopra. Le nuove prove
+[S1-010](security-regression-baseline.md) hanno propria PR/CI e28b771 verificate;
+non usare la run S1-009 come evidenza del nuovo codice.
 
 ## Demo e prossimo passo
 
@@ -186,5 +187,5 @@ accesso/workspace è ora implementata/verificata localmente. Per il valore AI re
 la verticale D2–D5: obiettivo condizionato 6–13 novembre per prima prova interna,
 prova generale entro 20 novembre e stakeholder entro 30 novembre 2026. Non è una
 garanzia: dipende da capacità, scope invariato e decisione tempestiva provider/budget.
-L'utente ha poi autorizzato S1-010: suite locale estesa, review umana e CI dello
-SHA nuovo ancora pendenti. S1-011/012 non iniziati.
+L'utente ha poi autorizzato S1-010 e la sua pubblicazione in PR: suite estesa e CI
+del nuovo SHA verificate, review umana/merge ancora pendenti. S1-011/012 non iniziati.

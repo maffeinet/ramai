@@ -266,12 +266,18 @@ Test: component test ed E2E del percorso critico con dati sintetici, lint/tipi/b
 
 ### S1-010 — Security regression
 
-**IMPLEMENTATO/VERIFICATO LOCALMENTE, REVIEW E CI PENDENTI** il 21 ottobre.
+Pubblicazione successiva autorizzata: branch codex/s1-010-security-regression,
+commit test e28b771, [PR #1](https://github.com/maffeinet/ramai/pull/1) aperta senza
+auto-merge. [CI PR success](https://github.com/maffeinet/ramai/actions/runs/39585109772)
+per e28b771: 300 backend/0 skipped, 19 client/componenti e 11 browser PASS.
+Review umana ancora pendente, nessun merge/Done finale.
+
+**IMPLEMENTATO/VERIFICATO LOCALMENTE E IN CI, REVIEW UMANA PENDENTE** il 21 ottobre.
 [Matrice/gate/checklist](../docs/security-regression-baseline.md): 300 backend
 PASS/0 skipped, 19 client/componenti e 11 browser PASS; build/format/lint/tipi verdi.
 22 prove backend + 2 E2E nuove, solo test/fixture/documenti. Non chiuso in DoD:
-mancano review umana prima del merge e CI del nuovo diff. Nessun push S1-010,
-nessun S1-011/012 avviato. La CI S1-009 non sostituisce questi due gate.
+manca review umana prima del merge. Push e CI S1-010 verificati sopra;
+nessun S1-011/012 avviato. La CI S1-009 non sostituisce la prova del nuovo SHA.
 
 Output: suite cross-tenant bloccante e test sessione/autorizzazione/IDOR/leak log;
 percorso utente reale minimo, non soltanto mock dell'autenticazione.

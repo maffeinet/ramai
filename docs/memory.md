@@ -4,6 +4,15 @@ Aggiornato: 2026-10-21, Europe/Rome.
 
 ## Ultimo aggiornamento operativo
 
+Pubblicazione successiva autorizzata: `codex/s1-010-security-regression`, commit
+test `e28b771`, 17 file S1-010 dopo scan/gate; [PR #1](https://github.com/maffeinet/ramai/pull/1)
+aperta verso main, senza auto-merge. CI PR 39585109772 e push 39585048873 success
+verificate per e28b771: 300 backend/0 skipped, 19 client/componenti e 11 browser,
+build/format/frontend/helper e cleanup PASS su GitHub-hosted Ubuntu. Aggiornamento
+documentale successivo con propria CI in PR. Review umana pendente:
+non Done e nessun merge/S1-011. Stato locale nei paragrafi seguenti superato per
+la sola pubblicazione, non per la review.
+
 21 ottobre, aggiornamento più recente: S1-009 pubblicato `bbe24f4`,
 [CI 39580728584](https://github.com/maffeinet/ramai/actions/runs/39580728584) success
 verificata su quello SHA: 278 backend/0 skipped, 19 client/componenti, 9 browser HTTPS,
